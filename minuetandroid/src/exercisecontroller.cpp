@@ -29,7 +29,7 @@
 
 #include <QtQml> // krazy:exclude=includes
 
-#include <drumstick/alsaevent.h>
+//#include <drumstick/alsaevent.h>
 
 ExerciseController::ExerciseController() :
     m_minRootNote(0),
