@@ -35,5 +35,6 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n)
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Quick Qml)
 
 add_subdirectory(src)
+add_subdirectory(exercises)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

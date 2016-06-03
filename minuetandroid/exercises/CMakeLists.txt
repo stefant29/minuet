@@ -1,4 +1,4 @@
-set(minuet_EXERCISES
+set(minuetandroid_EXERCISES
     intervals-ascending-melodic.json
     intervals-descending-melodic.json
     chords-root-position.json
@@ -7,5 +7,5 @@ set(minuet_EXERCISES
     rhythm-medium.json
 )
 
-install(FILES ${minuet_EXERCISES} DESTINATION ${KDE_INSTALL_DATADIR}/minuet/exercises)
-install(DIRECTORY exercise-images DESTINATION ${KDE_INSTALL_DATADIR}/minuet/qml)
+install(FILES ${minuetandroid_EXERCISES} DESTINATION ${KDE_INSTALL_DATADIR}/minuetandroid/exercises)
+install(DIRECTORY exercise-images DESTINATION ${KDE_INSTALL_DATADIR}/minuetandroid/qml)

@@ -2,4 +2,12 @@
     <qresource prefix="/">
         <file>main.qml</file>
     </qresource>
+    <qresource>
+      	<file alias='chords-root-position.json'>../exercises/chords-root-position.json</file>
+      	<file alias='intervals-ascending-melodic.json'>../exercises/intervals-ascending-melodic.json</file>	
+      	<file alias='intervals-descending-melodic.json'>../exercises/intervals-descending-melodic.json</file>	
+      	<file alias='rhythm-easy.json'>../exercises/rhythm-easy.json</file>	
+      	<file alias='rhythm-medium.json'>../exercises/rhythm-medium.json</file>	
+      	<file alias='scales-major-and-its-modes.json'>../exercises/scales-major-and-its-modes.json</file>		
+    </qresource>	
 </RCC>
