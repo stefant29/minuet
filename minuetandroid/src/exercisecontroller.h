@@ -49,7 +49,7 @@ public:
     Q_INVOKABLE void setPlayMode(PlayMode playMode);
     Q_INVOKABLE void setAnswerLength(unsigned int answerLength);
     Q_INVOKABLE unsigned int chosenRootNote();
-
+    Q_INVOKABLE QStringList randomlyChooseExercises();
     bool configureExercises();
     QString errorString() const;
     QJsonObject exercises() const;

@@ -75,6 +75,17 @@ unsigned int ExerciseController::chosenRootNote()
 {
     return m_chosenRootNote;
 }
+QStringList ExerciseController::randomlyChooseExercises()
+{
+    qsrand(QDateTime::currentDateTimeUtc().toTime_t());
+    QStringList chosenExercises;
+
+    for (unsigned int i = 0; i < m_answerLength; ++i) {
+        m_chosenExercise = qrand() % m_exerciseOptions.size();
+        chosenExercises << m_exerciseOptions[m_chosenExercise].toObject()[QStringLiteral("name")].toString();
+    }
+    return chosenExercises;
+}
 
 bool ExerciseController::configureExercises()
 {

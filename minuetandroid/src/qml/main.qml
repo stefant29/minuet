@@ -54,7 +54,17 @@ ApplicationWindow {
             break;
         }
     }
-    property Item selectedMenuItem : null
+    function userMessageChanged(message) {
+     //   pianoView.visible = (message != "the rhythm" && message != "exercise")
+        rhythmAnswerView.visible = (message == "the rhythm")
+    }
+
+    function exerciseViewStateChanged() {
+        if (exerciseView.state == "waitingForAnswer"){
+            rhythmAnswerView.resetAnswers()
+        }
+    }
+
     readonly property int textMargins: Math.round(16 * Flat.FlatStyle.scaleFactor)
     readonly property int menuMargins: Math.round(13 * Flat.FlatStyle.scaleFactor)
     readonly property alias anchorItem: navigationMenu
@@ -62,6 +72,7 @@ ApplicationWindow {
     readonly property int menuWidth: Math.min(window.width, window.height) * 0.75
 
     Item {
+
         id: navigationMenuContainer
         anchors.fill: parent
 
@@ -94,21 +105,28 @@ ApplicationWindow {
 
             //loads the exercises from exercise controller
             Item {
-            id: minuetMenu
-            width: parent.width
-            height: parent.height
-            property string message
+                property string message
+                property Item selectedMenuItem : null
 
-            signal breadcrumbPressed
+                signal breadcrumbPressed
+                signal itemChanged(var model)
+                signal userMessageChanged(string message)
 
-            function itemClicked(delegateRect, index) {
-                var model = delegateRect.ListView.view.model[index].options
-                if (model !== undefined) {
-                    exerciseController.setExerciseOptions(model)
+                id: minuetMenu
+                width: parent.width
+                height: parent.height
+
+                function itemClicked(delegateRect, index) {
+                    var model = delegateRect.ListView.view.model[index].options
+                    if (model != undefined) {
+                        exerciseController.setExerciseOptions(model)
+                        minuetMenu.itemChanged(model)
+                    }
                 }
-            }
+
             //back button
             Button {
+
                 id: breadcrumb
 
                 width: (stackView.depth > 1) ? 100:0; height: parent.height
@@ -116,11 +134,14 @@ ApplicationWindow {
                 //iconName: "go-previous"
                 onClicked: {
                     minuetMenu.breadcrumbPressed()
+                    minuetMenu.selectedMenuItem = null
                     stackView.pop()
+                    minuetMenu.userMessageChanged("exercise")
                     if (stackView.depth == 1)
-                        Qt.message = "exercise"
+                        minuetMenu.message = "exercise"
                 }
             }
+
             StackView {
                 id: stackView
 
@@ -132,33 +153,22 @@ ApplicationWindow {
                 Component {
                     id: categoryDelegate
 
-                    MouseArea {
+                    Button {
                         id: delegateRect
-                        width: parent.width; height:64 * Flat.FlatStyle.scaleFactor
 
-                        Rectangle {
-                            width: parent.width
-                            height: Flat.FlatStyle.onePixel
-                            anchors.bottom: parent.bottom
-                            color: Flat.FlatStyle.lightFrameColor
-                        }
-
-                        Label {
-                            id:abc
-                            text: "technical term, do you have a musician friend?", modelData.name
-                            font.pixelSize: Math.round(15 * Flat.FlatStyle.scaleFactor)
-                            font.family: Flat.FlatStyle.fontFamily
-                            renderType: Text.QtRendering
-                            //color: delegateRect.ListView.isCurrentItem ? Flat.FlatStyle.styleColor : Flat.FlatStyle.defaultTextColor
-                            color: Flat.FlatStyle.defaultTextColor
-                            anchors.left: parent.left
-                            anchors.leftMargin: menuMargins
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+                        width: parent.width; height: 100
+                        text: "technical term, do you have a musician friend?", modelData.name
+                        checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
                         onClicked: {
-                             var children = delegateRect.ListView.view.model[index].children
+                            var userMessage = delegateRect.ListView.view.model[index].userMessage
+                            if (userMessage != undefined)
+                                minuetMenu.message = userMessage
+                            var children = delegateRect.ListView.view.model[index].children
                             if (!children) {
+                                if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.checked = false
+                                minuetMenu.userMessageChanged(minuetMenu.message)
                                 minuetMenu.itemClicked(delegateRect, index)
+                                minuetMenu.selectedMenuItem = delegateRect
                             }
                             else {
                                 stackView.push(categoryMenu.createObject(stackView, {model: children}))
@@ -179,8 +189,9 @@ ApplicationWindow {
                                 }
                             }
                         }
-                        //style: MinuetButtonStyle {}
+//                        style: MinuetButtonStyle {}
                     }
+
                 }
                 Component {
                     id: categoryMenu
@@ -205,7 +216,6 @@ ApplicationWindow {
         }
 
         }
-
         //Contains the title + a navigation button
         Item {
             id: contentContainer
@@ -226,7 +236,7 @@ ApplicationWindow {
             ToolBar {
                 id: toolBar
                 width: parent.width
-                height: 54 * Flat.FlatStyle.scaleFactor
+                height: 36 * Flat.FlatStyle.scaleFactor
                 z: navigationMenuContainer.z + 1
                 style: Flat.ToolBarStyle {
                     padding.left: 0
@@ -272,6 +282,43 @@ ApplicationWindow {
                     }
                 }
             }
+
+            RhythmAnswerView {
+                id: rhythmAnswerView
+
+                anchors { bottom: parent.bottom; bottomMargin: 20; horizontalCenter: parent.horizontalCenter }
+                visible: false
+                exerciseView: exerciseView
+            }
+
+            ExerciseView {
+                id: exerciseView
+                width: contentContainer.width ; height: contentContainer.height
+                anchors { top: toolBar.bottom; horizontalCenter: contentContainer.horizontalCenter }
+            }
         }
+    }
+    Connections {
+        target: minuetMenu
+        onItemChanged: exerciseView.itemChanged(model)
+        onBreadcrumbPressed: exerciseView.clearExerciseGrid()
+        onUserMessageChanged: exerciseView.changeUserMessage(message)
+    }
+    Connections {
+        target: minuetMenu
+        onItemChanged: rhythmAnswerView.resetAnswers(model)
+        onBreadcrumbPressed: rhythmAnswerView.resetAnswers()
+        onUserMessageChanged: window.userMessageChanged(message)
+    }
+    Connections {
+        target: exerciseView
+        onAnswerClicked: rhythmAnswerView.answerClicked(answerImageSource, color)
+        onStateChanged: window.exerciseViewStateChanged()
+        onShowCorrectAnswer: rhythmAnswerView.showCorrectAnswer(chosenExercises, chosenColors)
+        onChosenExercisesChanged: rhythmAnswerView.fillCorrectAnswerGrid()
+    }
+    Connections {
+        target: rhythmAnswerView
+        onAnswerCompleted: exerciseView.checkAnswers(answers)
     }
 }

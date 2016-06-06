@@ -1,13 +1,23 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
+        <file alias="main.qml">qml/main.qml</file>
+        <file alias="ExerciseView.qml">qml/ExerciseView.qml</file>
+        <file alias="RhythmAnswerView.qml">qml/RhythmAnswerView.qml</file>
+        <file alias="chords-root-position.json">../exercises/chords-root-position.json</file>
+        <file alias="intervals-ascending-melodic.json">../exercises/intervals-ascending-melodic.json</file>
+        <file alias="intervals-descending-melodic.json">../exercises/intervals-descending-melodic.json</file>
+        <file alias="rhythm-easy.json">../exercises/rhythm-easy.json</file>
+        <file alias="rhythm-medium.json">../exercises/rhythm-medium.json</file>
+        <file alias="scales-major-and-its-modes.json">../exercises/scales-major-and-its-modes.json</file>
+        <file alias="current-rhythm.png">../exercises/exercise-images/current-rhythm.png</file>
+        <file alias="eighth-dot-sixteenth.png">../exercises/exercise-images/eighth-dot-sixteenth.png</file>
+        <file alias="eighth-eighth.png">../exercises/exercise-images/eighth-eighth.png</file>
+        <file alias="eighth-sixteenth-sixteenth.png">../exercises/exercise-images/eighth-sixteenth-sixteenth.png</file>
+        <file alias="quarter.png">../exercises/exercise-images/quarter.png</file>
+        <file alias="sixteenth-eighth-dot.png">../exercises/exercise-images/sixteenth-eighth-dot.png</file>
+        <file alias="sixteenth-eighth-sixteenth.png">../exercises/exercise-images/sixteenth-eighth-sixteenth.png</file>
+        <file alias="sixteenth-sixteenth-eighth.png">../exercises/exercise-images/sixteenth-sixteenth-eighth.png</file>
+        <file alias="sixteenth-sixteenth-sixteenth-sixteenth.png">../exercises/exercise-images/sixteenth-sixteenth-sixteenth-sixteenth.png</file>
+        <file alias="unknown-rhythm.png">../exercises/exercise-images/unknown-rhythm.png</file>
     </qresource>
-    <qresource>
-      	<file alias='chords-root-position.json'>../exercises/chords-root-position.json</file>
-      	<file alias='intervals-ascending-melodic.json'>../exercises/intervals-ascending-melodic.json</file>	
-      	<file alias='intervals-descending-melodic.json'>../exercises/intervals-descending-melodic.json</file>	
-      	<file alias='rhythm-easy.json'>../exercises/rhythm-easy.json</file>	
-      	<file alias='rhythm-medium.json'>../exercises/rhythm-medium.json</file>	
-      	<file alias='scales-major-and-its-modes.json'>../exercises/scales-major-and-its-modes.json</file>		
-    </qresource>	
 </RCC>
