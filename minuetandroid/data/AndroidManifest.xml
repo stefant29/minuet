@@ -5,7 +5,7 @@
                      android:icon="@drawable/minuet">
                 <activity android:name="org.qtproject.qt5.android.bindings.QtActivity"
                           android:label="Minuet Mobile"
-                          android:screenOrientation="unspecified"
+                          android:screenOrientation="sensorLandscape"
                           android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation">
                         <intent-filter>
                                 <action android:name="android.intent.action.MAIN"/>
@@ -34,4 +34,8 @@
         </application>
         <supports-screens android:anyDensity="true" android:normalScreens="true" android:smallScreens="true" android:largeScreens="true"/>
         <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="19"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+	<uses-permission android:name="android.permission.RECORD_AUDIO"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>	
 </manifest>

@@ -17,9 +17,9 @@ set(KF5_MIN_VERSION "5.15.0")
 
 if(CMAKE_SYSTEM_NAME STREQUAL Android)
     add_definitions(-DANDROID )
+    add_definitions(-DUSE_DOUBLE)
     set(ANDROID TRUE)
 endif()
-
 find_package(ECM ${ECM_MIN_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
@@ -33,6 +33,20 @@ include(FeatureSummary)
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Quick Qml)
+
+add_library(csoundandroid SHARED IMPORTED)
+set_property(TARGET csoundandroid PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi/libcsoundandroid.so)
+
+add_library(sndfile SHARED IMPORTED)
+set_property(TARGET sndfile PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi/libsndfile.so)
+
+add_library(c++_shared SHARED IMPORTED)
+set_property(TARGET c++_shared PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi/libc++_shared.so)
+
+link_directories(/home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi)
+
+include_directories(/home/ayush/csound/include)
+include_directories(/home/ayush/csound/android/CsoundAndroid/jni/)
 
 add_subdirectory(src)
 add_subdirectory(exercises)

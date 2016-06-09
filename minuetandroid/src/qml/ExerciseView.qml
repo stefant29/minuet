@@ -114,6 +114,7 @@ Item {
                 text: "new question"
 
                 onClicked: {
+                    csound.csEvent("i 1 0 0.5");
                     exerciseView.state = "waitingForAnswer"
                     chosenExercises = exerciseController.randomlyChooseExercises()
                     for (var i = 0; i < chosenExercises.length; ++i)
