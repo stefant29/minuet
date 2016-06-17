@@ -20,27 +20,27 @@
 **
 ****************************************************************************/
 
-#ifndef CSENGINE_H
-#define CSENGINE_H
+#ifndef MIDISEQUENCER_H
+#define MIDISEQUENCER_H
 
-#include <QThread>
-#include "AndroidCsound.hpp"
+#include <QObject>
 
-class CsEngine : public QThread
+class MidiSequencer : public QObject
 {
     Q_OBJECT
-private:
-    bool mStop;
-    AndroidCsound cs;
 
 public:
-    explicit CsEngine();
-    void run();
-    Q_INVOKABLE void stop();
-    Q_INVOKABLE void setChannel(const QString &channel, MYFLT value);
-    Q_INVOKABLE void csEvent(const QString &event_string);
-    //Q_INVOKABLE double getChannel(const char *channel);
+    explicit MidiSequencer();
+    virtual ~MidiSequencer();
 
+    void appendEvent(float noteFreq,unsigned int barStart);
+    void clearExercise();
+    float midiFreq(unsigned int midiNote);
+
+private:
+    unsigned int i;
+    unsigned int j;
 };
 
-#endif // CSENGINE_H
+#endif // MIDISEQUENCER_H
+

@@ -27,6 +27,9 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QStringList>
+#include <QFile>
+
+class MidiSequencer;
 
 class ExerciseController : public QObject
 {
@@ -34,7 +37,7 @@ class ExerciseController : public QObject
     Q_ENUMS(PlayMode)
 
 public:
-    explicit ExerciseController();
+    explicit ExerciseController(MidiSequencer *midiSequencer = 0);
     virtual ~ExerciseController();
     
     enum PlayMode {
@@ -50,14 +53,19 @@ public:
     Q_INVOKABLE void setAnswerLength(unsigned int answerLength);
     Q_INVOKABLE unsigned int chosenRootNote();
     Q_INVOKABLE QStringList randomlyChooseExercises();
+    Q_INVOKABLE void clearExercise();
     bool configureExercises();
     QString errorString() const;
     QJsonObject exercises() const;
-    
-private:
-    QJsonArray mergeExercises(QJsonArray exercises, QJsonArray newExercises);
+    void appendEvent(float noteFreq,unsigned int barStart);
 
 private:
+    QJsonArray mergeExercises(QJsonArray exercises, QJsonArray newExercises);
+    float midiFreq(unsigned int midiNote);
+
+private:
+    MidiSequencer *m_midiSequencer;
+    QFile m_csdFileOpen;
     QJsonObject m_exercises;
     QJsonArray m_exerciseOptions;
     unsigned int m_minRootNote;
@@ -67,6 +75,8 @@ private:
     unsigned int m_chosenRootNote;
     unsigned int m_chosenExercise;
     QString m_errorString;
+    unsigned int i;
+    unsigned int j;
 };
 
 #endif // EXERCISECONTROLLER_H

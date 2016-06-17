@@ -20,8 +20,9 @@
 **
 ****************************************************************************/
 
-#include <exercisecontroller.h>
+#include "exercisecontroller.h"
 #include "csengine.h"
+#include "midisequencer.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -41,12 +42,13 @@ int main(int argc, char *argv[])
     QString source = "assets:/share/minuetandroid/exercises";
     QString destination = "./exercises";
     copyDir(source,destination);
-    ExerciseController *m_exerciseController = new ExerciseController();
+    MidiSequencer *m_midiSequencer(new MidiSequencer());
+    ExerciseController *m_exerciseController = new ExerciseController(m_midiSequencer);
     m_exerciseController->configureExercises();
     engine.rootContext()->setContextProperty(QStringLiteral("exerciseCategories"), m_exerciseController->exercises()[QStringLiteral("exercises")].toArray());
     engine.rootContext()->setContextProperty(QStringLiteral("exerciseController"), m_exerciseController);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    cs.start();
+//    cs.start();
     engine.rootContext()->setContextProperty("csound", &cs); // forward c++ object that can be reached form qml by object name "csound"
 
     return app.exec();

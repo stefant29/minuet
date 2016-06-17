@@ -50,5 +50,8 @@ include_directories(/home/ayush/csound/android/CsoundAndroid/jni/)
 
 add_subdirectory(src)
 add_subdirectory(exercises)
+set(minuetandroid_CSD
+test1.csd)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+install(FILES ${minuetandroid_CSD} DESTINATION ${KDE_INSTALL_DATADIR})

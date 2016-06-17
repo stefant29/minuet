@@ -19,5 +19,6 @@
         <file alias="sixteenth-sixteenth-eighth.png">../exercises/exercise-images/sixteenth-sixteenth-eighth.png</file>
         <file alias="sixteenth-sixteenth-sixteenth-sixteenth.png">../exercises/exercise-images/sixteenth-sixteenth-sixteenth-sixteenth.png</file>
         <file alias="unknown-rhythm.png">../exercises/exercise-images/unknown-rhythm.png</file>
+	<file alias="test1.csd">../test1.csd</file>
     </qresource>
 </RCC>
