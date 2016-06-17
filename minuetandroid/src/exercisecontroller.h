@@ -53,15 +53,15 @@ public:
     Q_INVOKABLE void setAnswerLength(unsigned int answerLength);
     Q_INVOKABLE unsigned int chosenRootNote();
     Q_INVOKABLE QStringList randomlyChooseExercises();
-    Q_INVOKABLE void clearExercise();
+    //Q_INVOKABLE void clearExercise();
     bool configureExercises();
     QString errorString() const;
     QJsonObject exercises() const;
-    void appendEvent(float noteFreq,unsigned int barStart);
+    //void appendEvent(float noteFreq,unsigned int barStart);
 
 private:
     QJsonArray mergeExercises(QJsonArray exercises, QJsonArray newExercises);
-    float midiFreq(unsigned int midiNote);
+    //float midiFreq(unsigned int midiNote);
 
 private:
     MidiSequencer *m_midiSequencer;
