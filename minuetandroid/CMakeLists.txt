@@ -35,15 +35,15 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n)
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Quick Qml)
 
 add_library(csoundandroid SHARED IMPORTED)
-set_property(TARGET csoundandroid PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi/libcsoundandroid.so)
+set_property(TARGET csoundandroid PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a/libcsoundandroid.so)
 
 add_library(sndfile SHARED IMPORTED)
-set_property(TARGET sndfile PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi/libsndfile.so)
+set_property(TARGET sndfile PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a/libsndfile.so)
 
 add_library(c++_shared SHARED IMPORTED)
-set_property(TARGET c++_shared PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi/libc++_shared.so)
+set_property(TARGET c++_shared PROPERTY IMPORTED_LOCATION_RELEASE /home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a/libc++_shared.so)
 
-link_directories(/home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi)
+link_directories(/home/ayush/csound-android-6.07.0/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a)
 
 include_directories(/home/ayush/csound/include)
 include_directories(/home/ayush/csound/android/CsoundAndroid/jni/)
