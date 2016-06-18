@@ -31,8 +31,7 @@
 
 CsEngine::CsEngine()
 {
-    cs.setOpenSlCallbacks(); // for android audio to work
-    mStop=false;
+    //mStop=false;
     //cs.SetOption("-odac");
     //cs.SetOption("-d");
 }
@@ -44,12 +43,12 @@ void CsEngine::run() {
             cs.Start();
             cs.Perform();
     }*/
+    cs.setOpenSlCallbacks(); // for android audio to work
     cs.Compile("./test1.csd");
     cs.Start();
     cs.Perform();
     cs.Cleanup();
     cs.Reset();
-
 }
 
 void CsEngine::stop()
@@ -58,7 +57,7 @@ void CsEngine::stop()
 }
 
 
-void CsEngine::setChannel(const QString &channel, MYFLT value)
+/*void CsEngine::setChannel(const QString &channel, MYFLT value)
 {
     //qDebug()<<"setChannel "<<channel<<" value: "<<value;
     cs.SetChannel(channel.toLocal8Bit(), value);
@@ -67,4 +66,4 @@ void CsEngine::setChannel(const QString &channel, MYFLT value)
 void CsEngine::csEvent(const QString &event_string)
 {
     cs.InputMessage(event_string.toLocal8Bit());
-}
+}*/

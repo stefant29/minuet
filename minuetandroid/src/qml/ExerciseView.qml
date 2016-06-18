@@ -114,7 +114,7 @@ Item {
                 text: "new question"
 
                 onClicked: {
-                    //csound.csEvent("i 1 0 0.5");
+                    //sequencer.csEvent("i 1 0 0.5");
                     exerciseView.state = "waitingForAnswer"
                     chosenExercises = exerciseController.randomlyChooseExercises()
                     for (var i = 0; i < chosenExercises.length; ++i)
@@ -128,7 +128,7 @@ Item {
                     })
                     if (userMessage != "the rhythm")
                         answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
-                    csound.start();
+                    sequencer.play();
                 }
                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
@@ -138,7 +138,8 @@ Item {
                 width: playQuestionButton.implicitWidth+textMargins*0.5
                 height: playQuestionButton.implicitHeight
                 text: "play question"
-               // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
+                onClicked: sequencer.play();
+                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
                 FontMetrics {
                     id: fontMetrics
                     font.family: "Arial"

@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty(QStringLiteral("exerciseController"), m_exerciseController);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 //    cs.start();
-    engine.rootContext()->setContextProperty("csound", &cs); // forward c++ object that can be reached form qml by object name "csound"
+    engine.rootContext()->setContextProperty("sequencer", m_midiSequencer); // forward c++ object that can be reached form qml by object name "csound"
 
     return app.exec();
 }

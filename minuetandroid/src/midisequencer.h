@@ -25,6 +25,8 @@
 
 #include <QObject>
 
+class CsEngine;
+
 class MidiSequencer : public QObject
 {
     Q_OBJECT
@@ -37,9 +39,13 @@ public:
     void clearExercise();
     float midiFreq(unsigned int midiNote);
 
+public Q_SLOTS:
+    void play();
+
 private:
     unsigned int i;
     unsigned int j;
+    CsEngine *m_csoundengine;
 };
 
 #endif // MIDISEQUENCER_H

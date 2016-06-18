@@ -21,6 +21,7 @@
 ****************************************************************************/
 
 #include "midisequencer.h"
+#include "csengine.h"
 
 #include <QtMath>
 #include <QLoggingCategory>
@@ -35,6 +36,7 @@ MidiSequencer::MidiSequencer() :
     j(1)
 {
     qmlRegisterType<MidiSequencer>("org.kde.minuetandroid", 1, 0, "MidiSequencer");
+    m_csoundengine = new CsEngine;
 }
 
 void MidiSequencer::clearExercise()
@@ -100,4 +102,9 @@ float MidiSequencer::midiFreq(unsigned int midiNote)
 
 MidiSequencer::~MidiSequencer()
 {
+    delete m_csoundengine;
+}
+
+void MidiSequencer::play(){
+    m_csoundengine->start();
 }
