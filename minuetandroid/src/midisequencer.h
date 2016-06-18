@@ -41,6 +41,7 @@ public:
 
 public Q_SLOTS:
     void play();
+    void stop();
 
 private:
     unsigned int i;

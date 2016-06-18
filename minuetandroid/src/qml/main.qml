@@ -133,6 +133,7 @@ ApplicationWindow {
                 //not working
                 //iconName: "go-previous"
                 onClicked: {
+                    sequencer.stop()
                     minuetMenu.breadcrumbPressed()
                     minuetMenu.selectedMenuItem = null
                     stackView.pop()

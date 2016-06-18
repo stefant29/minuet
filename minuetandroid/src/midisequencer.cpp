@@ -108,3 +108,7 @@ MidiSequencer::~MidiSequencer()
 void MidiSequencer::play(){
     m_csoundengine->start();
 }
+
+void MidiSequencer::stop(){
+    m_csoundengine->stop();
+}
