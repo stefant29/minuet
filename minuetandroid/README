@@ -1,4 +1,5 @@
 Step 1: List of Required dependencies
+
 Qt for Android
 Set up Android environement
 	Android NDK 
@@ -6,68 +7,26 @@ Set up Android environement
 	Ant
 	Java(OpenJDK)
 
-Step 2: Building KF5 for Android
+Step 2: Setting up the environment variables
 
-cd /Your-PATH/  (It is preferable to build KF5 for Android libaraies along side NDK and SDK. Example /home/ayush/android)
-git clone git://anongit.kde.org/scratch/cordlandwehr/kdesrc-conf-android.git  
-mkdir -p extragear/kdesrc-build  
-git clone git://anongit.kde.org/kdesrc-build extragear/kdesrc-build  
-ln -s extragear/kdesrc-build/kdesrc-build kdesrc-build  
-ln -s kdesrc-conf-android/kdesrc-buildrc kdesrc-buildrc
+Suggested configuration for .bashrc:
 
-Step 3 Now open the kdesrc-buildrc file in any text editor and change the following lines:
-
-line 15: -DCMAKE_PREFIX_PATH= "path to Qt5 Android libraries. Example: /home/ayush/Qt5.5/5.5/android_armv7"
- 
-Step 4 Setting up the environment variables
-
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk
+export ADIR=/home/android-devel
+export ANDROID_NDK=$ADIR/android-ndk-r11c
+export ANDROID_SDK_ROOT=$ADIR/android-sdk-linux
+export Qt5_android=$ADIR/Qt5.6.0/5.6/android_armv7
+export PATH=$ADIR/android-sdk-linux/platform-tools/:$PATH
 export ANT=/usr/bin/ant
-export Qt5_android=/home/ayush/Qt5.5.1/5.5/android_armv7
-export ANDROID_SDK_ROOT=/home/ayush/android/android-sdk-linux/
-export PATH=$ANDROID_SDK_ROOT/platform-tools/:$PATH
-export ANDROID_NDK=/home/ayush/android/android-ndk-r10e/
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk/
+export CSOUND_ROOT=/home/android-devel/csound
+export CSOUND_ANDROID_ROOT=/home/android-devel/csound-android-6.07.0
+export INSTALL_DIR=/home/android-devel/usr/
 
-Step 5 Run the following script to set up all KDE android frameworks and ECM
+Step 3: build
 
- ./kdesrc-build libintl-lite extra-cmake-modules frameworks-android  
-Note you migh need to be a sudo user for it.
+mkdir build
+cd build
+../build.sh
 
-Step 6 Building instructions
-
-Change the directory and go to minuet/minuetandroid
-    export minuetandroid_DIR=`pwd`
-    mkdir -p export/minuetandroid
-    cd export/minuetandroid
-    mkdir -p ../../build/minuetandroid
-    cd ../../build/minuetandroid	
-    export minuetandroid_PRODUCT_DIR=`pwd`
-Step 7 cmake commands
-
-    cmake "${minuetandroid_DIR}" -DCMAKE_TOOLCHAIN_FILE=/usr/share/ECM/toolchain/Android.cmake \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_PREFIX_PATH="${Qt5_android}" \
-        -DCMAKE_INSTALL_PREFIX="${minuetandroid_PRODUCT_DIR}" \
-        -DQTANDROID_EXPORTED_TARGET=minuetandroid \
-        -DANDROID_APK_DIR="${minuetandroid_DIR}"/data \
-	-DKF5I18n_DIR=/opt/android/kde/install/lib/cmake/KF5I18n/ 
-#	-DKF5Config_DIR=/opt/android/kde/install/lib/cmake/KF5Config/ \	
-#     	-DKF5_HOST_TOOLING=/opt/android/kde/install/lib/cmake/KF5Config/
-
-Step 8
-
-make install/strip
-"install/strip" makes sure the binaries only have minimal stuff needed to run.    
-
-Step 9 Compulsory to run the following command else you will get an error . Ecm expects us to have a directory
-
-mkdir -p "${minuetandroid_PRODUCT_DIR}"/lib/qml
-
-Step 10 will create an apk
-make create-apk-minuetandroid
-
-Step 11 install it on your phone ... Android to be specific
-adb install -r minuetandroid_build_apk/bin/QtApp-debug.apk
-
-#Now you have a simple android application using cmake.... enjoy :)
-
+Step 4: install it on your phone
+../deploy.sh
