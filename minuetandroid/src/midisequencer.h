@@ -35,9 +35,8 @@ public:
     explicit MidiSequencer();
     virtual ~MidiSequencer();
 
-    void appendEvent(unsigned int midiNote,unsigned int barStart);
+    void appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo);
     void clearExercise();
-//    float midiFreq(unsigned int midiNote);
 
 public Q_SLOTS:
     void play();

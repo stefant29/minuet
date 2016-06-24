@@ -54,11 +54,8 @@ void MidiSequencer::clearExercise()
     j=1;
 }
 
-void MidiSequencer::appendEvent(unsigned int midiNote,unsigned int barStart)
+void MidiSequencer::appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo)
 {
-    //QString number;
-//    QString instrumentString = "</CsInstruments>";
-//    QString scoreString =  "</CsScore>";
     QString content;
     QFile m_csdFileOpen("./test1.csd");
     if(!m_csdFileOpen.isOpen()){
@@ -68,21 +65,11 @@ void MidiSequencer::appendEvent(unsigned int midiNote,unsigned int barStart)
     QTextStream in(&m_csdFileOpen);
     while(!in.atEnd()){
         lineData = in.readLine();
-        /*if(lineData.contains("</CsInstruments>")){
-            number = QString::number(i);
-            QString a = "instr ";
-            //QString b = "\naout vco2 0.5, 440\nouts aout, aout\nendin\n";
-            QString b = "\naout oscil 0.5, " + QString::number(noteFreq) + "\nouts aout, aout\nendin\n";
-            //QString b = "\nasig oscil 10000, 440, 1\nout asig\nendin\n";
-            QString instrument = a + number + b;
-            content= content + instrument;
-            i++;
-        }*/
         if(lineData.contains("i 99 0 10")){
-            //QString initScore = "i" + QString::number(j) + " 0 " + "3\n" ;
-            QString initScore = "i 1 " + QString::number(barStart) + " " + QString::number(barStart+1) + " " + QString::number(midiNote) + " 100"+ "\n" ;
-            content = content + initScore;
-            //j++;
+            for(int i=0 ; i<midiNotes.count() ; i++){
+                QString initScore = "i 1 " + QString::number(barStartInfo.at(i)) + " " + QString::number(barStartInfo.at(i)+1) + " " + QString::number(midiNotes.at(i)) + " 100"+ "\n" ;
+                content = content + initScore;
+            }
         }
         content= content + lineData + "\n";
     }
@@ -90,15 +77,6 @@ void MidiSequencer::appendEvent(unsigned int midiNote,unsigned int barStart)
     QByteArray contentByte = content.toUtf8();
     m_csdFileOpen.write(contentByte);
 }
-
-/*float MidiSequencer::midiFreq(unsigned int midiNote)
-{
-    float freq;
-    int a = 440; // a is 440 hz...
-    float num=(midiNote-9)/12.0;
-    freq=(a*1.0 / 32) * qPow(2,num);
-    return freq;
-}*/
 
 MidiSequencer::~MidiSequencer()
 {

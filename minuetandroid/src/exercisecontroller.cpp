@@ -80,6 +80,8 @@ unsigned int ExerciseController::chosenRootNote()
 }
 QStringList ExerciseController::randomlyChooseExercises()
 {
+    QList<unsigned int> midiNotes;
+    QList<unsigned int> barStartInfo;
     m_midiSequencer->clearExercise();
     //clearExercise();
     qsrand(QDateTime::currentDateTimeUtc().toTime_t());
@@ -101,18 +103,23 @@ QStringList ExerciseController::randomlyChooseExercises()
                 m_chosenRootNote = m_minRootNote + qrand() % (m_maxRootNote - m_minRootNote);
             while (m_chosenRootNote + maxNote > 108 || m_chosenRootNote + minNote < 21);
             //appendEvent(midiFreq(m_chosenRootNote), barStart);
-            m_midiSequencer->appendEvent(m_chosenRootNote, barStart);
+            midiNotes.append(m_chosenRootNote);
+            barStartInfo.append(barStart);
+            //m_midiSequencer->appendEvent(m_chosenRootNote, barStart);
 
 //            barStart++;
             unsigned int j = 1;
             foreach(const QString &additionalNote, sequence.split(' ')) {
-                m_midiSequencer->appendEvent(m_chosenRootNote + additionalNote.toInt(),(m_playMode == ScalePlayMode) ? barStart+j:barStart);
+                midiNotes.append(m_chosenRootNote+additionalNote.toInt());
+                barStartInfo.append((m_playMode == ScalePlayMode) ? barStart+j:barStart);
+                //m_midiSequencer->appendEvent(m_chosenRootNote + additionalNote.toInt(),(m_playMode == ScalePlayMode) ? barStart+j:barStart);
                 //appendEvent(midiFreq(m_chosenRootNote + additionalNote.toInt()),barStart);
                 j++;
             }
         chosenExercises << m_exerciseOptions[m_chosenExercise].toObject()[QStringLiteral("name")].toString();
         }
     }
+    m_midiSequencer->appendEvent(midiNotes,barStartInfo);
     return chosenExercises;
 }
 
