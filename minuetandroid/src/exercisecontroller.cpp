@@ -101,14 +101,14 @@ QStringList ExerciseController::randomlyChooseExercises()
                 m_chosenRootNote = m_minRootNote + qrand() % (m_maxRootNote - m_minRootNote);
             while (m_chosenRootNote + maxNote > 108 || m_chosenRootNote + minNote < 21);
             //appendEvent(midiFreq(m_chosenRootNote), barStart);
-            m_midiSequencer->appendEvent(m_midiSequencer->midiFreq(m_chosenRootNote), barStart);
+            m_midiSequencer->appendEvent(m_chosenRootNote, barStart);
 
-            barStart++;
-
+//            barStart++;
+            unsigned int j = 1;
             foreach(const QString &additionalNote, sequence.split(' ')) {
-                m_midiSequencer->appendEvent(m_midiSequencer->midiFreq(m_chosenRootNote + additionalNote.toInt()),barStart);
+                m_midiSequencer->appendEvent(m_chosenRootNote + additionalNote.toInt(),(m_playMode == ScalePlayMode) ? barStart+j:barStart);
                 //appendEvent(midiFreq(m_chosenRootNote + additionalNote.toInt()),barStart);
-                barStart++;
+                j++;
             }
         chosenExercises << m_exerciseOptions[m_chosenExercise].toObject()[QStringLiteral("name")].toString();
         }

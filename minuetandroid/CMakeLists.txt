@@ -50,8 +50,11 @@ include_directories($ENV{CSOUND_ROOT}/android/CsoundAndroid/jni/)
 
 add_subdirectory(src)
 add_subdirectory(exercises)
+
 set(minuetandroid_CSD
-test1.csd)
+test1.csd
+sf_GMbank.sf2
+$ENV{CSOUND_ANDROID_ROOT}/pluginlibs/libfluidsynth/libs/armeabi-v7a/libfluidOpcodes.so)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 install(FILES ${minuetandroid_CSD} DESTINATION ${KDE_INSTALL_DATADIR})

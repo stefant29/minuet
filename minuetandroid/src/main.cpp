@@ -39,6 +39,24 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
     CsEngine cs;
+    QFile afile ("assets:/share/sf_GMbank.sf2");
+    if (afile.exists())
+    {
+            afile.copy("./sf_GMbank.sf2");
+            QFile::setPermissions("./sf_GMbank.sf2",QFile::WriteOwner | QFile::ReadOwner);
+    }
+/*    QFile efile ("assets:/share/midichn_advanced.mid");
+    if (efile.exists())
+    {
+            efile.copy("./midichn_advanced.mid");
+            QFile::setPermissions("./midichn_advanced.mid",QFile::WriteOwner | QFile::ReadOwner);
+    }*/
+    QFile ffile ("libs:/armeabi-v7a/libshare_libfluidOpcodes.so");
+    if (ffile.exists())
+    {
+            ffile.copy("./libshare_libfluidOpcodes.so");
+            QFile::setPermissions("./libshare_libfluidOpcodes.so",QFile::WriteOwner | QFile::ReadOwner);
+    }
     QString source = "assets:/share/minuetandroid/exercises";
     QString destination = "./exercises";
     copyDir(source,destination);

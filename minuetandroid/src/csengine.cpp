@@ -49,6 +49,7 @@ void CsEngine::run() {
     cs.Perform();
     cs.Cleanup();
     cs.Reset();
+    cs.Stop();
 }
 
 void CsEngine::stop()

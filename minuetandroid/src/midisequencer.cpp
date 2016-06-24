@@ -54,9 +54,9 @@ void MidiSequencer::clearExercise()
     j=1;
 }
 
-void MidiSequencer::appendEvent(float noteFreq,unsigned int barStart)
+void MidiSequencer::appendEvent(unsigned int midiNote,unsigned int barStart)
 {
-    QString number;
+    //QString number;
 //    QString instrumentString = "</CsInstruments>";
 //    QString scoreString =  "</CsScore>";
     QString content;
@@ -68,7 +68,7 @@ void MidiSequencer::appendEvent(float noteFreq,unsigned int barStart)
     QTextStream in(&m_csdFileOpen);
     while(!in.atEnd()){
         lineData = in.readLine();
-        if(lineData.contains("</CsInstruments>")){
+        /*if(lineData.contains("</CsInstruments>")){
             number = QString::number(i);
             QString a = "instr ";
             //QString b = "\naout vco2 0.5, 440\nouts aout, aout\nendin\n";
@@ -77,12 +77,12 @@ void MidiSequencer::appendEvent(float noteFreq,unsigned int barStart)
             QString instrument = a + number + b;
             content= content + instrument;
             i++;
-        }
-        if(lineData.contains("</CsScore>")){
+        }*/
+        if(lineData.contains("i 99 0 10")){
             //QString initScore = "i" + QString::number(j) + " 0 " + "3\n" ;
-            QString initScore = "i" + QString::number(j) + " " + QString::number(barStart) + " "+ "1\n" ;
+            QString initScore = "i 1 " + QString::number(barStart) + " " + QString::number(barStart+1) + " " + QString::number(midiNote) + " 100"+ "\n" ;
             content = content + initScore;
-            j++;
+            //j++;
         }
         content= content + lineData + "\n";
     }
@@ -91,14 +91,14 @@ void MidiSequencer::appendEvent(float noteFreq,unsigned int barStart)
     m_csdFileOpen.write(contentByte);
 }
 
-float MidiSequencer::midiFreq(unsigned int midiNote)
+/*float MidiSequencer::midiFreq(unsigned int midiNote)
 {
     float freq;
     int a = 440; // a is 440 hz...
     float num=(midiNote-9)/12.0;
     freq=(a*1.0 / 32) * qPow(2,num);
     return freq;
-}
+}*/
 
 MidiSequencer::~MidiSequencer()
 {
