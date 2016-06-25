@@ -43,8 +43,6 @@ public Q_SLOTS:
     void stop();
 
 private:
-    unsigned int i;
-    unsigned int j;
     CsEngine *m_csoundengine;
 };
 

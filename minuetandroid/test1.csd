@@ -38,6 +38,5 @@ asigl, asigr fluidOut giengine
 endin
 </CsInstruments>
 <CsScore>
-i 99 0 10
 </CsScore>
 </CsoundSynthesizer>

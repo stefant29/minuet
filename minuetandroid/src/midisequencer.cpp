@@ -31,9 +31,7 @@
 Q_DECLARE_LOGGING_CATEGORY(MINUET)
 
 
-MidiSequencer::MidiSequencer() :
-    i(1),
-    j(1)
+MidiSequencer::MidiSequencer()
 {
     qmlRegisterType<MidiSequencer>("org.kde.minuetandroid", 1, 0, "MidiSequencer");
     m_csoundengine = new CsEngine;
@@ -50,12 +48,11 @@ void MidiSequencer::clearExercise()
         sfile.copy("./test1.csd");
         QFile::setPermissions("./test1.csd",QFile::WriteOwner | QFile::ReadOwner);
     }
-    i=1;
-    j=1;
 }
 
 void MidiSequencer::appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo)
 {
+    //TODO : use grantlee processing or any other text template library
     QString content;
     QFile m_csdFileOpen("./test1.csd");
     if(!m_csdFileOpen.isOpen()){
@@ -65,13 +62,15 @@ void MidiSequencer::appendEvent(QList<unsigned int> midiNotes,QList<unsigned int
     QTextStream in(&m_csdFileOpen);
     while(!in.atEnd()){
         lineData = in.readLine();
-        if(lineData.contains("i 99 0 10")){
+        content= content + lineData + "\n";
+        if(lineData.contains("<CsScore>")){
             for(int i=0 ; i<midiNotes.count() ; i++){
-                QString initScore = "i 1 " + QString::number(barStartInfo.at(i)) + " " + QString::number(barStartInfo.at(i)+1) + " " + QString::number(midiNotes.at(i)) + " 100"+ "\n" ;
+                QString initScore = "i 1 " + QString::number(barStartInfo.at(i)) + " " + QString::number(1) + " " + QString::number(midiNotes.at(i)) + " 100"+ "\n" ;
                 content = content + initScore;
             }
+            QString instrInit = "i 99 0 " + QString::number(barStartInfo.at(barStartInfo.count()-1)+1) + "\ne\n";//instrument will be active till the end of the notes +1 second
+            content = content + instrInit;
         }
-        content= content + lineData + "\n";
     }
     m_csdFileOpen.seek(0);
     QByteArray contentByte = content.toUtf8();
