@@ -34,6 +34,7 @@ CsEngine::CsEngine()
     //mStop=false;
     //cs.SetOption("-odac");
     //cs.SetOption("-d");
+    m_fileName = (char *)"./test1.csd";
 }
 
 void CsEngine::run() {
@@ -44,13 +45,12 @@ void CsEngine::run() {
             cs.Perform();
     }*/
     cs.setOpenSlCallbacks(); // for android audio to work
-    cs.Compile("./test1.csd");
+    cs.Compile(m_fileName);
     cs.Start();
     cs.Perform();
     cs.Cleanup();
     cs.Reset();
     cs.Stop();
-
 }
 
 void CsEngine::stop()

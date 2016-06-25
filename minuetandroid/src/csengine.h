@@ -30,8 +30,8 @@ class CsEngine : public QThread
 {
     Q_OBJECT
 private:
-    bool mStop;
     AndroidCsound cs;
+    char *m_fileName;
 
 public:
     explicit CsEngine();
