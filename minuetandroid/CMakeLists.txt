@@ -32,7 +32,7 @@ include(FeatureSummary)
 
 #find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n)
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Quick Qml)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Quick Qml XmlPatterns QuickControls2)
 
 add_library(csoundandroid SHARED IMPORTED)
 set_property(TARGET csoundandroid PROPERTY IMPORTED_LOCATION_RELEASE $ENV{CSOUND_ANDROID_ROOT}/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a/libcsoundandroid.so)

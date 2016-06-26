@@ -21,7 +21,7 @@
 ****************************************************************************/
 
 import QtQuick 2.4
-import QtQuick.Controls 1.3
+import QtQuick.Controls 2.0
 import QtQuick.Controls.Styles 1.1
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Styles.Flat 1.0 as Flat
@@ -35,13 +35,13 @@ ApplicationWindow {
     width: 640
     height: 480
 
-    onCurrentMenuChanged: {
+    /*onCurrentMenuChanged: {
         xBehavior.enabled = true;
         anchorCurrentMenu();
-    }
+    }*/
 
     //called to slide the navigation menu
-    function anchorCurrentMenu() {
+    /*function anchorCurrentMenu() {
         switch (currentMenu) {
         case -1:
             anchorItem.x = -menuWidth;
@@ -53,7 +53,7 @@ ApplicationWindow {
             anchorItem.x = -menuWidth * 2;
             break;
         }
-    }
+    }*/
     function userMessageChanged(message) {
      //   pianoView.visible = (message != "the rhythm" && message != "exercise")
         rhythmAnswerView.visible = (message == "the rhythm")
@@ -68,31 +68,33 @@ ApplicationWindow {
     readonly property int textMargins: Math.round(16 * Flat.FlatStyle.scaleFactor)
     readonly property int menuMargins: Math.round(13 * Flat.FlatStyle.scaleFactor)
     readonly property alias anchorItem: navigationMenu
-    property int currentMenu: -1
+    //property int currentMenu: -1
     readonly property int menuWidth: Math.min(window.width, window.height) * 0.75
 
-    Item {
+    //Item {
 
-        id: navigationMenuContainer
-        anchors.fill: parent
+      //  id: navigationMenuContainer
+       // anchors.fill: parent
 
-        Rectangle{
+        Drawer{
 
             id: navigationMenu
-            x: navigationMenuContainer.x - width
-            z: minuetMenu.z + 1
-            width: menuWidth
-            height: parent.height
+            //x: navigationMenuContainer.x - width
+            //z: minuetMenu.z + 1
+            //width: menuWidth
+            //height: parent.height
+            width: Math.min(window.width, window.height) * 0.75
+            height: window.height
 
             //for resizing
-            Binding {
+            /*Binding {
                 target: navigationMenu
                 property: "x"
                 value: navigationMenuContainer.x - navigationMenu.width
                 when: !xBehavior.enabled && !xNumberAnimation.running && currentMenu == -1
-            }
+            }*/
 
-            Behavior on x {
+            /*Behavior on x {
                 id: xBehavior
                 enabled: false
                 NumberAnimation {
@@ -101,12 +103,12 @@ ApplicationWindow {
                     duration: 500
                     onRunningChanged: xBehavior.enabled = false
                 }
-            }
+            }*/
 
             //loads the exercises from exercise controller
             Item {
                 property string message
-                property Item selectedMenuItem : null
+                //property Item selectedMenuItem : null
 
                 signal breadcrumbPressed
                 signal itemChanged(var model)
@@ -135,7 +137,7 @@ ApplicationWindow {
                 onClicked: {
                     sequencer.stop()
                     minuetMenu.breadcrumbPressed()
-                    minuetMenu.selectedMenuItem = null
+                    //minuetMenu.selectedMenuItem = null
                     stackView.pop()
                     minuetMenu.userMessageChanged("exercise")
                     if (stackView.depth == 1)
@@ -154,38 +156,48 @@ ApplicationWindow {
                 Component {
                     id: categoryDelegate
 
-                    Button {
+                    Rectangle {
                         id: delegateRect
+                        width: stackView.width
+                        height:100
+                        Label {
+                            id: exerciseName
+                            text: "technical term, do you have a musician friend?", modelData.name
+                            padding: 50
+                        }
 
-                        width: parent.width; height: 100
-                        text: "technical term, do you have a musician friend?", modelData.name
-                        checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
-                        onClicked: {
-                            var userMessage = delegateRect.ListView.view.model[index].userMessage
-                            if (userMessage != undefined)
-                                minuetMenu.message = userMessage
-                            var children = delegateRect.ListView.view.model[index].children
-                            if (!children) {
-                                if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.checked = false
-                                minuetMenu.userMessageChanged(minuetMenu.message)
-                                minuetMenu.itemClicked(delegateRect, index)
-                                minuetMenu.selectedMenuItem = delegateRect
-                            }
-                            else {
-                                stackView.push(categoryMenu.createObject(stackView, {model: children}))
-                                var root = delegateRect.ListView.view.model[index].root
-                                if (root != undefined) {
-                                    exerciseController.setMinRootNote(root.split('.')[0])
-                                    exerciseController.setMaxRootNote(root.split('.')[2])
+                        //checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
+                        MouseArea{
+                            width: parent.width
+                            height: parent.height
+                            onClicked: {
+                                var userMessage = delegateRect.ListView.view.model[index].userMessage
+                                if (userMessage != undefined)
+                                    minuetMenu.message = userMessage
+                                var children = delegateRect.ListView.view.model[index].children
+                                if (!children) {
+                                    //if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.checked = false
+                                    minuetMenu.userMessageChanged(minuetMenu.message)
+                                    minuetMenu.itemClicked(delegateRect, index)
+                                    //minuetMenu.selectedMenuItem = delegateRect
+                                    navigationMenu.close()
                                 }
-                                var playMode = delegateRect.ListView.view.model[index].playMode
-                                if (playMode != undefined) {
-                                    if (playMode == "scale") exerciseController.setPlayMode(0) // ScalePlayMode
-                                    if (playMode == "chord") exerciseController.setPlayMode(1) // ChordPlayMode
-                                    exerciseController.setAnswerLength(1)
-                                    if (playMode == "rhythm") {
-                                        exerciseController.setPlayMode(2) // RhythmPlayMode
-                                        exerciseController.setAnswerLength(4)
+                                else {
+                                    stackView.push(categoryMenu.createObject(stackView, {model: children}))
+                                    var root = delegateRect.ListView.view.model[index].root
+                                    if (root != undefined) {
+                                        exerciseController.setMinRootNote(root.split('.')[0])
+                                        exerciseController.setMaxRootNote(root.split('.')[2])
+                                    }
+                                    var playMode = delegateRect.ListView.view.model[index].playMode
+                                    if (playMode != undefined) {
+                                        if (playMode == "scale") exerciseController.setPlayMode(0) // ScalePlayMode
+                                        if (playMode == "chord") exerciseController.setPlayMode(1) // ChordPlayMode
+                                        exerciseController.setAnswerLength(1)
+                                        if (playMode == "rhythm") {
+                                            exerciseController.setPlayMode(2) // RhythmPlayMode
+                                            exerciseController.setAnswerLength(4)
+                                        }
                                     }
                                 }
                             }
@@ -207,7 +219,7 @@ ApplicationWindow {
                             anchors.fill: parent
                             spacing: -2
                             delegate: categoryDelegate
-
+                            ScrollIndicator.vertical: ScrollIndicator { }
                         }
                     }
                 }
@@ -227,10 +239,10 @@ ApplicationWindow {
             MouseArea{
                 width: parent.width;
                 height: parent.height
-                onClicked: {
+                /*onClicked: {
                     if(currentMenu == 0)
                         currentMenu = -1
-                }
+                }*/
             }
 
             //contains the title and one button
@@ -238,11 +250,11 @@ ApplicationWindow {
                 id: toolBar
                 width: parent.width
                 height: 36 * Flat.FlatStyle.scaleFactor
-                z: navigationMenuContainer.z + 1
-                style: Flat.ToolBarStyle {
+                //z: navigationMenuContainer.z + 1
+                /*style: Flat.ToolBarStyle {
                     padding.left: 0
                     padding.right: 0
-                }
+                }*/
 
                 RowLayout {
                     anchors.fill: parent
@@ -251,8 +263,8 @@ ApplicationWindow {
                         id: controlsButton
                         Layout.preferredWidth: toolBar.height + textMargins
                         Layout.preferredHeight: toolBar.height
-                        onClicked: currentMenu = currentMenu == 0 ? -1 : 0
-
+                        //onClicked: currentMenu = currentMenu == 0 ? -1 : 0
+                        onClicked: navigationMenu.open()
                         Column {
                             id: controlsIcon
                             anchors.left: parent.left
@@ -298,7 +310,7 @@ ApplicationWindow {
                 anchors { top: toolBar.bottom; horizontalCenter: contentContainer.horizontalCenter }
             }
         }
-    }
+    //}
     Connections {
         target: minuetMenu
         onItemChanged: exerciseView.itemChanged(model)
