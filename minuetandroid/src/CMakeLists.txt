@@ -28,6 +28,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL Android)
     )
 endif()
 
-target_link_libraries(minuetandroid csoundandroid sndfile c++_shared)
+target_link_libraries(minuetandroid ${CSOUND_LIBS})
 
 install(TARGETS minuetandroid RUNTIME DESTINATION bin)

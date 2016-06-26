@@ -34,16 +34,13 @@ include(FeatureSummary)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Quick Qml XmlPatterns QuickControls2)
 
-add_library(csoundandroid SHARED IMPORTED)
-set_property(TARGET csoundandroid PROPERTY IMPORTED_LOCATION_RELEASE $ENV{CSOUND_ANDROID_ROOT}/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a/libcsoundandroid.so)
+set(CSOUND_LIBS_DIR $ENV{CSOUND_ANDROID_ROOT}/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a)
 
-add_library(sndfile SHARED IMPORTED)
-set_property(TARGET sndfile PROPERTY IMPORTED_LOCATION_RELEASE $ENV{CSOUND_ANDROID_ROOT}/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a/libsndfile.so)
+find_library(CSOUND_ANDROID NAMES libcsoundandroid.so HINTS ${CSOUND_LIBS_DIR} CMAKE_FIND_ROOT_PATH_BOTH NO_DEFAULT_PATH)
+find_library(CSOUND_SHARED NAMES libc++_shared.so HINTS ${CSOUND_LIBS_DIR} CMAKE_FIND_ROOT_PATH_BOTH NO_DEFAULT_PATH)
+find_library(CSOUND_SND NAMES libsndfile.so HINTS ${CSOUND_LIBS_DIR} CMAKE_FIND_ROOT_PATH_BOTH NO_DEFAULT_PATH)
 
-add_library(c++_shared SHARED IMPORTED)
-set_property(TARGET c++_shared PROPERTY IMPORTED_LOCATION_RELEASE $ENV{CSOUND_ANDROID_ROOT}/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a/libc++_shared.so)
-
-link_directories($ENV{CSOUND_ANDROID_ROOT}/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a)
+set(CSOUND_LIBS ${CSOUND_ANDROID} ${CSOUND_SHARED} ${CSOUND_SND})
 
 include_directories($ENV{CSOUND_ROOT}/include)
 include_directories($ENV{CSOUND_ROOT}/android/CsoundAndroid/jni/)
