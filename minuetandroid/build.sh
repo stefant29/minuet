@@ -4,7 +4,7 @@ cmake ../ -DCMAKE_TOOLCHAIN_FILE=/usr/share/ECM/toolchain/Android.cmake -DCMAKE_
 
 make
 
-mkdir "${INSTALL_DIR}"/share
+mkdir -p "${INSTALL_DIR}"/share
 mkdir -p "${INSTALL_DIR}"/lib/qml
 
 make install/strip
