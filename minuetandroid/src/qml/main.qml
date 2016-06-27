@@ -35,25 +35,6 @@ ApplicationWindow {
     width: 640
     height: 480
 
-    /*onCurrentMenuChanged: {
-        xBehavior.enabled = true;
-        anchorCurrentMenu();
-    }*/
-
-    //called to slide the navigation menu
-    /*function anchorCurrentMenu() {
-        switch (currentMenu) {
-        case -1:
-            anchorItem.x = -menuWidth;
-            break;
-        case 0:
-            anchorItem.x = 0;
-            break;
-        case 1:
-            anchorItem.x = -menuWidth * 2;
-            break;
-        }
-    }*/
     function userMessageChanged(message) {
      //   pianoView.visible = (message != "the rhythm" && message != "exercise")
         rhythmAnswerView.visible = (message == "the rhythm")
@@ -71,39 +52,11 @@ ApplicationWindow {
     //property int currentMenu: -1
     readonly property int menuWidth: Math.min(window.width, window.height) * 0.75
 
-    //Item {
-
-      //  id: navigationMenuContainer
-       // anchors.fill: parent
-
         Drawer{
 
             id: navigationMenu
-            //x: navigationMenuContainer.x - width
-            //z: minuetMenu.z + 1
-            //width: menuWidth
-            //height: parent.height
             width: Math.min(window.width, window.height) * 0.75
             height: window.height
-
-            //for resizing
-            /*Binding {
-                target: navigationMenu
-                property: "x"
-                value: navigationMenuContainer.x - navigationMenu.width
-                when: !xBehavior.enabled && !xNumberAnimation.running && currentMenu == -1
-            }*/
-
-            /*Behavior on x {
-                id: xBehavior
-                enabled: false
-                NumberAnimation {
-                    id: xNumberAnimation
-                    easing.type: Easing.OutExpo
-                    duration: 500
-                    onRunningChanged: xBehavior.enabled = false
-                }
-            }*/
 
             //loads the exercises from exercise controller
             Item {
@@ -127,29 +80,34 @@ ApplicationWindow {
                 }
 
             //back button
-            Button {
+            Rectangle {
 
                 id: breadcrumb
-
-                width: (stackView.depth > 1) ? 100:0; height: parent.height
+                border.width: 1
+                border.color: "gray"
+                height: (stackView.depth > 1) ? 100:0; width: parent.width
                 //not working
                 //iconName: "go-previous"
-                onClicked: {
-                    sequencer.stop()
-                    minuetMenu.breadcrumbPressed()
-                    //minuetMenu.selectedMenuItem = null
-                    stackView.pop()
-                    minuetMenu.userMessageChanged("exercise")
-                    if (stackView.depth == 1)
-                        minuetMenu.message = "exercise"
+                MouseArea
+                {
+                    width: parent.width; height: parent.height
+                    onClicked: {
+                        sequencer.stop()
+                        minuetMenu.breadcrumbPressed()
+                        //minuetMenu.selectedMenuItem = null
+                        stackView.pop()
+                        minuetMenu.userMessageChanged("exercise")
+                        if (stackView.depth == 1)
+                            minuetMenu.message = "exercise"
+                    }
                 }
             }
 
             StackView {
                 id: stackView
 
-                width: parent.width - breadcrumb.width; height: parent.height
-                anchors.left: breadcrumb.right
+                width: parent.width; height: parent.height
+                anchors.top: breadcrumb.bottom
                 clip: true
                 focus: true
 
@@ -159,7 +117,7 @@ ApplicationWindow {
                     Rectangle {
                         id: delegateRect
                         width: stackView.width
-                        height:100
+                        height:exerciseName.height - exerciseName.padding
                         Label {
                             id: exerciseName
                             text: "technical term, do you have a musician friend?", modelData.name
@@ -236,25 +194,12 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
 
             width: parent.width
-            MouseArea{
-                width: parent.width;
-                height: parent.height
-                /*onClicked: {
-                    if(currentMenu == 0)
-                        currentMenu = -1
-                }*/
-            }
 
             //contains the title and one button
             ToolBar {
                 id: toolBar
                 width: parent.width
                 height: 36 * Flat.FlatStyle.scaleFactor
-                //z: navigationMenuContainer.z + 1
-                /*style: Flat.ToolBarStyle {
-                    padding.left: 0
-                    padding.right: 0
-                }*/
 
                 RowLayout {
                     anchors.fill: parent
