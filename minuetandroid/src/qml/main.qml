@@ -20,20 +20,19 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.4
+import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Styles 1.1
-import QtQuick.Layouts 1.0
-import QtQuick.Controls.Styles.Flat 1.0 as Flat
+import QtQuick.Layouts 1.3
 import QtQuick.Extras 1.4
 import QtQuick.Extras.Private 1.0
+import QtQuick.Controls.Material 2.0
 
 //window
 ApplicationWindow {
     id:window
     visible: true
-    width: 640
-    height: 480
+    width: 640;height: 480
 
     function userMessageChanged(message) {
      //   pianoView.visible = (message != "the rhythm" && message != "exercise")
@@ -46,16 +45,43 @@ ApplicationWindow {
         }
     }
 
-    readonly property int textMargins: Math.round(16 * Flat.FlatStyle.scaleFactor)
-    readonly property int menuMargins: Math.round(13 * Flat.FlatStyle.scaleFactor)
-    readonly property alias anchorItem: navigationMenu
-    //property int currentMenu: -1
-    readonly property int menuWidth: Math.min(window.width, window.height) * 0.75
+    //contains title and button
+    //TODO add a settings bar
+    header: ToolBar{
+        Material.foreground: "white"
+        id:toolBar
 
+        RowLayout{
+            spacing: 20
+            anchors.fill: parent
+            height: parent.height/5
+            ToolButton {
+                contentItem: Image {
+                    fillMode: Image.Stretch
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "drawer.png"
+                }
+                onClicked: navigationMenu.open()
+            }
+
+            Label {
+                id: titleLabel
+                text: "Minuet Mobile"
+                font.pixelSize: 25
+                elide: Label.ElideRight
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+            }
+        }
+    }
+
+    //TODO: Have an icon next to the name for each type of main exercise(chords,intervals,rhythm) in navigation drawer
     Drawer{
        id: navigationMenu
-       width: Math.min(window.width, window.height) * 0.75
-       height: window.height
+       //TODO check if we need vertical and horizontal orientation
+       width: Math.min(window.width, window.height) * 0.75; height: window.height
 
        //loads the exercises from exercise controller
        Item {
@@ -66,8 +92,7 @@ ApplicationWindow {
             signal itemChanged(var model)
             signal userMessageChanged(string message)
             id: minuetMenu
-            width: parent.width
-            height: parent.height
+            width: parent.width; height: parent.height
 
             function itemClicked(delegateRect, index) {
                 var model = delegateRect.ListView.view.model[index].options
@@ -78,16 +103,15 @@ ApplicationWindow {
             }
 
             //back button
+            //TODO add a back icon along with the current position in the drawer
             Rectangle {
                 id: breadcrumb
                 border.width: 1
                 border.color: "gray"
-                height: (stackView.depth > 1) ? 100:0; width: parent.width
-                //not working
-                //iconName: "go-previous"
-                MouseArea
-                {
-                    width: parent.width; height: parent.height
+                width: parent.width; height: (stackView.depth > 1) ? 50:0
+
+                MouseArea{
+                    anchors.fill: parent
                     onClicked: {
                         sequencer.stop()
                         minuetMenu.breadcrumbPressed()
@@ -102,8 +126,9 @@ ApplicationWindow {
 
             StackView {
                 id: stackView
-                width: parent.width; height: parent.height
+                width: parent.width;
                 anchors.top: breadcrumb.bottom
+                anchors.bottom:parent.bottom
                 clip: true
                 focus: true
 
@@ -112,18 +137,17 @@ ApplicationWindow {
 
                     Rectangle {
                         id: delegateRect
-                        width: stackView.width
-                        height:exerciseName.height - exerciseName.padding
+                        width: stackView.width; height:exerciseName.height - exerciseName.padding
+
                         Label {
                             id: exerciseName
                             text: "technical term, do you have a musician friend?", modelData.name
-                            padding: 50
+                            padding: 25
                         }
 
                         //checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
                         MouseArea{
-                            width: parent.width
-                            height: parent.height
+                            anchors.fill: parent
                             onClicked: {
                                 var userMessage = delegateRect.ListView.view.model[index].userMessage
                                 if (userMessage != undefined)
@@ -180,61 +204,11 @@ ApplicationWindow {
                 Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseCategories})) }
             }
         }
-
     }
 
-    //Contains the title + a navigation button
     Item {
         id: contentContainer
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        width: parent.width
-
-        //contains the title and one button
-        ToolBar {
-            id: toolBar
-            width: parent.width
-            height: 36 * Flat.FlatStyle.scaleFactor
-
-            RowLayout {
-                anchors.fill: parent
-                //controls button in main view
-                MouseArea {
-                    id: controlsButton
-                    Layout.preferredWidth: toolBar.height + textMargins
-                    Layout.preferredHeight: toolBar.height
-                    //onClicked: currentMenu = currentMenu == 0 ? -1 : 0
-                    onClicked: navigationMenu.open()
-                    Column {
-                        id: controlsIcon
-                        anchors.left: parent.left
-                        anchors.leftMargin: textMargins
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: Math.round(2 * Flat.FlatStyle.scaleFactor)
-
-                        Repeater {
-                            model: 3
-
-                            Rectangle {
-                                width: Math.round(4 * Flat.FlatStyle.scaleFactor)
-                                height: width
-                                radius: width / 2
-                                color: Flat.FlatStyle.defaultTextColor
-                            }
-                        }
-                    }
-                }
-                //title
-                Text {
-                    text: "Minuet Mobile"
-                    font.family: Flat.FlatStyle.fontFamily
-                    font.pixelSize: Math.round(16 * Flat.FlatStyle.scaleFactor)
-                    horizontalAlignment: Text.AlignHCenter
-                    color: "#666666"
-                    Layout.fillWidth: true
-                }
-            }
-        }
+        anchors.fill: parent
 
         RhythmAnswerView {
             id: rhythmAnswerView
@@ -246,7 +220,7 @@ ApplicationWindow {
         ExerciseView {
             id: exerciseView
             width: contentContainer.width ; height: contentContainer.height
-            anchors { top: toolBar.bottom; horizontalCenter: contentContainer.horizontalCenter }
+            anchors { horizontalCenter: contentContainer.horizontalCenter }
         }
     }
 
@@ -274,3 +248,4 @@ ApplicationWindow {
         onAnswerCompleted: exerciseView.checkAnswers(answers)
     }
 }
+

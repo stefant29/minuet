@@ -28,7 +28,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QDir>
-
+#include <QQuickStyle>
 //#include <QQmlDebuggingEnabler>
 //QQmlDebuggingEnabler enabler;
 
@@ -36,6 +36,8 @@ bool copyDir(const QString source, const QString destination);
 
 int main(int argc, char *argv[])
 {
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    qputenv("QT_QUICK_CONTROLS_STYLE", "material");
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
     CsEngine cs;

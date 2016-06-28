@@ -19,6 +19,10 @@
         <file alias="sixteenth-sixteenth-eighth.png">../exercises/exercise-images/sixteenth-sixteenth-eighth.png</file>
         <file alias="sixteenth-sixteenth-sixteenth-sixteenth.png">../exercises/exercise-images/sixteenth-sixteenth-sixteenth-sixteenth.png</file>
         <file alias="unknown-rhythm.png">../exercises/exercise-images/unknown-rhythm.png</file>
+	<file alias="drawer.png">../images/drawer.png</file>		
+        <file alias="drawer@2x.png">../images/drawer@2x.png</file>
+        <file alias="drawer@3x.png">../images/drawer@3x.png</file>
+        <file alias="drawer@4x.png">../images/drawer@4x.png</file>
 	<file alias="test1.csd">../test1.csd</file>
     </qresource>
 </RCC>

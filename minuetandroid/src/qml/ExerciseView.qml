@@ -20,10 +20,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.4
-import QtQuick.Controls 1.3
+import QtQuick 2.6
+import QtQuick.Controls 2.0
 import QtQuick.Controls.Styles.Flat 1.0 as Flat
-
+import QtQuick.Controls.Material 2.0
 
 Item {
     id: exerciseView
@@ -94,27 +94,23 @@ Item {
 
         Text {
             id: messageText
-
             width: parent.width
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 18
             textFormat: Text.RichText
             text: "Hear " + userMessage + " and then choose an answer from options below!<br/>Click
                        'play question' if you want to hear again!"
-
         }
+
         Row {
             anchors { horizontalCenter: parent.horizontalCenter }
             spacing: 20
 
             Button {
                 id: newQuestionButton
-                width: playQuestionButton.implicitWidth+textMargins*0.5
-                height: playQuestionButton.implicitHeight
+                width: playQuestionButton.implicitWidth+textMargins*0.5; height: playQuestionButton.implicitHeight
                 text: "new question"
-
                 onClicked: {
-                    //sequencer.csEvent("i 1 0 0.5");
                     exerciseView.state = "waitingForAnswer"
                     chosenExercises = exerciseController.randomlyChooseExercises()
                     for (var i = 0; i < chosenExercises.length; ++i)
@@ -132,19 +128,16 @@ Item {
                 }
                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
+
+            //TODO change name to play again and click play question to play again
             Button {
                 id: playQuestionButton
-
-                width: playQuestionButton.implicitWidth+textMargins*0.5
-                height: playQuestionButton.implicitHeight
+                width: playQuestionButton.implicitWidth+textMargins*0.5; height: playQuestionButton.implicitHeight
                 text: "play question"
                 onClicked: sequencer.play();
                 // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
-                FontMetrics {
-                    id: fontMetrics
-                    font.family: "Arial"
-                }
             }
+
             Button {
                 id: giveUpButton
                 width: playQuestionButton.implicitWidth+textMargins*0.5
@@ -162,6 +155,7 @@ Item {
                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
         }
+
         Rectangle {
             color: "#475057"
             radius: 5
@@ -171,26 +165,23 @@ Item {
 
             Grid {
                 id: answerGrid
-
                 anchors.centerIn: parent
                 spacing: 10; columns: 2; rows: 1
+
                 Component {
                     id: answerOption
 
                     Rectangle {
-                        id: answerRectangle
-
                         property var model
                         property int index
 
-                        width: window.width*0.85/6
-                        height: (userMessage != "the rhythm") ? window.height*0.5/4:window.height*0.3/5
+                        id: answerRectangle
+                        width: window.width*0.85/6; height: (userMessage != "the rhythm") ? window.height*0.5/4:window.height*0.3/5
 
                         Text {
-                            id: option
-
                             property string originalText: model.name
 
+                            id: option
                             visible: userMessage != "the rhythm"
                             text: model.name
                             width: parent.width - 4
@@ -199,14 +190,15 @@ Item {
                             color: "black"
                             wrapMode: Text.Wrap
                         }
+
                         Image {
                             id: rhythmImage
-
                             anchors.centerIn: parent
                             visible: userMessage == "the rhythm"
                             source: (userMessage == "the rhythm") ? model.name + ".png":""
                             fillMode: Image.Pad
                         }
+
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
@@ -291,7 +283,6 @@ Item {
     ]
     ParallelAnimation {
         id: animation
-
         loops: 2
 
         SequentialAnimation {
