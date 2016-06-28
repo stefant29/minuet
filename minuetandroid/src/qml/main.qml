@@ -52,36 +52,33 @@ ApplicationWindow {
     //property int currentMenu: -1
     readonly property int menuWidth: Math.min(window.width, window.height) * 0.75
 
-        Drawer{
+    Drawer{
+       id: navigationMenu
+       width: Math.min(window.width, window.height) * 0.75
+       height: window.height
 
-            id: navigationMenu
-            width: Math.min(window.width, window.height) * 0.75
-            height: window.height
+       //loads the exercises from exercise controller
+       Item {
+            property string message
+            //property Item selectedMenuItem : null
 
-            //loads the exercises from exercise controller
-            Item {
-                property string message
-                //property Item selectedMenuItem : null
+            signal breadcrumbPressed
+            signal itemChanged(var model)
+            signal userMessageChanged(string message)
+            id: minuetMenu
+            width: parent.width
+            height: parent.height
 
-                signal breadcrumbPressed
-                signal itemChanged(var model)
-                signal userMessageChanged(string message)
-
-                id: minuetMenu
-                width: parent.width
-                height: parent.height
-
-                function itemClicked(delegateRect, index) {
-                    var model = delegateRect.ListView.view.model[index].options
-                    if (model != undefined) {
-                        exerciseController.setExerciseOptions(model)
-                        minuetMenu.itemChanged(model)
-                    }
+            function itemClicked(delegateRect, index) {
+                var model = delegateRect.ListView.view.model[index].options
+                if (model != undefined) {
+                    exerciseController.setExerciseOptions(model)
+                    minuetMenu.itemChanged(model)
                 }
+            }
 
             //back button
             Rectangle {
-
                 id: breadcrumb
                 border.width: 1
                 border.color: "gray"
@@ -105,7 +102,6 @@ ApplicationWindow {
 
             StackView {
                 id: stackView
-
                 width: parent.width; height: parent.height
                 anchors.top: breadcrumb.bottom
                 clip: true
@@ -162,7 +158,6 @@ ApplicationWindow {
                         }
 //                        style: MinuetButtonStyle {}
                     }
-
                 }
                 Component {
                     id: categoryMenu
@@ -186,76 +181,75 @@ ApplicationWindow {
             }
         }
 
-        }
-        //Contains the title + a navigation button
-        Item {
-            id: contentContainer
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
+    }
 
+    //Contains the title + a navigation button
+    Item {
+        id: contentContainer
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        width: parent.width
+
+        //contains the title and one button
+        ToolBar {
+            id: toolBar
             width: parent.width
+            height: 36 * Flat.FlatStyle.scaleFactor
 
-            //contains the title and one button
-            ToolBar {
-                id: toolBar
-                width: parent.width
-                height: 36 * Flat.FlatStyle.scaleFactor
+            RowLayout {
+                anchors.fill: parent
+                //controls button in main view
+                MouseArea {
+                    id: controlsButton
+                    Layout.preferredWidth: toolBar.height + textMargins
+                    Layout.preferredHeight: toolBar.height
+                    //onClicked: currentMenu = currentMenu == 0 ? -1 : 0
+                    onClicked: navigationMenu.open()
+                    Column {
+                        id: controlsIcon
+                        anchors.left: parent.left
+                        anchors.leftMargin: textMargins
+                        anchors.verticalCenter: parent.verticalCenter
+                        spacing: Math.round(2 * Flat.FlatStyle.scaleFactor)
 
-                RowLayout {
-                    anchors.fill: parent
-                    //controls button in main view
-                    MouseArea {
-                        id: controlsButton
-                        Layout.preferredWidth: toolBar.height + textMargins
-                        Layout.preferredHeight: toolBar.height
-                        //onClicked: currentMenu = currentMenu == 0 ? -1 : 0
-                        onClicked: navigationMenu.open()
-                        Column {
-                            id: controlsIcon
-                            anchors.left: parent.left
-                            anchors.leftMargin: textMargins
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: Math.round(2 * Flat.FlatStyle.scaleFactor)
+                        Repeater {
+                            model: 3
 
-                            Repeater {
-                                model: 3
-
-                                Rectangle {
-                                    width: Math.round(4 * Flat.FlatStyle.scaleFactor)
-                                    height: width
-                                    radius: width / 2
-                                    color: Flat.FlatStyle.defaultTextColor
-                                }
+                            Rectangle {
+                                width: Math.round(4 * Flat.FlatStyle.scaleFactor)
+                                height: width
+                                radius: width / 2
+                                color: Flat.FlatStyle.defaultTextColor
                             }
                         }
                     }
-                    //title
-                    Text {
-                        text: "Minuet Mobile"
-                        font.family: Flat.FlatStyle.fontFamily
-                        font.pixelSize: Math.round(16 * Flat.FlatStyle.scaleFactor)
-                        horizontalAlignment: Text.AlignHCenter
-                        color: "#666666"
-                        Layout.fillWidth: true
-                    }
+                }
+                //title
+                Text {
+                    text: "Minuet Mobile"
+                    font.family: Flat.FlatStyle.fontFamily
+                    font.pixelSize: Math.round(16 * Flat.FlatStyle.scaleFactor)
+                    horizontalAlignment: Text.AlignHCenter
+                    color: "#666666"
+                    Layout.fillWidth: true
                 }
             }
-
-            RhythmAnswerView {
-                id: rhythmAnswerView
-
-                anchors { bottom: parent.bottom; bottomMargin: 20; horizontalCenter: parent.horizontalCenter }
-                visible: false
-                exerciseView: exerciseView
-            }
-
-            ExerciseView {
-                id: exerciseView
-                width: contentContainer.width ; height: contentContainer.height
-                anchors { top: toolBar.bottom; horizontalCenter: contentContainer.horizontalCenter }
-            }
         }
-    //}
+
+        RhythmAnswerView {
+            id: rhythmAnswerView
+            anchors { bottom: parent.bottom; bottomMargin: 20; horizontalCenter: parent.horizontalCenter }
+            visible: false
+            exerciseView: exerciseView
+        }
+
+        ExerciseView {
+            id: exerciseView
+            width: contentContainer.width ; height: contentContainer.height
+            anchors { top: toolBar.bottom; horizontalCenter: contentContainer.horizontalCenter }
+        }
+    }
+
     Connections {
         target: minuetMenu
         onItemChanged: exerciseView.itemChanged(model)
