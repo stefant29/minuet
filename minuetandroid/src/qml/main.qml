@@ -44,7 +44,6 @@ ApplicationWindow {
             rhythmAnswerView.resetAnswers()
         }
     }
-
     //contains title and button
     //TODO add a settings bar
     header: ToolBar{
@@ -55,6 +54,7 @@ ApplicationWindow {
             spacing: 20
             anchors.fill: parent
             height: parent.height/5
+
             ToolButton {
                 contentItem: Image {
                     fillMode: Image.Stretch
@@ -109,6 +109,7 @@ ApplicationWindow {
        //loads the exercises from exercise controller
        Item {
             property string message
+            property variant exerciseArray: []
             //property Item selectedMenuItem : null
 
             signal breadcrumbPressed
@@ -127,23 +128,44 @@ ApplicationWindow {
 
             //back button
             //TODO add a back icon along with the current position in the drawer
-            Rectangle {
+            Item {
                 id: breadcrumb
-                border.width: 1
-                border.color: "gray"
                 width: parent.width; height: (stackView.depth > 1) ? 50:0
 
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        sequencer.stop()
-                        minuetMenu.breadcrumbPressed()
-                        //minuetMenu.selectedMenuItem = null
-                        stackView.pop()
-                        minuetMenu.userMessageChanged("exercise")
-                        if (stackView.depth == 1)
-                            minuetMenu.message = "exercise"
+                Image {
+                    id: backButton
+                    fillMode: Image.Stretch
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+
+                    source: "back@2x.png"
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            sequencer.stop()
+                            minuetMenu.breadcrumbPressed()
+                            //minuetMenu.selectedMenuItem = null
+                            stackView.pop()
+                            minuetMenu.exerciseArray.pop()
+                            currentExercise.text = minuetMenu.exerciseArray.toString()
+                            minuetMenu.userMessageChanged("exercise")
+                            if (stackView.depth == 1)
+                                minuetMenu.message = "exercise"
+                        }
                     }
+                }
+
+                Label{
+                    id: currentExercise
+                    text:""
+                    font.pixelSize: 25
+                    elide: Label.ElideRight
+                    verticalAlignment: Qt.AlignVCenter
+                    Layout.fillWidth: true
+                    anchors.left: backButton.right
+                    anchors.verticalCenter: parent.verticalCenter
                 }
             }
 
@@ -165,6 +187,7 @@ ApplicationWindow {
                         Label {
                             id: exerciseName
                             text: "technical term, do you have a musician friend?", modelData.name
+
                             padding: 25
                         }
 
@@ -185,6 +208,8 @@ ApplicationWindow {
                                 }
                                 else {
                                     stackView.push(categoryMenu.createObject(stackView, {model: children}))
+                                    currentExercise.text = modelData.name
+                                    minuetMenu.exerciseArray.push(modelData.name)
                                     var root = delegateRect.ListView.view.model[index].root
                                     if (root != undefined) {
                                         exerciseController.setMinRootNote(root.split('.')[0])
@@ -206,6 +231,7 @@ ApplicationWindow {
 //                        style: MinuetButtonStyle {}
                     }
                 }
+
                 Component {
                     id: categoryMenu
 
@@ -271,5 +297,4 @@ ApplicationWindow {
         onAnswerCompleted: exerciseView.checkAnswers(answers)
     }
 }
-
 

@@ -27,6 +27,10 @@
         <file alias="menu@2x.png">../images/menu@2x.png</file>
         <file alias="menu@3x.png">../images/menu@3x.png</file>
         <file alias="menu4@x.png">../images/menu@4x.png</file>
+	<file alias="back.png">../images/back.png</file>		
+        <file alias="back@2x.png">../images/back@2x.png</file>
+        <file alias="back@3x.png">../images/back@3x.png</file>
+        <file alias="back@4x.png">../images/back@4x.png</file>
 	<file alias="test1.csd">../test1.csd</file>
     </qresource>
 </RCC>
