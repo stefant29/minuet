@@ -74,6 +74,29 @@ ApplicationWindow {
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
             }
+
+            ToolButton {
+                contentItem: Image {
+                    fillMode: Image.Pad
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "menu.png"
+                }
+                onClicked: optionsMenu.open()
+
+                Menu {
+                    id: optionsMenu
+                    x: parent.width - width
+                    transformOrigin: Menu.TopRight
+
+                    MenuItem {
+                        text: "Settings"
+                    }
+                    MenuItem {
+                        text: "About"
+                    }
+                }
+            }
         }
     }
 
@@ -248,4 +271,5 @@ ApplicationWindow {
         onAnswerCompleted: exerciseView.checkAnswers(answers)
     }
 }
+
 

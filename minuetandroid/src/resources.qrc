@@ -23,6 +23,10 @@
         <file alias="drawer@2x.png">../images/drawer@2x.png</file>
         <file alias="drawer@3x.png">../images/drawer@3x.png</file>
         <file alias="drawer@4x.png">../images/drawer@4x.png</file>
+	<file alias="menu.png">../images/menu.png</file>		
+        <file alias="menu@2x.png">../images/menu@2x.png</file>
+        <file alias="menu@3x.png">../images/menu@3x.png</file>
+        <file alias="menu4@x.png">../images/menu@4x.png</file>
 	<file alias="test1.csd">../test1.csd</file>
     </qresource>
 </RCC>
