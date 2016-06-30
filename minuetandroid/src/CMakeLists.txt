@@ -2,7 +2,7 @@ set(minuetandroid_SRCS
     main.cpp
     exercisecontroller.cpp
     csengine.cpp
-    midisequencer.cpp
+    csoundandroidsoundbackend.cpp
 )
 qt5_add_resources(minuetandroid_SRCS resources.qrc)
 

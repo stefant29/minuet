@@ -20,20 +20,20 @@
 **
 ****************************************************************************/
 
-#ifndef MIDISEQUENCER_H
-#define MIDISEQUENCER_H
+#ifndef CSOUNDANDROIDSOUNDBACKEND_H
+#define CSOUNDANDROIDSOUNDBACKEND_H
 
 #include <QObject>
 
 class CsEngine;
 
-class MidiSequencer : public QObject
+class CsoundAndroidSoundBackend : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit MidiSequencer();
-    virtual ~MidiSequencer();
+    explicit CsoundAndroidSoundBackend();
+    virtual ~CsoundAndroidSoundBackend();
 
     void appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo);
     void clearExercise();
@@ -46,5 +46,4 @@ private:
     CsEngine *m_csoundengine;
 };
 
-#endif // MIDISEQUENCER_H
-
+#endif

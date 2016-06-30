@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-#include "midisequencer.h"
+#include "csoundandroidsoundbackend.h"
 #include "csengine.h"
 
 #include <QtMath>
@@ -28,16 +28,16 @@
 
 #include <QtQml>
 
-Q_DECLARE_LOGGING_CATEGORY(MINUET)
+Q_DECLARE_LOGGING_CATEGORY(MINUETANDROID)
 
 
-MidiSequencer::MidiSequencer()
+CsoundAndroidSoundBackend::CsoundAndroidSoundBackend()
 {
-    qmlRegisterType<MidiSequencer>("org.kde.minuetandroid", 1, 0, "MidiSequencer");
+    qmlRegisterType<CsoundAndroidSoundBackend>("org.kde.minuetandroid", 1, 0, "CsoundAndroidSoundBackend");
     m_csoundengine = new CsEngine;
 }
 
-void MidiSequencer::clearExercise()
+void CsoundAndroidSoundBackend::clearExercise()
 {
     QFile dfile("./test1.csd");
     if(dfile.exists())
@@ -50,7 +50,7 @@ void MidiSequencer::clearExercise()
     }
 }
 
-void MidiSequencer::appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo)
+void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo)
 {
     //TODO : use grantlee processing or any other text template library
     QString content;
@@ -77,15 +77,15 @@ void MidiSequencer::appendEvent(QList<unsigned int> midiNotes,QList<unsigned int
     m_csdFileOpen.write(contentByte);
 }
 
-MidiSequencer::~MidiSequencer()
+CsoundAndroidSoundBackend::~CsoundAndroidSoundBackend()
 {
     delete m_csoundengine;
 }
 
-void MidiSequencer::play(){
+void CsoundAndroidSoundBackend::play(){
     m_csoundengine->start();
 }
 
-void MidiSequencer::stop(){
+void CsoundAndroidSoundBackend::stop(){
     m_csoundengine->stop();
 }

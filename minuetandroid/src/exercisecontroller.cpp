@@ -21,7 +21,7 @@
 ****************************************************************************/
 
 #include "exercisecontroller.h"
-#include "midisequencer.h"
+#include "csoundandroidsoundbackend.h"
 
 #include <QDir>
 #include <QDateTime>
@@ -33,8 +33,8 @@
 
 //#include <drumstick/alsaevent.h>
 
-ExerciseController::ExerciseController(MidiSequencer *midiSequencer) :
-    m_midiSequencer(midiSequencer),
+ExerciseController::ExerciseController(CsoundAndroidSoundBackend *csoundAndroidSoundBackend) :
+    m_csoundAndroidSoundBackend(csoundAndroidSoundBackend),
     m_minRootNote(0),
     m_maxRootNote(0),
     m_playMode(ScalePlayMode),
@@ -82,7 +82,7 @@ QStringList ExerciseController::randomlyChooseExercises()
 {
     QList<unsigned int> midiNotes;
     QList<unsigned int> barStartInfo;
-    m_midiSequencer->clearExercise();
+    m_csoundAndroidSoundBackend->clearExercise();
     //clearExercise();
     qsrand(QDateTime::currentDateTimeUtc().toTime_t());
     QStringList chosenExercises;
@@ -119,7 +119,7 @@ QStringList ExerciseController::randomlyChooseExercises()
         chosenExercises << m_exerciseOptions[m_chosenExercise].toObject()[QStringLiteral("name")].toString();
         }
     }
-    m_midiSequencer->appendEvent(midiNotes,barStartInfo);
+    m_csoundAndroidSoundBackend->appendEvent(midiNotes,barStartInfo);
     return chosenExercises;
 }
 
