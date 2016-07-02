@@ -144,7 +144,7 @@ ApplicationWindow {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            sequencer.stop()
+                            soundBackend.stop()
                             minuetMenu.breadcrumbPressed()
                             //minuetMenu.selectedMenuItem = null
                             stackView.pop()

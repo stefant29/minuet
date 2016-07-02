@@ -33,8 +33,8 @@
 
 //#include <drumstick/alsaevent.h>
 
-ExerciseController::ExerciseController(Minuet::ISoundBackend *csoundAndroidSoundBackend) :
-    m_csoundAndroidSoundBackend(csoundAndroidSoundBackend),
+ExerciseController::ExerciseController(Minuet::ISoundBackend *soundBackend) :
+    m_soundBackend(soundBackend),
     m_minRootNote(0),
     m_maxRootNote(0),
     m_playMode(ScalePlayMode),
@@ -82,7 +82,7 @@ QStringList ExerciseController::randomlyChooseExercises()
 {
     QList<unsigned int> midiNotes;
     QList<unsigned int> barStartInfo;
-    m_csoundAndroidSoundBackend->clearExercise();
+    m_soundBackend->clearExercise();
     //clearExercise();
     qsrand(QDateTime::currentDateTimeUtc().toTime_t());
     QStringList chosenExercises;
@@ -119,7 +119,7 @@ QStringList ExerciseController::randomlyChooseExercises()
         chosenExercises << m_exerciseOptions[m_chosenExercise].toObject()[QStringLiteral("name")].toString();
         }
     }
-    m_csoundAndroidSoundBackend->appendEvent(midiNotes,barStartInfo);
+    m_soundBackend->appendEvent(midiNotes,barStartInfo);
     return chosenExercises;
 }
 

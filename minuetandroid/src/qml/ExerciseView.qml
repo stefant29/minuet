@@ -124,7 +124,7 @@ Item {
                     })
                     if (userMessage != "the rhythm")
                         answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
-                    sequencer.play();
+                    soundBackend.play();
                 }
                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
@@ -134,7 +134,7 @@ Item {
                 id: playQuestionButton
                 width: playQuestionButton.implicitWidth+textMargins*0.5; height: playQuestionButton.implicitHeight
                 text: "play question"
-                onClicked: sequencer.play();
+                onClicked: soundBackend.play();
                 // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
 
@@ -256,7 +256,7 @@ Item {
             name: "waitingForAnswer"
             StateChangeScript {
                 script: {
-                    //sequencer.allNotesOff()
+                    //soundBackend.allNotesOff()
                     for (var i = 0; i < answerGrid.children.length; ++i) {
                         answerGrid.children[i].opacity = 1
                         answerGrid.children[i].enabled = true
