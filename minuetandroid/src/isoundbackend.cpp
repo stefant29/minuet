@@ -19,43 +19,51 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-//ask if minuetandroid or minuet
-#ifndef MINUET_CSOUNDANDROIDSOUNDBACKEND_H
-#define MINUET_CSOUNDANDROIDSOUNDBACKEND_H
 
 #include "isoundbackend.h"
 
-class CsEngine;
+#include <qqml.h>
 
-class CsoundAndroidSoundBackend : public Minuet::ISoundBackend
+namespace Minuet
 {
-    Q_OBJECT
 
-    //Q_PLUGIN_METADATA(IID "org.kde.minuet.IPlugin" FILE "csoundandroidsoundbackend.json")
-    Q_INTERFACES(Minuet::IPlugin)
-    Q_INTERFACES(Minuet::ISoundBackend)
+ISoundBackend::ISoundBackend(QObject *parent)
+    : IPlugin(parent),
+    m_state(StoppedState)
+{
+    qmlRegisterInterface<ISoundBackend>("ISoundBackend");
+    qmlRegisterUncreatableType<ISoundBackend>("org.kde.minuet", 1, 0, "ISoundBackend", "ISoundBackend cannot be instantiated");
+}
 
-public:
-    explicit CsoundAndroidSoundBackend(QObject *parent = 0);
-    virtual ~CsoundAndroidSoundBackend() override;
+ISoundBackend::~ISoundBackend()
+{
+}
 
-public Q_SLOTS:
-    virtual void appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo) override;
-    virtual void clearExercise()  override;
+QString ISoundBackend::playbackLabel() const
+{
+    return m_playbackLabel;
+}
 
-    virtual void setPitch(qint8 pitch);
-    virtual void setVolume(quint8 volume);
-    virtual void setTempo (quint8 tempo);
+ISoundBackend::State ISoundBackend::state() const
+{
+    return m_state;
+}
 
-    virtual void prepareFromExerciseOptions(QJsonArray selectedOptions) override;
-    virtual void prepareFromMidiFile(const QString &fileName) override;
+void ISoundBackend::setPlaybackLabel(const QString &playbackLabel)
+{
+    if (m_playbackLabel != playbackLabel) {
+        m_playbackLabel = playbackLabel;
+        emit playbackLabelChanged(m_playbackLabel);
+    }
+}
 
-    virtual void play() override;
-    virtual void pause() override;
-    virtual void stop() override;
+void ISoundBackend::setState(State state)
+{
+    if (m_state != state) {
+        m_state = state;
+        emit stateChanged(m_state);
+    }
+}
 
-private:
-    CsEngine *m_csoundengine;
-};
+}
 
-#endif

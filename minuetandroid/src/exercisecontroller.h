@@ -28,8 +28,7 @@
 #include <QJsonObject>
 #include <QStringList>
 #include <QFile>
-
-class CsoundAndroidSoundBackend;
+#include "isoundbackend.h"
 
 class ExerciseController : public QObject
 {
@@ -37,7 +36,7 @@ class ExerciseController : public QObject
     Q_ENUMS(PlayMode)
 
 public:
-    explicit ExerciseController(CsoundAndroidSoundBackend *csoundAndroidSoundBackend = 0);
+    explicit ExerciseController(Minuet::ISoundBackend *csoundAndroidSoundBackend = 0);
     virtual ~ExerciseController();
     
     enum PlayMode {
@@ -64,7 +63,7 @@ private:
     //float midiFreq(unsigned int midiNote);
 
 private:
-    CsoundAndroidSoundBackend *m_csoundAndroidSoundBackend;
+    Minuet::ISoundBackend *m_csoundAndroidSoundBackend;
     QFile m_csdFileOpen;
     QJsonObject m_exercises;
     QJsonArray m_exerciseOptions;

@@ -33,7 +33,7 @@
 
 //#include <drumstick/alsaevent.h>
 
-ExerciseController::ExerciseController(CsoundAndroidSoundBackend *csoundAndroidSoundBackend) :
+ExerciseController::ExerciseController(Minuet::ISoundBackend *csoundAndroidSoundBackend) :
     m_csoundAndroidSoundBackend(csoundAndroidSoundBackend),
     m_minRootNote(0),
     m_maxRootNote(0),

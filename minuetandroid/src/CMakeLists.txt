@@ -3,6 +3,8 @@ set(minuetandroid_SRCS
     exercisecontroller.cpp
     csengine.cpp
     csoundandroidsoundbackend.cpp
+    isoundbackend.cpp
+    iplugin.cpp
 )
 qt5_add_resources(minuetandroid_SRCS resources.qrc)
 

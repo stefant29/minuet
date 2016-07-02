@@ -31,7 +31,8 @@
 Q_DECLARE_LOGGING_CATEGORY(MINUETANDROID)
 
 
-CsoundAndroidSoundBackend::CsoundAndroidSoundBackend()
+CsoundAndroidSoundBackend::CsoundAndroidSoundBackend(QObject *parent)
+    : Minuet::ISoundBackend(parent)
 {
     qmlRegisterType<CsoundAndroidSoundBackend>("org.kde.minuet", 1, 0, "CsoundAndroidSoundBackend");
     m_csoundengine = new CsEngine;
@@ -82,10 +83,39 @@ CsoundAndroidSoundBackend::~CsoundAndroidSoundBackend()
     delete m_csoundengine;
 }
 
+void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedOptions){
+
+}
+
+void CsoundAndroidSoundBackend::prepareFromMidiFile(const QString &fileName){
+    Q_UNUSED(fileName)
+}
+
 void CsoundAndroidSoundBackend::play(){
     m_csoundengine->start();
+}
+
+void CsoundAndroidSoundBackend::pause(){
+    
 }
 
 void CsoundAndroidSoundBackend::stop(){
     m_csoundengine->stop();
 }
+
+void CsoundAndroidSoundBackend::setPitch (qint8 pitch){
+    
+}
+
+
+void CsoundAndroidSoundBackend::setVolume (quint8 volume){
+    
+}
+
+
+void CsoundAndroidSoundBackend::setTempo (quint8 tempo){
+    
+}
+
+#include "moc_csoundandroidsoundbackend.cpp"
+
