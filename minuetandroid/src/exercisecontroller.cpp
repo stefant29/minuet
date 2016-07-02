@@ -42,7 +42,7 @@ ExerciseController::ExerciseController(CsoundAndroidSoundBackend *csoundAndroidS
     m_chosenRootNote(0),
     m_chosenExercise(0)
 {
-    qmlRegisterType<ExerciseController>("org.kde.minuetandroid", 1, 0, "ExerciseController");
+    qmlRegisterType<ExerciseController>("org.kde.minuet", 1, 0, "ExerciseController");
 }
 
 ExerciseController::~ExerciseController()

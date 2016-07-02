@@ -33,7 +33,7 @@ Q_DECLARE_LOGGING_CATEGORY(MINUETANDROID)
 
 CsoundAndroidSoundBackend::CsoundAndroidSoundBackend()
 {
-    qmlRegisterType<CsoundAndroidSoundBackend>("org.kde.minuetandroid", 1, 0, "CsoundAndroidSoundBackend");
+    qmlRegisterType<CsoundAndroidSoundBackend>("org.kde.minuet", 1, 0, "CsoundAndroidSoundBackend");
     m_csoundengine = new CsEngine;
 }
 
