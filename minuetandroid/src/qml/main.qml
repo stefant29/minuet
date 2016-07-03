@@ -44,8 +44,8 @@ ApplicationWindow {
             rhythmAnswerView.resetAnswers()
         }
     }
+
     //contains title and button
-    //TODO add a settings bar
     header: ToolBar{
         Material.foreground: "white"
         id:toolBar
@@ -92,6 +92,7 @@ ApplicationWindow {
                     MenuItem {
                         text: "Settings"
                     }
+
                     MenuItem {
                         text: "About"
                     }
@@ -103,7 +104,6 @@ ApplicationWindow {
     //TODO: Have an icon next to the name for each type of main exercise(chords,intervals,rhythm) in navigation drawer
     Drawer{
        id: navigationMenu
-       //TODO check if we need vertical and horizontal orientation
        width: Math.min(window.width, window.height) * 0.75; height: window.height
 
        //loads the exercises from exercise controller
@@ -127,7 +127,6 @@ ApplicationWindow {
             }
 
             //back button
-            //TODO add a back icon along with the current position in the drawer
             Item {
                 id: breadcrumb
                 width: parent.width; height: (stackView.depth > 1) ? 50:0
@@ -138,9 +137,10 @@ ApplicationWindow {
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
 
-                    source: "back@2x.png"
+                    source: "back.png"
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
+
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
@@ -182,31 +182,41 @@ ApplicationWindow {
 
                     Rectangle {
                         id: delegateRect
-                        width: stackView.width; height:exerciseName.height - exerciseName.padding
+                        width: stackView.width; height:exerciseName.height
 
                         Label {
                             id: exerciseName
                             text: "technical term, do you have a musician friend?", modelData.name
-
                             padding: 25
                         }
 
                         //checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
                         MouseArea{
+
                             anchors.fill: parent
-                            onClicked: {
+
+                            onPressed: {
+                               delegateRect.color =  " light gray"
+                            }
+
+                            onCanceled: {
+                                delegateRect.color = "white"
+                            }
+
+                            onReleased: {
                                 var userMessage = delegateRect.ListView.view.model[index].userMessage
                                 if (userMessage != undefined)
                                     minuetMenu.message = userMessage
                                 var children = delegateRect.ListView.view.model[index].children
                                 if (!children) {
-                                    //if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.checked = false
+                                    //if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.highlight = true
                                     minuetMenu.userMessageChanged(minuetMenu.message)
                                     minuetMenu.itemClicked(delegateRect, index)
                                     //minuetMenu.selectedMenuItem = delegateRect
                                     navigationMenu.close()
                                 }
                                 else {
+                                    delegateRect.color = "white"
                                     stackView.push(categoryMenu.createObject(stackView, {model: children}))
                                     currentExercise.text = modelData.name
                                     minuetMenu.exerciseArray.push(modelData.name)
