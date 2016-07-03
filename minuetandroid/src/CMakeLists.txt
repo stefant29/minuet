@@ -20,15 +20,15 @@ target_link_libraries (
     Qt5::QuickControls2
 )
 
-if (CMAKE_SYSTEM_NAME STREQUAL Android)
-    target_link_libraries (
-        minuetandroid
-        Qt5::Core
-        Qt5::Gui
-        Qt5::Quick
-        Qt5::Qml
-    )
-endif()
+#if (CMAKE_SYSTEM_NAME STREQUAL Android)
+#    target_link_libraries (
+#        minuetandroid
+#        Qt5::Core
+#        Qt5::Gui
+#        Qt5::Quick
+#        Qt5::Qml
+#    )
+#endif()
 
 target_link_libraries(minuetandroid ${CSOUND_LIBS})
 
