@@ -132,14 +132,17 @@ ApplicationWindow {
                 width: parent.width; height: (stackView.depth > 1) ? 50:0
 
                 Image {
+                    height: parent.height/2
                     id: backButton
                     fillMode: Image.Stretch
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
-
-                    source: "back.png"
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
+                    source: "back@2x.png"
+                    anchors{
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                        margins: 10
+                    }
 
                     MouseArea{
                         anchors.fill: parent
@@ -164,8 +167,11 @@ ApplicationWindow {
                     elide: Label.ElideRight
                     verticalAlignment: Qt.AlignVCenter
                     Layout.fillWidth: true
-                    anchors.left: backButton.right
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors{
+                        left: backButton.right
+                        verticalCenter: parent.verticalCenter
+                        margins: 10
+                    }
                 }
             }
 
@@ -307,4 +313,3 @@ ApplicationWindow {
         onAnswerCompleted: exerciseView.checkAnswers(answers)
     }
 }
-
