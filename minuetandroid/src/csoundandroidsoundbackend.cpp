@@ -36,6 +36,10 @@ CsoundAndroidSoundBackend::CsoundAndroidSoundBackend(QObject *parent)
 {
     qmlRegisterType<CsoundAndroidSoundBackend>("org.kde.minuet", 1, 0, "CsoundAndroidSoundBackend");
     m_csoundengine = new CsEngine;
+    setQuestionLabel("new question");
+    connect(m_csoundengine, &CsEngine::finished, this, [=]() {
+        setQuestionLabel(QStringLiteral("play again"));
+    });
 }
 
 void CsoundAndroidSoundBackend::clearExercise()

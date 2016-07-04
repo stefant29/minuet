@@ -216,6 +216,7 @@ ApplicationWindow {
                                 var children = delegateRect.ListView.view.model[index].children
                                 if (!children) {
                                     //if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.highlight = true
+                                    soundBackend.setQuestionLabel("new question")
                                     minuetMenu.userMessageChanged(minuetMenu.message)
                                     minuetMenu.itemClicked(delegateRect, index)
                                     //minuetMenu.selectedMenuItem = delegateRect

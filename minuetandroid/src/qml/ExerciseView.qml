@@ -34,11 +34,15 @@ Item {
     property Item answerRectangle
     property var colors: ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f", "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928"]
     readonly property int textMargins: Math.round(16 * Flat.FlatStyle.scaleFactor)
-
+    property string questionLabel: soundBackend.questionLabel//newQuestionButton.text
     signal answerHoverEnter(var chan, var pitch, var vel, var color)
     signal answerHoverExit(var chan, var pitch, var vel)
     signal answerClicked(var answerImageSource, var color)
     signal showCorrectAnswer(var chosenExercises, var chosenColors)
+    onQuestionLabelChanged: changeNewQuestion()
+    function changeNewQuestion(){
+    newQuestionButton.text = questionLabel
+}
 
     function clearExerciseGrid() {
         exerciseView.visible = false
@@ -98,8 +102,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 18
             textFormat: Text.RichText
-            text: "Hear " + userMessage + " and then choose an answer from options below!<br/>Click
-                       'play question' if you want to hear again!"
+            text: "Hear " + userMessage + " and then choose an answer from options below!"
         }
 
         Row {
@@ -108,40 +111,43 @@ Item {
 
             Button {
                 id: newQuestionButton
-                width: playQuestionButton.implicitWidth+textMargins*0.5; height: playQuestionButton.implicitHeight
-                text: "new question"
+                text: questionLabel
+                width: giveUpButton.implicitWidth+textMargins*4; height: giveUpButton.implicitHeight
+                //text: "new question"
                 onClicked: {
-                    exerciseView.state = "waitingForAnswer"
-                    chosenExercises = exerciseController.randomlyChooseExercises()
-                    for (var i = 0; i < chosenExercises.length; ++i)
-                        for (var j = 0; j < answerGrid.children.length; ++j)
-                            if (answerGrid.children[j].children[0].originalText == chosenExercises[i]) {
-                                chosenColors[i] = answerGrid.children[j].color
-                                break
-                            }
-                    messageText.text = Qt.binding(function() {
-                        return "Hear " + userMessage + " and then choose an answer from options below!<br/>Click 'play quest to hear again!"
-                    })
-                    if (userMessage != "the rhythm")
-                        answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
+                    if(newQuestionButton.text == "new question"){
+                        exerciseView.state = "waitingForAnswer"
+                        chosenExercises = exerciseController.randomlyChooseExercises()
+                        for (var i = 0; i < chosenExercises.length; ++i)
+                            for (var j = 0; j < answerGrid.children.length; ++j)
+                                if (answerGrid.children[j].children[0].originalText == chosenExercises[i]) {
+                                    chosenColors[i] = answerGrid.children[j].color
+                                    break
+                                }
+                        messageText.text = Qt.binding(function() {
+                            return "Hear " + userMessage + " and then choose an answer from options below!"
+                        })
+                        if (userMessage != "the rhythm")
+                            answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
+                    }
                     soundBackend.play();
                 }
                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
 
             //TODO change name to play again and click play question to play again
-            Button {
+            /*Button {
                 id: playQuestionButton
                 width: playQuestionButton.implicitWidth+textMargins*0.5; height: playQuestionButton.implicitHeight
                 text: "play question"
                 onClicked: soundBackend.play();
                 // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
-            }
+            }*/
 
             Button {
                 id: giveUpButton
-                width: playQuestionButton.implicitWidth+textMargins*0.5
-                height: playQuestionButton.implicitHeight
+                width: giveUpButton.implicitWidth+textMargins*4
+                height: giveUpButton.implicitHeight
                 text: "give up"
                 onClicked: {
                     if (userMessage != "the rhythm") {
@@ -151,6 +157,7 @@ Item {
                         showCorrectAnswer(chosenExercises, chosenColors)
                         exerciseView.state = "nextQuestion"
                     }
+                    soundBackend.setQuestionLabel("new question")
                 }
                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
@@ -245,7 +252,7 @@ Item {
             StateChangeScript {
                 script: {
                     newQuestionButton.enabled = true
-                    playQuestionButton.enabled = false
+                    //playQuestionButton.enabled = false
                     giveUpButton.enabled = false
                     answerGrid.enabled = false
                     answerGrid.opacity = 0.25
@@ -261,8 +268,8 @@ Item {
                         answerGrid.children[i].opacity = 1
                         answerGrid.children[i].enabled = true
                     }
-                    newQuestionButton.enabled = false
-                    playQuestionButton.enabled = true
+                    //newQuestionButton.enabled = false
+                    //playQuestionButton.enabled = true
                     giveUpButton.enabled = true
                     answerGrid.enabled = true
                     answerGrid.opacity = 1
@@ -273,8 +280,9 @@ Item {
             name: "nextQuestion"
             StateChangeScript {
                 script: {
+                    newQuestionButton.text = "new question"
                     newQuestionButton.enabled = true
-                    playQuestionButton.enabled = false
+                    //playQuestionButton.enabled = false
                     giveUpButton.enabled = false
                     answerGrid.enabled = false
                 }

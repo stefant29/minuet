@@ -44,6 +44,11 @@ QString ISoundBackend::playbackLabel() const
     return m_playbackLabel;
 }
 
+QString ISoundBackend::questionLabel() const
+{
+    return m_questionLabel;
+}
+
 ISoundBackend::State ISoundBackend::state() const
 {
     return m_state;
@@ -54,6 +59,14 @@ void ISoundBackend::setPlaybackLabel(const QString &playbackLabel)
     if (m_playbackLabel != playbackLabel) {
         m_playbackLabel = playbackLabel;
         emit playbackLabelChanged(m_playbackLabel);
+    }
+}
+
+void ISoundBackend::setQuestionLabel(const QString &questionLabel)
+{
+    if (m_questionLabel != questionLabel) {
+        m_questionLabel = questionLabel;
+        emit questionLabelChanged(m_questionLabel);
     }
 }
 
