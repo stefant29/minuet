@@ -68,11 +68,9 @@ int main(int argc, char *argv[])
     ExerciseController *m_exerciseController = new ExerciseController(m_soundBackend);
     m_exerciseController->configureExercises();
     engine.rootContext()->setContextProperty(QStringLiteral("exerciseCategories"), m_exerciseController->exercises()[QStringLiteral("exercises")].toArray());
+    engine.rootContext()->setContextProperty("soundBackend", m_soundBackend); // forward c++ object that can be reached form 
     engine.rootContext()->setContextProperty(QStringLiteral("exerciseController"), m_exerciseController);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-//    cs.start();
-    engine.rootContext()->setContextProperty("soundBackend", m_soundBackend); // forward c++ object that can be reached form qml by object name "csound"
-
     return app.exec();
 }
 
