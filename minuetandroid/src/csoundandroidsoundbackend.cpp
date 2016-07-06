@@ -87,7 +87,64 @@ CsoundAndroidSoundBackend::~CsoundAndroidSoundBackend()
     delete m_csoundengine;
 }
 
-void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedOptions){
+void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedExerciseOptions,const QString &playMode){
+    /*Song *song = new Song;
+    song->setHeader(0, 1, 60);
+    song->setInitialTempo(600000);
+    m_song.reset(song);
+
+    if (m_song->initialTempo() == 0)
+        m_song->setInitialTempo(600000);
+    appendEvent(new drumstick::TempoEvent(m_queueId, 600000), 0);
+    */
+    clearExercise();
+    unsigned int barStart = 0;
+    /*if (playMode == "rhythm") {
+        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 0);
+        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 60);
+        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 120);
+        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 180);
+        barStart = 240;
+    }*/
+    QList<unsigned int> midiNotes;
+    QList<unsigned int> barStartInfo;
+
+    for (int i = 0; i < selectedExerciseOptions.size(); ++i) {
+        QString sequence = selectedExerciseOptions[i].toObject()[QStringLiteral("sequence")].toString();
+
+        unsigned int chosenRootNote = selectedExerciseOptions[i].toObject()[QStringLiteral("rootNote")].toString().toInt();
+        if (playMode != "rhythm") {
+            //appendEvent(new drumstick::NoteOnEvent(1, chosenRootNote, 120), barStart);
+            //appendEvent(new drumstick::NoteOffEvent(1, chosenRootNote, 120), barStart + 60);
+            midiNotes.append(chosenRootNote);
+            barStartInfo.append(barStart);
+
+            unsigned int j = 1;
+            //drumstick::SequencerEvent *ev;
+            foreach(const QString &additionalNote, sequence.split(' ')) {
+                midiNotes.append(chosenRootNote+additionalNote.toInt());
+                barStartInfo.append((m_playMode == ScalePlayMode) ? barStart+j:barStart);
+                ++j;
+            }
+        }
+        else {
+            //TODO: Implement for rhythm
+            /*appendEvent(new drumstick::NoteOnEvent(9, 80, 120), barStart);
+            foreach(QString additionalNote, sequence.split(' ')) { // krazy:exclude=foreach
+                appendEvent(new drumstick::NoteOnEvent(9, 37, 120), barStart);
+                float dotted = 1;
+                if (additionalNote.endsWith('.')) {
+                    dotted = 1.5;
+                    additionalNote.chop(1);
+                }
+                barStart += dotted*60*(4.0/additionalNote.toInt());
+            }
+        */}
+    }
+    appendEvent(midiNotes,barStartInfo);
+
+    /*if (playMode == "rhythm")
+        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), barStart);*/
 
 }
 

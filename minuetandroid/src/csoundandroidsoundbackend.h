@@ -40,14 +40,12 @@ public:
     virtual ~CsoundAndroidSoundBackend() override;
 
 public Q_SLOTS:
-    virtual void appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo) override;
-    virtual void clearExercise()  override;
 
     virtual void setPitch(qint8 pitch);
     virtual void setVolume(quint8 volume);
     virtual void setTempo (quint8 tempo);
 
-    virtual void prepareFromExerciseOptions(QJsonArray selectedOptions) override;
+    virtual void prepareFromExerciseOptions(QJsonArray selectedExerciseOptions, const QString &playMode) override;
     virtual void prepareFromMidiFile(const QString &fileName) override;
 
     virtual void play() override;
@@ -56,6 +54,9 @@ public Q_SLOTS:
 
 private:
     CsEngine *m_csoundengine;
+    void appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo);
+    void clearExercise();
+
 };
 
 #endif

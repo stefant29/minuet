@@ -20,62 +20,58 @@
 **
 ****************************************************************************/
 
-#ifndef EXERCISECONTROLLER_H
-#define EXERCISECONTROLLER_H
+#ifndef MINUET_EXERCISECONTROLLER_H
+#define MINUET_EXERCISECONTROLLER_H
 
-#include <QObject>
-#include <QJsonArray>
-#include <QJsonObject>
+//#include <interfaces/iexercisecontroller.h>
+#include "iexercisecontroller.h"
+
+//#include "minuetshellexport.h"
+
 #include <QStringList>
-#include <QFile>
-#include "isoundbackend.h"
+#include <QJsonObject>
 
-class ExerciseController : public QObject
+namespace Minuet
+{
+
+//class Core;
+ 
+//class MINUETSHELL_EXPORT ExerciseController : public IExerciseController
+class ExerciseController : public IExerciseController
 {
     Q_OBJECT
-    Q_ENUMS(PlayMode)
 
 public:
-    explicit ExerciseController(Minuet::ISoundBackend *soundBackend = 0);
+    explicit ExerciseController(QObject *parent= 0);
     virtual ~ExerciseController();
-    
-    enum PlayMode {
-        ScalePlayMode = 0,
-        ChordPlayMode,
-        RhythmPlayMode
-    };
+ 
+    //bool initialize(Core *core);
+    bool initialize();
 
-    Q_INVOKABLE void setExerciseOptions(QJsonArray exerciseOptions);
-    Q_INVOKABLE void setMinRootNote(unsigned int minRootNote);
-    Q_INVOKABLE void setMaxRootNote(unsigned int maxRootNote);
-    Q_INVOKABLE void setPlayMode(PlayMode playMode);
-    Q_INVOKABLE void setAnswerLength(unsigned int answerLength);
     Q_INVOKABLE unsigned int chosenRootNote();
-    Q_INVOKABLE QStringList randomlyChooseExercises();
-    //Q_INVOKABLE void clearExercise();
-    bool configureExercises();
+
     QString errorString() const;
-    QJsonObject exercises() const;
-    //void appendEvent(float noteFreq,unsigned int barStart);
+    virtual QJsonArray exercises() const override;
 
+public Q_SLOTS:
+    virtual void randomlySelectExerciseOptions();
+ 
 private:
-    QJsonArray mergeExercises(QJsonArray exercises, QJsonArray newExercises);
-    //float midiFreq(unsigned int midiNote);
+    bool mergeJsonFiles(const QString directoryName, QJsonObject &targetObject, bool applyDefinitionsFlag = false, QString commonKey = "", QString mergeKey = "");
+    QJsonArray applyDefinitions(QJsonArray exercises, QJsonArray definitions, QJsonObject collectedProperties = QJsonObject());
+    enum DefinitionFilteringMode {
+        AndFiltering = 0,
+        OrFiltering
+    };
+    void filterDefinitions(QJsonArray &definitions, QJsonObject &exerciseObject, const QString &filterTagsKey, DefinitionFilteringMode definitionFilteringMode);
+    QJsonArray mergeJsonArrays(QJsonArray oldFile, QJsonArray newFile, QString commonKey = "", QString mergeKey = "");
 
-private:
-    Minuet::ISoundBackend *m_soundBackend;
-    QFile m_csdFileOpen;
     QJsonObject m_exercises;
-    QJsonArray m_exerciseOptions;
-    unsigned int m_minRootNote;
-    unsigned int m_maxRootNote;
-    PlayMode m_playMode;
-    unsigned int m_answerLength;
+    QJsonObject m_definitions;
     unsigned int m_chosenRootNote;
-    unsigned int m_chosenExercise;
     QString m_errorString;
-    unsigned int i;
-    unsigned int j;
 };
 
-#endif // EXERCISECONTROLLER_H
+}
+
+#endif // MINUET_EXERCISECONTROLLER_H

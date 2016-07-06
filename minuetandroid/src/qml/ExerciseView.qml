@@ -30,16 +30,18 @@ Item {
 
     property var chosenExercises
     property var chosenColors: [4]
-    property string userMessage
+    //property string userMessage
     property Item answerRectangle
     property var colors: ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f", "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928"]
     readonly property int textMargins: Math.round(16 * Flat.FlatStyle.scaleFactor)
     property string questionLabel: soundBackend.questionLabel//newQuestionButton.text
+
     signal answerHoverEnter(var chan, var pitch, var vel, var color)
     signal answerHoverExit(var chan, var pitch, var vel)
     signal answerClicked(var answerImageSource, var color)
     signal showCorrectAnswer(var chosenExercises, var chosenColors)
     onQuestionLabelChanged: changeNewQuestion()
+
     function changeNewQuestion(){
     newQuestionButton.text = questionLabel
 }
@@ -62,19 +64,20 @@ Item {
         })
         animation.start()
     }
-    function itemChanged(model) {
+    function setCurrentExercise(currentExercise) {
         clearExerciseGrid()
-        var length = model.length
+        var currentExerciseOptions = currentExercise["options"];
+        var length = currentExerciseOptions.length
         answerGrid.columns = Math.min(6, length)
         answerGrid.rows = Math.ceil(length/6)
         for (var i = 0; i < length; ++i)
-            answerOption.createObject(answerGrid, {model: model[i], index: i, color: colors[i%24]})
+            answerOption.createObject(answerGrid, {model: currentExerciseOptions[i], index: i, color: colors[i%24]})
         exerciseView.visible = true
         exerciseView.state = "initial"
     }
-    function changeUserMessage(message) {
+    /*function changeUserMessage(message) {
         userMessage = message
-    }
+    }*/
     function checkAnswers(answers) {
         var answersOk = true
         for(var i = 0; i < 4; ++i) {
@@ -102,7 +105,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 18
             textFormat: Text.RichText
-            text: "Hear " + userMessage + " and then choose an answer from options below!"
+            text: "Hear " + exerciseController.currentExercise["userMessage"] + " and then choose an answer from options below!"
         }
 
         Row {
@@ -117,8 +120,32 @@ Item {
                 onClicked: {
                     if(newQuestionButton.text == "new question"){
                         exerciseView.state = "waitingForAnswer"
-                        chosenExercises = exerciseController.randomlyChooseExercises()
+                        var playMode = exerciseController.currentExercise["playMode"]
+                        exerciseController.answerLength = (playMode == "rhythm") ? 4:1
+                        exerciseController.randomlySelectExerciseOptions()
+                        //chosenExercises = exerciseController.randomlyChooseExercises()
+                        var selectedExerciseOptions = exerciseController.selectedExerciseOptions
+                        /*Make changes over here*/
+                        soundBackend.prepareFromExerciseOptions(selectedExerciseOptions, playMode)
+                        var newChosenExercises = [];
+                        for (var i = 0; i < selectedExerciseOptions.length; ++i)
+                            newChosenExercises.push(selectedExerciseOptions[i].name);
+                        chosenExercises = newChosenExercises
                         for (var i = 0; i < chosenExercises.length; ++i)
+                            for (var j = 0; j < answerGrid.children.length; ++j)
+                                if (answerGrid.children[j].children[0].originalText == chosenExercises[i]) {
+                                    chosenColors[i] = answerGrid.children[j].color
+                                    break
+                                }
+                        messageText.text = Qt.binding(function(){
+                            return exerciseController.currentExercise["userMessage"] + "<br/>Click 'play question' if you want to hear again!"})
+                        //if (exerciseController.currentExercise["playMode"] != "rhythm")
+                    //    answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
+                    }
+                    soundBackend.play()
+                }
+
+                    /*for (var i = 0; i < chosenExercises.length; ++i)
                             for (var j = 0; j < answerGrid.children.length; ++j)
                                 if (answerGrid.children[j].children[0].originalText == chosenExercises[i]) {
                                     chosenColors[i] = answerGrid.children[j].color
@@ -129,8 +156,8 @@ Item {
                         })
                         if (userMessage != "the rhythm")
                             answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
-                    }
-                    soundBackend.play();
+                    //}*/
+                    //soundBackend.play();
                 }
                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
@@ -150,7 +177,7 @@ Item {
                 height: giveUpButton.implicitHeight
                 text: "give up"
                 onClicked: {
-                    if (userMessage != "the rhythm") {
+                    if (exerciseController.currentExercise["playMode"] != "the rhythm") {
                         highlightRightAnswer()
                     }
                     else {
@@ -179,18 +206,20 @@ Item {
                     id: answerOption
 
                     Rectangle {
+                        id: answerRectangle
+
                         property var model
                         property int index
 
-                        id: answerRectangle
-                        width: window.width*0.85/6; height: (userMessage != "the rhythm") ? window.height*0.5/4:window.height*0.3/5
+                        width: window.width*0.85/6; height: (exerciseController.currentExercise["playMode"] != "the rhythm") ? window.height*0.5/4:window.height*0.3/5
 
                         Text {
+                            id: option
+
                             property string originalText: model.name
 
-                            id: option
-                            visible: userMessage != "the rhythm"
-                            text: model.name
+                            visible: exerciseController.currentExercise["playMode"] != "the rhythm"
+                            text: originalText
                             width: parent.width - 4
                             anchors.centerIn: parent
                             horizontalAlignment: Qt.AlignHCenter
@@ -201,15 +230,15 @@ Item {
                         Image {
                             id: rhythmImage
                             anchors.centerIn: parent
-                            visible: userMessage == "the rhythm"
-                            source: (userMessage == "the rhythm") ? model.name + ".png":""
+                            visible: exerciseController.currentExercise["playMode"] == "the rhythm"
+                            source: (exerciseController.currentExercise["playMode"] == "the rhythm") ? "exercise-images/" + model.name + ".png":""
                             fillMode: Image.Pad
                         }
 
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                if (userMessage != "the rhythm") {
+                                if (exerciseController.currentExercise["playMode"] != "the rhythm") {
                                     onExited()
                                     if (option.originalText == chosenExercises[0])
                                         messageText.text = "Congratulations!<br/>You answered correctly!"
@@ -225,7 +254,7 @@ Item {
                             hoverEnabled: true
                             onEntered: {
                                 answerRectangle.color = Qt.darker(answerRectangle.color, 1.1)
-                                if (userMessage != "the rhythm") {
+                                if (exerciseController.currentExercise["playMode"] != "the rhythm") {
                                     model.sequence.split(' ').forEach(function(note) {
                                         answerHoverEnter(0, exerciseController.chosenRootNote() + parseInt(note), 0, colors[answerRectangle.index])
                                     })
@@ -233,7 +262,7 @@ Item {
                             }
                             onExited: {
                                 answerRectangle.color = colors[answerRectangle.index]
-                                if (userMessage != "the rhythm") {
+                                if (exerciseController.currentExercise["playMode"] != "the rhythm") {
                                     if (!animation.running)
                                         model.sequence.split(' ').forEach(function(note) {
                                             answerHoverExit(0, exerciseController.chosenRootNote() + parseInt(note), 0)
@@ -245,7 +274,7 @@ Item {
                 }
             }
         }
-    }
+
     states: [
         State {
             name: "initial"

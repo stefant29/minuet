@@ -71,11 +71,8 @@ public Q_SLOTS:
     virtual void setVolume(quint8 tempo) = 0;
     virtual void setTempo(quint8 tempo) = 0;
 
-    virtual void prepareFromExerciseOptions(QJsonArray selectedOptions) = 0;
+    virtual void prepareFromExerciseOptions(QJsonArray selectedExerciseOptions, const QString &playMode) = 0;
     virtual void prepareFromMidiFile(const QString &fileName) = 0;
-
-    virtual void appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo) = 0;
-    virtual void clearExercise() = 0;
 
     virtual void play() = 0;
     virtual void pause() = 0;

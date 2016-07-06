@@ -46,7 +46,7 @@ include_directories($ENV{CSOUND_ROOT}/include)
 include_directories($ENV{CSOUND_ROOT}/android/CsoundAndroid/jni/)
 
 add_subdirectory(src)
-add_subdirectory(exercises)
+add_subdirectory(data)
 
 set(minuetandroid_CSD
 test1.csd

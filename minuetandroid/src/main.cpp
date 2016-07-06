@@ -24,6 +24,7 @@
 #include "csengine.h"
 #include "csoundandroidsoundbackend.h"
 #include "isoundbackend.h"
+#include "iexercisecontroller.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -59,17 +60,19 @@ int main(int argc, char *argv[])
             ffile.copy("./libshare_libfluidOpcodes.so");
             QFile::setPermissions("./libshare_libfluidOpcodes.so",QFile::WriteOwner | QFile::ReadOwner);
     }
-    QString source = "assets:/share/minuetandroid/exercises";
-    QString destination = "./exercises";
+    QString source = "assets:/share/minuet";
+    QString destination = "./";
     copyDir(source,destination);
     Minuet::ISoundBackend *m_soundBackend;
     CsoundAndroidSoundBackend *m_csoundAndroidSoundBackend(new CsoundAndroidSoundBackend());
     m_soundBackend = m_csoundAndroidSoundBackend;
-    ExerciseController *m_exerciseController = new ExerciseController(m_soundBackend);
-    m_exerciseController->configureExercises();
-    engine.rootContext()->setContextProperty(QStringLiteral("exerciseCategories"), m_exerciseController->exercises()[QStringLiteral("exercises")].toArray());
+    //ExerciseController *m_exerciseController = new ExerciseController(0);
+    //m_exerciseController->configureExercises();
+    Minuet::IExerciseController *exerciseController = new Minuet::ExerciseController(0);
+    ((Minuet::ExerciseController *)exerciseController)->initialize();
+    //engine.rootContext()->setContextProperty(QStringLiteral("exerciseCategories"), m_exerciseController->exercises()[QStringLiteral("exercises")].toArray());
     engine.rootContext()->setContextProperty("soundBackend", m_soundBackend); // forward c++ object that can be reached form 
-    engine.rootContext()->setContextProperty(QStringLiteral("exerciseController"), m_exerciseController);
+    engine.rootContext()->setContextProperty("exerciseController", exerciseController);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     return app.exec();
 }

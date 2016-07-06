@@ -108,16 +108,27 @@ ApplicationWindow {
 
        //loads the exercises from exercise controller
        Item {
-            property string message
+            //property string message
             property variant exerciseArray: []
             //property Item selectedMenuItem : null
-
-            signal breadcrumbPressed
+            signal backPressed
+            readonly property alias currentExercise: stackView.currentExercise
+            //signal breadcrumbPressed
             signal itemChanged(var model)
             signal userMessageChanged(string message)
             id: minuetMenu
             width: parent.width; height: parent.height
 
+            onCurrentExerciseChanged: {
+                exerciseView.setCurrentExercise(currentExercise)
+                rhythmAnswerView.resetAnswers()
+                exerciseController.currentExercise = currentExercise
+            }
+            onBackPressed: {
+                soundBackend.stop()
+                exerciseView.clearExerciseGrid()
+                //pianoView.clearAllMarks()
+            }
             function itemClicked(delegateRect, index) {
                 var model = delegateRect.ListView.view.model[index].options
                 if (model != undefined) {
@@ -148,20 +159,23 @@ ApplicationWindow {
                         anchors.fill: parent
                         onClicked: {
                             soundBackend.stop()
-                            minuetMenu.breadcrumbPressed()
+                            //minuetMenu.breadcrumbPressed()
+                            stackView.currentExerciseMenuItem = null
+                            exerciseController.currentExercise ={}
                             //minuetMenu.selectedMenuItem = null
                             stackView.pop()
                             minuetMenu.exerciseArray.pop()
                             currentExercise.text = minuetMenu.exerciseArray.toString()
-                            minuetMenu.userMessageChanged("exercise")
-                            if (stackView.depth == 1)
-                                minuetMenu.message = "exercise"
+                            //minuetMenu.userMessageChanged("exercise")
+                            //if (stackView.depth == 1)
+                            //    minuetMenu.message = "exercise"
+                            minuetMenu.backPressed()
                         }
                     }
                 }
 
                 Label{
-                    id: currentExercise
+                    id: currentExercise1
                     text:""
                     font.pixelSize: 25
                     elide: Label.ElideRight
@@ -177,6 +191,10 @@ ApplicationWindow {
 
             StackView {
                 id: stackView
+
+                property var currentExercise
+                property Item currentExerciseMenuItem
+
                 width: parent.width;
                 anchors.top: breadcrumb.bottom
                 anchors.bottom:parent.bottom
@@ -210,24 +228,29 @@ ApplicationWindow {
                             }
 
                             onReleased: {
-                                var userMessage = delegateRect.ListView.view.model[index].userMessage
-                                if (userMessage != undefined)
-                                    minuetMenu.message = userMessage
+                                //var userMessage = delegateRect.ListView.view.model[index].userMessage
+                                //if (userMessage != undefined)
+                                //    minuetMenu.message = userMessage
+                                //checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
                                 var children = delegateRect.ListView.view.model[index].children
                                 if (!children) {
+                                    //if (stackView.currentExerciseMenuItem != undefined) stackView.currentExerciseMenuItem.checked = false
                                     //if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.highlight = true
                                     soundBackend.setQuestionLabel("new question")
-                                    minuetMenu.userMessageChanged(minuetMenu.message)
-                                    minuetMenu.itemClicked(delegateRect, index)
+                                    //minuetMenu.userMessageChanged(minuetMenu.message)
+                                    //minuetMenu.itemClicked(delegateRect, index)
                                     //minuetMenu.selectedMenuItem = delegateRect
+                                    stackView.currentExercise = delegateRect.ListView.view.model[index]
+                                    stackView.currentExerciseMenuItem = delegateRect
                                     navigationMenu.close()
                                 }
                                 else {
                                     delegateRect.color = "white"
                                     stackView.push(categoryMenu.createObject(stackView, {model: children}))
-                                    currentExercise.text = modelData.name
+                                    //stackView.push(categoryMenu.createObject(stackView, {model: children}))
+                                    currentExercise1.text = modelData.name
                                     minuetMenu.exerciseArray.push(modelData.name)
-                                    var root = delegateRect.ListView.view.model[index].root
+                                    /*var root = delegateRect.ListView.view.model[index].root
                                     if (root != undefined) {
                                         exerciseController.setMinRootNote(root.split('.')[0])
                                         exerciseController.setMaxRootNote(root.split('.')[2])
@@ -241,7 +264,7 @@ ApplicationWindow {
                                             exerciseController.setPlayMode(2) // RhythmPlayMode
                                             exerciseController.setAnswerLength(4)
                                         }
-                                    }
+                                    }*/
                                 }
                             }
                         }
@@ -267,7 +290,8 @@ ApplicationWindow {
                     }
                 }
 
-                Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseCategories})) }
+                //Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseCategories})) }
+                Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseController.exercises})) }
             }
         }
     }
@@ -290,18 +314,18 @@ ApplicationWindow {
         }
     }
 
-    Connections {
+    /*Connections {
         target: minuetMenu
         onItemChanged: exerciseView.itemChanged(model)
         onBreadcrumbPressed: exerciseView.clearExerciseGrid()
         onUserMessageChanged: exerciseView.changeUserMessage(message)
-    }
-    Connections {
+    }*/
+    /*Connections {
         target: minuetMenu
         onItemChanged: rhythmAnswerView.resetAnswers(model)
         onBreadcrumbPressed: rhythmAnswerView.resetAnswers()
         onUserMessageChanged: window.userMessageChanged(message)
-    }
+    }*/
     Connections {
         target: exerciseView
         onAnswerClicked: rhythmAnswerView.answerClicked(answerImageSource, color)

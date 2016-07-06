@@ -1,0 +1,67 @@
+{
+  "exercises": [
+    {
+      "name": "Chords",
+      "root": "21..104",
+      "playMode": "chord",
+      "userMessage": "Hear the chord and then choose an answer from options below",
+      "children": [
+        {
+          "name": "Root Position",
+          "and-tags": ["chord", "root-position"],
+          "children": [
+            {
+              "name": "Minor and Major Chords",
+              "and-tags": ["triad"],
+              "or-tags": ["minor", "major"]
+            },
+            {
+              "name": "Minor 7 and Dominant 7 Chords",
+              "and-tags": ["7"],
+              "or-tags": ["minor", "dominant"]
+            },
+            {
+              "name": "Diminished and Augmented Chords",
+              "and-tags": ["triad"],
+              "or-tags": ["diminished", "augmented"]
+            },
+            {
+              "name": "Minor 9 and Major 9 Chords",
+              "and-tags": ["9"],
+              "or-tags": ["minor", "major"]
+            },
+            {
+              "name": "Major 7(b9) and Major maj7(9) Chords",
+              "and-tags": ["7", "9"],
+              "or-tags": ["major"]
+            },
+            {
+              "name": "Major Seventh, Diminished Seventh, and Half Diminished Seventh Chords",
+              "and-tags": ["7"],
+              "or-tags": ["major", "diminished"]
+            },
+            {
+              "name": "Chords with 9 in their name",
+              "or-tags": ["9"]
+            },
+            {
+              "name": "Altered Chords",
+              "and-tags": ["altered"]
+            },
+            {
+              "name": "Chords with 7 in their name",
+              "and-tags": ["7"]
+            },
+            {
+              "name": "Minor, Major, Diminished, and Augmented Chords",
+              "or-tags": ["minor", "major", "diminished", "augmented"]
+            },
+            {
+              "name": "Lots of Chords"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
