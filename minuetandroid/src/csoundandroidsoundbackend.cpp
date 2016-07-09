@@ -122,9 +122,10 @@ void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedEx
             //drumstick::SequencerEvent *ev;
             foreach(const QString &additionalNote, sequence.split(' ')) {
                 midiNotes.append(chosenRootNote+additionalNote.toInt());
-                barStartInfo.append((m_playMode == ScalePlayMode) ? barStart+j:barStart);
+                barStartInfo.append((playMode == "scale") ? barStart+j:barStart);
                 ++j;
             }
+            barStart++;
         }
         else {
             //TODO: Implement for rhythm
