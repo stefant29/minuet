@@ -34,16 +34,14 @@ Item {
     property Item answerRectangle
     property var colors: ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f", "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928"]
     readonly property int textMargins: Math.round(16 * Flat.FlatStyle.scaleFactor)
-    property string questionLabel: soundBackend.questionLabel//newQuestionButton.text
 
     signal answerHoverEnter(var chan, var pitch, var vel, var color)
     signal answerHoverExit(var chan, var pitch, var vel)
     signal answerClicked(var answerImageSource, var color)
     signal showCorrectAnswer(var chosenExercises, var chosenColors)
-    onQuestionLabelChanged: changeNewQuestion()
 
     function changeNewQuestion(){
-    newQuestionButton.text = questionLabel
+    newQuestionButton.text = soundBackend.questionLabel
 }
 
     function clearExerciseGrid() {
@@ -114,7 +112,7 @@ Item {
 
             Button {
                 id: newQuestionButton
-                text: questionLabel
+                text: soundBackend.questionLabel
                 width: giveUpButton.implicitWidth+textMargins*4; height: giveUpButton.implicitHeight
                 //text: "new question"
                 onClicked: {

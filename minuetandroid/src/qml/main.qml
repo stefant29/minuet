@@ -158,14 +158,14 @@ ApplicationWindow {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            soundBackend.stop()
+                            //soundBackend.stop()
                             //minuetMenu.breadcrumbPressed()
                             stackView.currentExerciseMenuItem = null
                             exerciseController.currentExercise ={}
                             //minuetMenu.selectedMenuItem = null
                             stackView.pop()
                             minuetMenu.exerciseArray.pop()
-                            currentExercise.text = minuetMenu.exerciseArray.toString()
+                            currentExercise1.text = minuetMenu.exerciseArray.toString()
                             //minuetMenu.userMessageChanged("exercise")
                             //if (stackView.depth == 1)
                             //    minuetMenu.message = "exercise"
@@ -336,5 +336,9 @@ ApplicationWindow {
     Connections {
         target: rhythmAnswerView
         onAnswerCompleted: exerciseView.checkAnswers(answers)
+    }
+    Connections{
+        target: soundBackend
+        onQuestionLabelChanged: exerciseView.changeNewQuestion()
     }
 }

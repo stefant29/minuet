@@ -53,7 +53,7 @@ public Q_SLOTS:
     virtual void stop() override;
 
 private:
-    CsEngine *m_csoundengine;
+    CsEngine *m_csoundEngine;
     void appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo);
     void clearExercise();
 

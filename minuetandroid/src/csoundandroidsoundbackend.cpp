@@ -31,13 +31,13 @@
 Q_DECLARE_LOGGING_CATEGORY(MINUETANDROID)
 
 
-CsoundAndroidSoundBackend::CsoundAndroidSoundBackend(QObject *parent)
-    : Minuet::ISoundBackend(parent)
+CsoundAndroidSoundBackend::CsoundAndroidSoundBackend(QObject *parent):
+    Minuet::ISoundBackend(parent),
+    m_csoundEngine(new CsEngine)
 {
     qmlRegisterType<CsoundAndroidSoundBackend>("org.kde.minuet", 1, 0, "CsoundAndroidSoundBackend");
-    m_csoundengine = new CsEngine;
     setQuestionLabel("new question");
-    connect(m_csoundengine, &CsEngine::finished, this, [=]() {
+    connect(m_csoundEngine, &CsEngine::finished, this, [=]() {
         setQuestionLabel(QStringLiteral("play again"));
     });
 }
@@ -84,7 +84,7 @@ void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<
 
 CsoundAndroidSoundBackend::~CsoundAndroidSoundBackend()
 {
-    delete m_csoundengine;
+    delete m_csoundEngine;
 }
 
 void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedExerciseOptions,const QString &playMode){
@@ -153,7 +153,7 @@ void CsoundAndroidSoundBackend::prepareFromMidiFile(const QString &fileName){
 }
 
 void CsoundAndroidSoundBackend::play(){
-    m_csoundengine->start();
+    m_csoundEngine->start();
 }
 
 void CsoundAndroidSoundBackend::pause(){
@@ -161,22 +161,22 @@ void CsoundAndroidSoundBackend::pause(){
 }
 
 void CsoundAndroidSoundBackend::stop(){
-    m_csoundengine->stop();
+    m_csoundEngine->stop();
 }
 
 void CsoundAndroidSoundBackend::setPitch (qint8 pitch){
-    
+    Q_UNUSED(pitch)
 }
 
 
 void CsoundAndroidSoundBackend::setVolume (quint8 volume){
-    
+    Q_UNUSED(volume)
 }
 
 
 void CsoundAndroidSoundBackend::setTempo (quint8 tempo){
-    
+    Q_UNUSED(tempo)
 }
 
-#include "moc_csoundandroidsoundbackend.cpp"
+//#include "moc_csoundandroidsoundbackend.cpp"
 
