@@ -42,6 +42,7 @@ ApplicationWindow {
     function exerciseViewStateChanged() {
         if (exerciseView.state == "waitingForAnswer"){
             rhythmAnswerView.resetAnswers()
+            soundBackend.setQuestionLabel("play again")
         }
     }
 
