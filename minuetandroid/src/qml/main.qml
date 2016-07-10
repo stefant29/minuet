@@ -58,7 +58,7 @@ ApplicationWindow {
 
             ToolButton {
                 contentItem: Image {
-                    fillMode: Image.Stretch
+                    fillMode: Image.Pad
                     horizontalAlignment: Image.AlignHCenter
                     verticalAlignment: Image.AlignVCenter
                     source: "drawer.png"
@@ -166,7 +166,7 @@ ApplicationWindow {
                             //minuetMenu.selectedMenuItem = null
                             stackView.pop()
                             minuetMenu.exerciseArray.pop()
-                            currentExercise1.text = minuetMenu.exerciseArray.toString()
+                            currentExerciseParent.text = minuetMenu.exerciseArray.toString()
                             //minuetMenu.userMessageChanged("exercise")
                             //if (stackView.depth == 1)
                             //    minuetMenu.message = "exercise"
@@ -176,7 +176,7 @@ ApplicationWindow {
                 }
 
                 Label{
-                    id: currentExercise1
+                    id: currentExerciseParent
                     text:""
                     font.pixelSize: 25
                     elide: Label.ElideRight
@@ -249,7 +249,7 @@ ApplicationWindow {
                                     delegateRect.color = "white"
                                     stackView.push(categoryMenu.createObject(stackView, {model: children}))
                                     //stackView.push(categoryMenu.createObject(stackView, {model: children}))
-                                    currentExercise1.text = modelData.name
+                                    currentExerciseParent.text = modelData.name
                                     minuetMenu.exerciseArray.push(modelData.name)
                                     /*var root = delegateRect.ListView.view.model[index].root
                                     if (root != undefined) {
