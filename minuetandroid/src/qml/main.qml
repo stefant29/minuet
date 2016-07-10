@@ -111,7 +111,7 @@ ApplicationWindow {
        Item {
             //property string message
             property variant exerciseArray: []
-            //property Item selectedMenuItem : null
+            property Item selectedMenuItem : null
             signal backPressed
             readonly property alias currentExercise: stackView.currentExercise
             //signal breadcrumbPressed
@@ -235,7 +235,8 @@ ApplicationWindow {
                                 //checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
                                 var children = delegateRect.ListView.view.model[index].children
                                 if (!children) {
-                                    //if (stackView.currentExerciseMenuItem != undefined) stackView.currentExerciseMenuItem.checked = false
+                                    if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.color = "white"
+                                    minuetMenu.selectedMenuItem = delegateRect
                                     //if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.highlight = true
                                     soundBackend.setQuestionLabel("new question")
                                     //minuetMenu.userMessageChanged(minuetMenu.message)
