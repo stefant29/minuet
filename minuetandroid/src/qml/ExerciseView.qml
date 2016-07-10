@@ -109,7 +109,7 @@ Item {
             Button {
                 id: newQuestionButton
                 width: giveUpButton.implicitWidth+textMargins*4; height: giveUpButton.implicitHeight
-                //text: "new question"
+                text: soundBackend.questionLabel
                 onClicked: {
                     if(newQuestionButton.text == "new question"){
                         exerciseView.state = "waitingForAnswer"
@@ -299,7 +299,7 @@ Item {
             name: "nextQuestion"
             StateChangeScript {
                 script: {
-                    newQuestionButton.text = "new question"
+                    soundBackend.setQuestionLabel("new question")
                     newQuestionButton.enabled = true
                     giveUpButton.enabled = false
                     answerGrid.enabled = false
@@ -322,10 +322,5 @@ Item {
         }
 
         onStopped: exerciseView.state = "nextQuestion"
-    }
-    Binding{
-        target: newQuestionButton
-        property: "text"
-        value: soundBackend.questionLabel
     }
 }
