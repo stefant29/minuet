@@ -40,7 +40,7 @@ CsoundAndroidSoundBackend::CsoundAndroidSoundBackend(QObject *parent):
 }
 
 void CsoundAndroidSoundBackend::openExerciseFile(){
-    QFile sfile("assets:/share/test1.csd");
+    QFile sfile("assets:/share/template.csd");
     if (!sfile.open(QIODevice::ReadOnly | QIODevice::Text))
         return;
 
@@ -63,7 +63,7 @@ void CsoundAndroidSoundBackend::openExerciseFile(){
 void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo){
     //TODO : use grantlee processing or any other text template library
     QString content;
-    QFile m_csdFileOpen("./test1.csd");
+    QFile m_csdFileOpen("./template.csd");
     if(!m_csdFileOpen.isOpen()){
         m_csdFileOpen.open(QIODevice::ReadWrite | QIODevice::Text);
     }

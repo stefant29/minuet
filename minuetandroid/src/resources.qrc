@@ -36,6 +36,6 @@
         <file alias="back@2x.png">../images/back@2x.png</file>
         <file alias="back@3x.png">../images/back@3x.png</file>
         <file alias="back@4x.png">../images/back@4x.png</file>
-	<file alias="test1.csd">../test1.csd</file>
+	<file alias="template.csd">../template.csd</file>
     </qresource>
 </RCC>

@@ -34,7 +34,7 @@ CsEngine::CsEngine()
     //mStop=false;
     //cs.SetOption("-odac");
     //cs.SetOption("-d");
-    m_fileName = (char *)"./test1.csd";
+    m_fileName = (char *)"./template.csd";
 }
 
 void CsEngine::run() {
