@@ -40,10 +40,6 @@ Item {
     signal answerClicked(var answerImageSource, var color)
     signal showCorrectAnswer(var chosenExercises, var chosenColors)
 
-    function changeNewQuestion(){
-    newQuestionButton.text = soundBackend.questionLabel
-}
-
     function clearExerciseGrid() {
         exerciseView.visible = false
         for (var i = 0; i < answerGrid.children.length; ++i)
@@ -112,7 +108,6 @@ Item {
 
             Button {
                 id: newQuestionButton
-                text: soundBackend.questionLabel
                 width: giveUpButton.implicitWidth+textMargins*4; height: giveUpButton.implicitHeight
                 //text: "new question"
                 onClicked: {
@@ -295,8 +290,6 @@ Item {
                         answerGrid.children[i].opacity = 1
                         answerGrid.children[i].enabled = true
                     }
-                    //newQuestionButton.enabled = false
-                    //playQuestionButton.enabled = true
                     giveUpButton.enabled = true
                     answerGrid.enabled = true
                     answerGrid.opacity = 1
@@ -309,7 +302,6 @@ Item {
                 script: {
                     newQuestionButton.text = "new question"
                     newQuestionButton.enabled = true
-                    //playQuestionButton.enabled = false
                     giveUpButton.enabled = false
                     answerGrid.enabled = false
                 }
@@ -331,5 +323,10 @@ Item {
         }
 
         onStopped: exerciseView.state = "nextQuestion"
+    }
+    Binding{
+        target: newQuestionButton
+        property: "text"
+        value: soundBackend.questionLabel
     }
 }

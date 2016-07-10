@@ -338,8 +338,4 @@ ApplicationWindow {
         target: rhythmAnswerView
         onAnswerCompleted: exerciseView.checkAnswers(answers)
     }
-    Connections{
-        target: soundBackend
-        onQuestionLabelChanged: exerciseView.changeNewQuestion()
-    }
 }

@@ -154,6 +154,7 @@ void CsoundAndroidSoundBackend::prepareFromMidiFile(const QString &fileName){
 
 void CsoundAndroidSoundBackend::play(){
     m_csoundEngine->start();
+    setState(PlayingState);
 }
 
 void CsoundAndroidSoundBackend::pause(){
@@ -162,6 +163,7 @@ void CsoundAndroidSoundBackend::pause(){
 
 void CsoundAndroidSoundBackend::stop(){
     m_csoundEngine->stop();
+    setState(StoppedState);
 }
 
 void CsoundAndroidSoundBackend::setPitch (qint8 pitch){
