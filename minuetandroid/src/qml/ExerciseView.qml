@@ -153,7 +153,6 @@ Item {
                     //soundBackend.play();
                 }
                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
-            }
 
             //TODO change name to play again and click play question to play again
             /*Button {
@@ -267,7 +266,7 @@ Item {
                 }
             }
         }
-
+    }
     states: [
         State {
             name: "initial"
