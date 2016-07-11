@@ -100,7 +100,7 @@ Column {
                     id: correctRhythmImage
 
                     anchors.centerIn: parent
-                    source: (correctAnswers != undefined && exerciseView.userMessage == "the rhythm") ?  correctAnswers[index] + ".png":""
+                    source: (correctAnswers != undefined && exerciseView.userMessage == "rhythm") ?  correctAnswers[index] + ".png":""
                     fillMode: Image.Pad
                 }
             }

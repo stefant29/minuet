@@ -147,7 +147,7 @@ Item {
                         messageText.text = Qt.binding(function() {
                             return "Hear " + userMessage + " and then choose an answer from options below!"
                         })
-                        if (userMessage != "the rhythm")
+                        if (userMessage != "rhythm")
                             answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
                     //}*/
                     //soundBackend.play();
@@ -169,7 +169,7 @@ Item {
                 height: giveUpButton.implicitHeight
                 text: "give up"
                 onClicked: {
-                    if (exerciseController.currentExercise["playMode"] != "the rhythm") {
+                    if (exerciseController.currentExercise["playMode"] != "rhythm") {
                         highlightRightAnswer()
                     }
                     else {
@@ -203,14 +203,14 @@ Item {
                         property var model
                         property int index
 
-                        width: window.width*0.85/6; height: (exerciseController.currentExercise["playMode"] != "the rhythm") ? window.height*0.5/4:window.height*0.3/5
+                        width: window.width*0.85/6; height: (exerciseController.currentExercise["playMode"] != "rhythm") ? window.height*0.5/4:window.height*0.3/5
 
                         Text {
                             id: option
 
                             property string originalText: model.name
 
-                            visible: exerciseController.currentExercise["playMode"] != "the rhythm"
+                            visible: exerciseController.currentExercise["playMode"] != "rhythm"
                             text: originalText
                             width: parent.width - 4
                             anchors.centerIn: parent
@@ -222,15 +222,15 @@ Item {
                         Image {
                             id: rhythmImage
                             anchors.centerIn: parent
-                            visible: exerciseController.currentExercise["playMode"] == "the rhythm"
-                            source: (exerciseController.currentExercise["playMode"] == "the rhythm") ? "exercise-images/" + model.name + ".png":""
+                            visible: exerciseController.currentExercise["playMode"] == "rhythm"
+                            source: (exerciseController.currentExercise["playMode"] == "rhythm") ? model.name + ".png":""
                             fillMode: Image.Pad
                         }
 
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                if (exerciseController.currentExercise["playMode"] != "the rhythm") {
+                                if (exerciseController.currentExercise["playMode"] != "rhythm") {
                                     onExited()
                                     if (option.originalText == chosenExercises[0])
                                         messageText.text = "Congratulations!<br/>You answered correctly!"
@@ -246,7 +246,7 @@ Item {
                             hoverEnabled: true
                             onEntered: {
                                 answerRectangle.color = Qt.darker(answerRectangle.color, 1.1)
-                                if (exerciseController.currentExercise["playMode"] != "the rhythm") {
+                                if (exerciseController.currentExercise["playMode"] != "rhythm") {
                                     model.sequence.split(' ').forEach(function(note) {
                                         answerHoverEnter(0, exerciseController.chosenRootNote() + parseInt(note), 0, colors[answerRectangle.index])
                                     })
@@ -254,7 +254,7 @@ Item {
                             }
                             onExited: {
                                 answerRectangle.color = colors[answerRectangle.index]
-                                if (exerciseController.currentExercise["playMode"] != "the rhythm") {
+                                if (exerciseController.currentExercise["playMode"] != "rhythm") {
                                     if (!animation.running)
                                         model.sequence.split(' ').forEach(function(note) {
                                             answerHoverExit(0, exerciseController.chosenRootNote() + parseInt(note), 0)

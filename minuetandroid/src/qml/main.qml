@@ -35,8 +35,8 @@ ApplicationWindow {
     width: 640;height: 480
 
     function userMessageChanged(message) {
-     //   pianoView.visible = (message != "the rhythm" && message != "exercise")
-        rhythmAnswerView.visible = (message == "the rhythm")
+     //   pianoView.visible = (message != "rhythm" && message != "exercise")
+        rhythmAnswerView.visible = (message == "rhythm")
     }
 
     function exerciseViewStateChanged() {
