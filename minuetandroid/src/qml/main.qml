@@ -34,10 +34,10 @@ ApplicationWindow {
     visible: true
     width: 640;height: 480
 
-    function userMessageChanged(message) {
+    /*function userMessageChanged(message) {
      //   pianoView.visible = (message != "rhythm" && message != "exercise")
         rhythmAnswerView.visible = (message == "rhythm")
-    }
+    }*/
 
     function exerciseViewStateChanged() {
         if (exerciseView.state == "waitingForAnswer"){
@@ -116,7 +116,7 @@ ApplicationWindow {
             readonly property alias currentExercise: stackView.currentExercise
             //signal breadcrumbPressed
             signal itemChanged(var model)
-            signal userMessageChanged(string message)
+            //signal userMessageChanged(string message)
             id: minuetMenu
             width: parent.width; height: parent.height
 

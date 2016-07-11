@@ -99,7 +99,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 18
             textFormat: Text.RichText
-            text: "Hear " + exerciseController.currentExercise["userMessage"] + " and then choose an answer from options below!"
+            //text: "Hear " + exerciseController.currentExercise["userMessage"] + " and then choose an answer from options below!"
         }
 
         Row {
@@ -131,8 +131,8 @@ Item {
                                     chosenColors[i] = answerGrid.children[j].color
                                     break
                                 }
-                        messageText.text = Qt.binding(function(){
-                            return exerciseController.currentExercise["userMessage"] + "<br/>Click 'play question' if you want to hear again!"})
+                        /*messageText.text = Qt.binding(function(){
+                            return exerciseController.currentExercise["userMessage"] + "<br/>Click 'play question' if you want to hear again!"})*/
                         //if (exerciseController.currentExercise["playMode"] != "rhythm")
                     //    answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
                     }
@@ -212,7 +212,8 @@ Item {
                             property string originalText: model.name
 
                             visible: exerciseController.currentExercise["playMode"] != "rhythm"
-                            text: originalText
+                            //text: originalText
+                            text: model.name
                             width: parent.width - 4
                             anchors.centerIn: parent
                             horizontalAlignment: Qt.AlignHCenter
@@ -275,6 +276,7 @@ Item {
                 script: {
                     newQuestionButton.enabled = true
                     //playQuestionButton.enabled = false
+                    messageText.text = exerciseController.currentExercise["userMessage"] + "Click 'play question' if you want to hear again!"
                     giveUpButton.enabled = false
                     answerGrid.enabled = false
                     answerGrid.opacity = 0.25
@@ -293,6 +295,7 @@ Item {
                     giveUpButton.enabled = true
                     answerGrid.enabled = true
                     answerGrid.opacity = 1
+                    messageText.text = exerciseController.currentExercise["userMessage"] + "Click 'play question' if you want to hear again!"
                 }
             }
         },
