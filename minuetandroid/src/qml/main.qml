@@ -304,9 +304,12 @@ ApplicationWindow {
 
         RhythmAnswerView {
             id: rhythmAnswerView
+
             anchors { bottom: parent.bottom; bottomMargin: 20; horizontalCenter: parent.horizontalCenter }
-            visible: false
+            visible: (exerciseController.currentExercise["playMode"] == "rhythm")
             exerciseView: exerciseView
+
+            onAnswerCompleted: exerciseView.checkAnswers(answers)
         }
 
         ExerciseView {

@@ -118,8 +118,9 @@ Item {
                         exerciseController.randomlySelectExerciseOptions()
                         //chosenExercises = exerciseController.randomlyChooseExercises()
                         var selectedExerciseOptions = exerciseController.selectedExerciseOptions
-                        /*Make changes over here*/
-                        soundBackend.prepareFromExerciseOptions(selectedExerciseOptions, playMode)
+                        //temporary condition
+                        if(playMode != "rhythm")
+                            soundBackend.prepareFromExerciseOptions(selectedExerciseOptions, playMode)
                         var newChosenExercises = [];
                         for (var i = 0; i < selectedExerciseOptions.length; ++i)
                             newChosenExercises.push(selectedExerciseOptions[i].name);

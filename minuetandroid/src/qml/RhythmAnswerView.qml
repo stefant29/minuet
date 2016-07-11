@@ -7,7 +7,7 @@
 ** published by the Free Software Foundation; either version 2 of
 ** the License or (at your option) version 3 or any later version
 ** accepted by the membership of KDE e.V. (or its successor approved
-** by the membership of KDE e.V.), which shall act as a proxy 
+** by the membership of KDE e.V.), which shall act as a proxy
 ** defined in Section 14 of version 3 of the license.
 **
 ** This program is distributed in the hope that it will be useful,
@@ -63,6 +63,8 @@ Column {
         correctAnswers = undefined
         colors = ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
         correctColors = ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+        for (var i = 0; i < 4; ++i)
+            correctAnswerGrid.children[i].opacity = 0
     }
     function showCorrectAnswer(chosenExercises, chosenColors) {
         var tempAnswers = answers
@@ -100,7 +102,7 @@ Column {
                     id: correctRhythmImage
 
                     anchors.centerIn: parent
-                    source: (correctAnswers != undefined && exerciseView.userMessage == "rhythm") ?  correctAnswers[index] + ".png":""
+                    source: (correctAnswers != undefined && exerciseController.currentExercise["playMode"] == "rhythm") ?  correctAnswers[index] + ".png":""
                     fillMode: Image.Pad
                 }
             }
@@ -173,5 +175,9 @@ Column {
             }
         }
         //style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
+    }
+    Connections {
+        target: exerciseController
+        onCurrentExerciseChanged: resetAnswers()
     }
 }
