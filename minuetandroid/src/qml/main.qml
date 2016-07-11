@@ -235,7 +235,7 @@ ApplicationWindow {
                                 //checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
                                 var children = delegateRect.ListView.view.model[index].children
                                 if (!children) {
-                                    if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.color = "white"
+                                    if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
                                     minuetMenu.selectedMenuItem = delegateRect
                                     //if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.highlight = true
                                     soundBackend.setQuestionLabel("new question")
