@@ -20,9 +20,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.6
+import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Controls.Styles.Flat 1.0 as Flat
 import QtQuick.Controls.Material 2.0
 
 Item {
@@ -33,7 +32,6 @@ Item {
     //property string userMessage
     property Item answerRectangle
     property var colors: ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f", "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928"]
-    readonly property int textMargins: Math.round(16 * Flat.FlatStyle.scaleFactor)
 
     signal answerHoverEnter(var chan, var pitch, var vel, var color)
     signal answerHoverExit(var chan, var pitch, var vel)
@@ -108,8 +106,9 @@ Item {
 
             Button {
                 id: newQuestionButton
-                width: giveUpButton.implicitWidth+textMargins*4; height: giveUpButton.implicitHeight
+                width: giveUpButton.implicitWidth + 55; height: giveUpButton.implicitHeight
                 text: soundBackend.questionLabel
+
                 onClicked: {
                     if(newQuestionButton.text == "new question"){
                         exerciseView.state = "waitingForAnswer"
@@ -166,7 +165,7 @@ Item {
 
             Button {
                 id: giveUpButton
-                width: giveUpButton.implicitWidth+textMargins*4
+                width: giveUpButton.implicitWidth + 55
                 height: giveUpButton.implicitHeight
                 text: "give up"
                 onClicked: {
