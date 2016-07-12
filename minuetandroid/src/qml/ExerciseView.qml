@@ -29,7 +29,6 @@ Item {
 
     property var chosenExercises
     property var chosenColors: [4]
-    //property string userMessage
     property Item answerRectangle
     property var colors: ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f", "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928"]
 
@@ -67,9 +66,6 @@ Item {
         exerciseView.visible = true
         exerciseView.state = "initial"
     }
-    /*function changeUserMessage(message) {
-        userMessage = message
-    }*/
     function checkAnswers(answers) {
         var answersOk = true
         for(var i = 0; i < 4; ++i) {
@@ -97,7 +93,6 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             font.pointSize: 18
             textFormat: Text.RichText
-            //text: "Hear " + exerciseController.currentExercise["userMessage"] + " and then choose an answer from options below!"
         }
 
         Row {
@@ -115,7 +110,6 @@ Item {
                         var playMode = exerciseController.currentExercise["playMode"]
                         exerciseController.answerLength = (playMode == "rhythm") ? 4:1
                         exerciseController.randomlySelectExerciseOptions()
-                        //chosenExercises = exerciseController.randomlyChooseExercises()
                         var selectedExerciseOptions = exerciseController.selectedExerciseOptions
                         //temporary condition
                         if(playMode != "rhythm")
@@ -130,43 +124,14 @@ Item {
                                     chosenColors[i] = answerGrid.children[j].color
                                     break
                                 }
-                        /*messageText.text = Qt.binding(function(){
-                            return exerciseController.currentExercise["userMessage"] + "<br/>Click 'play question' if you want to hear again!"})*/
-                        //if (exerciseController.currentExercise["playMode"] != "rhythm")
-                    //    answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
                     }
                     soundBackend.play()
                 }
-
-                    /*for (var i = 0; i < chosenExercises.length; ++i)
-                            for (var j = 0; j < answerGrid.children.length; ++j)
-                                if (answerGrid.children[j].children[0].originalText == chosenExercises[i]) {
-                                    chosenColors[i] = answerGrid.children[j].color
-                                    break
-                                }
-                        messageText.text = Qt.binding(function() {
-                            return "Hear " + userMessage + " and then choose an answer from options below!"
-                        })
-                        if (userMessage != "rhythm")
-                            answerHoverEnter(0, exerciseController.chosenRootNote(), 0, "white")
-                    //}*/
-                    //soundBackend.play();
-                }
-               // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
-
-            //TODO change name to play again and click play question to play again
-            /*Button {
-                id: playQuestionButton
-                width: playQuestionButton.implicitWidth+textMargins*0.5; height: playQuestionButton.implicitHeight
-                text: "play question"
-                onClicked: soundBackend.play();
-                // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
-            }*/
+            }
 
             Button {
                 id: giveUpButton
-                width: giveUpButton.implicitWidth + 55
-                height: giveUpButton.implicitHeight
+                width: giveUpButton.implicitWidth + 55; height: giveUpButton.implicitHeight
                 text: "give up"
                 onClicked: {
                     if (exerciseController.currentExercise["playMode"] != "rhythm") {
@@ -178,16 +143,14 @@ Item {
                     }
                     soundBackend.setQuestionLabel("new question")
                 }
-               // style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
             }
         }
 
         Rectangle {
+            width: answerGrid.width + 20; height: answerGrid.height + 20
             color: "#475057"
             radius: 5
             anchors.horizontalCenter: parent.horizontalCenter
-            width: answerGrid.width + 20
-            height: answerGrid.height + 20
 
             Grid {
                 id: answerGrid
@@ -210,10 +173,9 @@ Item {
 
                             property string originalText: model.name
 
-                            visible: exerciseController.currentExercise["playMode"] != "rhythm"
-                            //text: originalText
-                            text: model.name
                             width: parent.width - 4
+                            visible: exerciseController.currentExercise["playMode"] != "rhythm"
+                            text: model.name
                             anchors.centerIn: parent
                             horizontalAlignment: Qt.AlignHCenter
                             color: "black"
@@ -274,7 +236,6 @@ Item {
             StateChangeScript {
                 script: {
                     newQuestionButton.enabled = true
-                    //playQuestionButton.enabled = false
                     messageText.text = exerciseController.currentExercise["userMessage"] + "Click 'play question' if you want to hear again!"
                     giveUpButton.enabled = false
                     answerGrid.enabled = false
@@ -286,7 +247,6 @@ Item {
             name: "waitingForAnswer"
             StateChangeScript {
                 script: {
-                    //soundBackend.allNotesOff()
                     for (var i = 0; i < answerGrid.children.length; ++i) {
                         answerGrid.children[i].opacity = 1
                         answerGrid.children[i].enabled = true
