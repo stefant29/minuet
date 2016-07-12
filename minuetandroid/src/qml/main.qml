@@ -166,7 +166,8 @@ ApplicationWindow {
                Label{
                    id: currentExerciseParent
                    text:""
-                   font.pixelSize: 25
+                   font.family: "cantarell"
+                   font.pixelSize: 20
                    elide: Label.ElideRight
                    verticalAlignment: Qt.AlignVCenter
                    Layout.fillWidth: true
@@ -176,6 +177,7 @@ ApplicationWindow {
                        margins: 10
                    }
                }
+
            }
 
            StackView {
@@ -200,13 +202,18 @@ ApplicationWindow {
                        Label {
                            id: exerciseName
                            text: "technical term, do you have a musician friend?", modelData.name
-                           padding: 25
+                           leftPadding: 25
+                           topPadding: 18
+                           bottomPadding: 18
+                           font.family: "cantarell"
+                           font.bold: true
+                           font.pixelSize: 12
                        }
 
                        MouseArea{
                            anchors.fill: parent
                            onPressed: {
-                               delegateRect.color =  " light gray"
+                               delegateRect.color =  "#E0E0E0"
                            }
                            onCanceled: {
                                delegateRect.color = "white"
