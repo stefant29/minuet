@@ -106,193 +106,168 @@ ApplicationWindow {
 
        //loads the exercises from exercise controller
        Item {
-            //property string message
-            property variant exerciseArray: []
-            property Item selectedMenuItem : null
-            signal backPressed
-            readonly property alias currentExercise: stackView.currentExercise
-            //signal breadcrumbPressed
-            signal itemChanged(var model)
-            //signal userMessageChanged(string message)
-            id: minuetMenu
-            width: parent.width; height: parent.height
+           id: minuetMenu
 
-            onCurrentExerciseChanged: {
+           property variant exerciseArray: []
+           property Item selectedMenuItem : null
+           signal backPressed
+           readonly property alias currentExercise: stackView.currentExercise
+           signal itemChanged(var model)
+           width: parent.width; height: parent.height
+
+           onCurrentExerciseChanged: {
                 exerciseView.setCurrentExercise(currentExercise)
                 rhythmAnswerView.resetAnswers()
                 exerciseController.currentExercise = currentExercise
-            }
-            onBackPressed: {
-                soundBackend.stop()
-                exerciseView.clearExerciseGrid()
+           }
+           onBackPressed: {
+               soundBackend.stop()
+               exerciseView.clearExerciseGrid()
                 //pianoView.clearAllMarks()
-            }
-            function itemClicked(delegateRect, index) {
-                var model = delegateRect.ListView.view.model[index].options
-                if (model != undefined) {
-                    exerciseController.setExerciseOptions(model)
-                    minuetMenu.itemChanged(model)
-                }
-            }
+           }
+           function itemClicked(delegateRect, index) {
+               var model = delegateRect.ListView.view.model[index].options
+               if (model != undefined) {
+                   exerciseController.setExerciseOptions(model)
+                   minuetMenu.itemChanged(model)
+               }
+           }
 
-            //back button
-            Item {
-                id: breadcrumb
-                width: parent.width; height: (stackView.depth > 1) ? 50:0
+           //back button
+           Item {
+               id: breadcrumb
+               width: parent.width; height: (stackView.depth > 1) ? 50:0
+               Image {
+                   height: parent.height/2
+                   id: backButton
+                   fillMode: Image.Stretch
+                   horizontalAlignment: Image.AlignHCenter
+                   verticalAlignment: Image.AlignVCenter
+                   source: "back@2x.png"
+                   anchors{
+                       left: parent.left
+                       verticalCenter: parent.verticalCenter
+                       margins: 10
+                   }
 
-                Image {
-                    height: parent.height/2
-                    id: backButton
-                    fillMode: Image.Stretch
-                    horizontalAlignment: Image.AlignHCenter
-                    verticalAlignment: Image.AlignVCenter
-                    source: "back@2x.png"
-                    anchors{
-                        left: parent.left
-                        verticalCenter: parent.verticalCenter
-                        margins: 10
-                    }
+                   MouseArea{
+                       anchors.fill: parent
+                       onClicked: {
+                           stackView.currentExerciseMenuItem = null
+                           exerciseController.currentExercise ={}
+                           stackView.pop()
+                           minuetMenu.exerciseArray.pop()
+                           currentExerciseParent.text = minuetMenu.exerciseArray.toString()
+                           minuetMenu.backPressed()
+                       }
+                   }
+               }
 
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            //soundBackend.stop()
-                            //minuetMenu.breadcrumbPressed()
-                            stackView.currentExerciseMenuItem = null
-                            exerciseController.currentExercise ={}
-                            //minuetMenu.selectedMenuItem = null
-                            stackView.pop()
-                            minuetMenu.exerciseArray.pop()
-                            currentExerciseParent.text = minuetMenu.exerciseArray.toString()
-                            //minuetMenu.userMessageChanged("exercise")
-                            //if (stackView.depth == 1)
-                            //    minuetMenu.message = "exercise"
-                            minuetMenu.backPressed()
-                        }
-                    }
-                }
+               Label{
+                   id: currentExerciseParent
+                   text:""
+                   font.pixelSize: 25
+                   elide: Label.ElideRight
+                   verticalAlignment: Qt.AlignVCenter
+                   Layout.fillWidth: true
+                   anchors{
+                       left: backButton.right
+                       verticalCenter: parent.verticalCenter
+                       margins: 10
+                   }
+               }
+           }
 
-                Label{
-                    id: currentExerciseParent
-                    text:""
-                    font.pixelSize: 25
-                    elide: Label.ElideRight
-                    verticalAlignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
-                    anchors{
-                        left: backButton.right
-                        verticalCenter: parent.verticalCenter
-                        margins: 10
-                    }
-                }
-            }
+           StackView {
+               id: stackView
 
-            StackView {
-                id: stackView
+               property var currentExercise
+               property Item currentExerciseMenuItem
 
-                property var currentExercise
-                property Item currentExerciseMenuItem
+               width: parent.width;
+               anchors.top: breadcrumb.bottom
+               anchors.bottom:parent.bottom
+               clip: true
+               focus: true
 
-                width: parent.width;
-                anchors.top: breadcrumb.bottom
-                anchors.bottom:parent.bottom
-                clip: true
-                focus: true
+               Component {
+                   id: categoryDelegate
 
-                Component {
-                    id: categoryDelegate
+                   Rectangle {
+                       id: delegateRect
+                       width: stackView.width; height:exerciseName.height
 
-                    Rectangle {
-                        id: delegateRect
-                        width: stackView.width; height:exerciseName.height
+                       Label {
+                           id: exerciseName
+                           text: "technical term, do you have a musician friend?", modelData.name
+                           padding: 25
+                       }
 
-                        Label {
-                            id: exerciseName
-                            text: "technical term, do you have a musician friend?", modelData.name
-                            padding: 25
-                        }
-
-                        //checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
-                        MouseArea{
-
-                            anchors.fill: parent
-
-                            onPressed: {
+                       MouseArea{
+                           anchors.fill: parent
+                           onPressed: {
                                delegateRect.color =  " light gray"
-                            }
+                           }
+                           onCanceled: {
+                               delegateRect.color = "white"
+                           }
+                           onReleased: {
+                               var children = delegateRect.ListView.view.model[index].children
+                               if (!children) {
+                                   if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
+                                   minuetMenu.selectedMenuItem = delegateRect
+                                   soundBackend.setQuestionLabel("new question")
+                                   stackView.currentExercise = delegateRect.ListView.view.model[index]
+                                   stackView.currentExerciseMenuItem = delegateRect
+                                   navigationMenu.close()
+                               }
+                               else {
+                                   delegateRect.color = "white"
+                                   stackView.push(categoryMenu.createObject(stackView, {model: children}))
+                                   currentExerciseParent.text = modelData.name
+                                   minuetMenu.exerciseArray.push(modelData.name)
+                                   /*var root = delegateRect.ListView.view.model[index].root
+                                   if (root != undefined) {
+                                       exerciseController.setMinRootNote(root.split('.')[0])
+                                       exerciseController.setMaxRootNote(root.split('.')[2])
+                                   }
+                                   var playMode = delegateRect.ListView.view.model[index].playMode
+                                   if (playMode != undefined) {
+                                       if (playMode == "scale") exerciseController.setPlayMode(0) // ScalePlayMode
+                                       if (playMode == "chord") exerciseController.setPlayMode(1) // ChordPlayMode
+                                       exerciseController.setAnswerLength(1)
+                                       if (playMode == "rhythm") {
+                                           exerciseController.setPlayMode(2) // RhythmPlayMode
+                                           exerciseController.setAnswerLength(4)
+                                       }
+                                   }*/
+                               }
+                           }
+                       }
+                   }
+               }
 
-                            onCanceled: {
-                                delegateRect.color = "white"
-                            }
+               Component {
+                   id: categoryMenu
 
-                            onReleased: {
-                                //var userMessage = delegateRect.ListView.view.model[index].userMessage
-                                //if (userMessage != undefined)
-                                //    minuetMenu.message = userMessage
-                                //checkable: (!delegateRect.ListView.view.model[index].children) ? true:false
-                                var children = delegateRect.ListView.view.model[index].children
-                                if (!children) {
-                                    if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
-                                    minuetMenu.selectedMenuItem = delegateRect
-                                    //if (minuetMenu.selectedMenuItem != undefined) minuetMenu.selectedMenuItem.highlight = true
-                                    soundBackend.setQuestionLabel("new question")
-                                    //minuetMenu.userMessageChanged(minuetMenu.message)
-                                    //minuetMenu.itemClicked(delegateRect, index)
-                                    //minuetMenu.selectedMenuItem = delegateRect
-                                    stackView.currentExercise = delegateRect.ListView.view.model[index]
-                                    stackView.currentExerciseMenuItem = delegateRect
-                                    navigationMenu.close()
-                                }
-                                else {
-                                    delegateRect.color = "white"
-                                    stackView.push(categoryMenu.createObject(stackView, {model: children}))
-                                    //stackView.push(categoryMenu.createObject(stackView, {model: children}))
-                                    currentExerciseParent.text = modelData.name
-                                    minuetMenu.exerciseArray.push(modelData.name)
-                                    /*var root = delegateRect.ListView.view.model[index].root
-                                    if (root != undefined) {
-                                        exerciseController.setMinRootNote(root.split('.')[0])
-                                        exerciseController.setMaxRootNote(root.split('.')[2])
-                                    }
-                                    var playMode = delegateRect.ListView.view.model[index].playMode
-                                    if (playMode != undefined) {
-                                        if (playMode == "scale") exerciseController.setPlayMode(0) // ScalePlayMode
-                                        if (playMode == "chord") exerciseController.setPlayMode(1) // ChordPlayMode
-                                        exerciseController.setAnswerLength(1)
-                                        if (playMode == "rhythm") {
-                                            exerciseController.setPlayMode(2) // RhythmPlayMode
-                                            exerciseController.setAnswerLength(4)
-                                        }
-                                    }*/
-                                }
-                            }
-                        }
-//                        style: MinuetButtonStyle {}
-                    }
-                }
+                   Rectangle {
+                       property alias model: listView.model
 
-                Component {
-                    id: categoryMenu
+                       width: stackView.width; height: parent.height
 
-                    Rectangle {
-                        property alias model: listView.model
+                       ListView {
+                           id: listView
+                           anchors.fill: parent
+                           spacing: -2
+                           delegate: categoryDelegate
+                           ScrollIndicator.vertical: ScrollIndicator { }
+                       }
+                   }
+               }
 
-                        width: stackView.width; height: parent.height
-
-                        ListView {
-                            id: listView
-                            anchors.fill: parent
-                            spacing: -2
-                            delegate: categoryDelegate
-                            ScrollIndicator.vertical: ScrollIndicator { }
-                        }
-                    }
-                }
-
-                //Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseCategories})) }
-                Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseController.exercises})) }
-            }
-        }
+               Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseController.exercises})) }
+           }
+       }
     }
 
     Item {
