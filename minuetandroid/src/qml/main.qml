@@ -116,9 +116,9 @@ ApplicationWindow {
            width: parent.width; height: parent.height
 
            onCurrentExerciseChanged: {
+                exerciseController.currentExercise = currentExercise
                 exerciseView.setCurrentExercise(currentExercise)
                 rhythmAnswerView.resetAnswers()
-                exerciseController.currentExercise = currentExercise
            }
            onBackPressed: {
                soundBackend.stop()
@@ -316,9 +316,5 @@ ApplicationWindow {
         onStateChanged: window.exerciseViewStateChanged()
         onShowCorrectAnswer: rhythmAnswerView.showCorrectAnswer(chosenExercises, chosenColors)
         onChosenExercisesChanged: rhythmAnswerView.fillCorrectAnswerGrid()
-    }
-    Connections {
-        target: rhythmAnswerView
-        onAnswerCompleted: exerciseView.checkAnswers(answers)
     }
 }

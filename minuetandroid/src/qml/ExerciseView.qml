@@ -236,7 +236,7 @@ Item {
             StateChangeScript {
                 script: {
                     newQuestionButton.enabled = true
-                    messageText.text = exerciseController.currentExercise["userMessage"] + "Click 'play question' if you want to hear again!"
+                    messageText.text = exerciseController.currentExercise["userMessage"]
                     giveUpButton.enabled = false
                     answerGrid.enabled = false
                     answerGrid.opacity = 0.25
@@ -254,7 +254,7 @@ Item {
                     giveUpButton.enabled = true
                     answerGrid.enabled = true
                     answerGrid.opacity = 1
-                    messageText.text = exerciseController.currentExercise["userMessage"] + "Click 'play question' if you want to hear again!"
+                    messageText.text = exerciseController.currentExercise["userMessage"]
                 }
             }
         },
