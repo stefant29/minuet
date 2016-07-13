@@ -102,7 +102,7 @@ ApplicationWindow {
     //TODO: Have an icon next to the name for each type of main exercise(chords,intervals,rhythm) in navigation drawer
     Drawer{
        id: navigationMenu
-       width: Math.min(window.width, window.height) * 0.75; height: window.height
+       width: Math.min(window.width, window.height) * 0.9; height: window.height
 
        //loads the exercises from exercise controller
        Item {
