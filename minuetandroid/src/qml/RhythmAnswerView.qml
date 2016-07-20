@@ -94,7 +94,7 @@ Column {
             Rectangle {
                 id: correctAnswerRectangle
 
-                width: window.width*0.85/8; height: 59
+                width: app.width*0.85/8; height: 59
                 color: correctColors[index]
                 opacity: 0
 
@@ -128,7 +128,7 @@ Column {
                 Rectangle {
                     id: answerRectangle
 
-                    width: window.width*0.85/8
+                    width: app.width*0.85/8
                     height: 59
                     color: colors[index]
 

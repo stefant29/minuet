@@ -25,11 +25,11 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.0
 
-//window
+//app
 ApplicationWindow {
-    id:window
+    id:app
     visible: true
-    width: 640;height: 480
+    width: 360;height: 520
 
     /*function userMessageChanged(message) {
      //   pianoView.visible = (message != "rhythm" && message != "exercise")
@@ -42,7 +42,7 @@ ApplicationWindow {
             soundBackend.setQuestionLabel("play again")
         }
     }
-
+    property string titleText: "Minuet Mobile"
     //contains title and button
     header: ToolBar{
         Material.foreground: "white"
@@ -65,8 +65,7 @@ ApplicationWindow {
 
             Label {
                 id: titleLabel
-                text: "Minuet Mobile"
-                font.pixelSize: 25
+                text: titleText
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
@@ -102,7 +101,7 @@ ApplicationWindow {
     //TODO: Have an icon next to the name for each type of main exercise(chords,intervals,rhythm) in navigation drawer
     Drawer{
        id: navigationMenu
-       width: Math.min(window.width, window.height) * 0.9; height: window.height
+       width: Math.min(app.width, app.height) * 0.9; height: app.height
 
        //loads the exercises from exercise controller
        Item {
@@ -123,6 +122,7 @@ ApplicationWindow {
            onBackPressed: {
                soundBackend.stop()
                exerciseView.clearExerciseGrid()
+               exerciseView.clearYourAnswerGrid()
                 //pianoView.clearAllMarks()
            }
            function itemClicked(delegateRect, index) {
@@ -159,6 +159,7 @@ ApplicationWindow {
                            minuetMenu.exerciseArray.pop()
                            currentExerciseParent.text = minuetMenu.exerciseArray.toString()
                            minuetMenu.backPressed()
+                           titleText = "Minuet Mobile"
                        }
                    }
                }
@@ -226,6 +227,7 @@ ApplicationWindow {
                                    soundBackend.setQuestionLabel("new question")
                                    stackView.currentExercise = delegateRect.ListView.view.model[index]
                                    stackView.currentExerciseMenuItem = delegateRect
+                                   titleText = modelData.name
                                    navigationMenu.close()
                                }
                                else {
@@ -279,8 +281,9 @@ ApplicationWindow {
 
     Item {
         id: contentContainer
-        anchors.fill: parent
-
+        //anchors.fill: parent
+        width: parent.width
+        height: parent.height
         RhythmAnswerView {
             id: rhythmAnswerView
 
@@ -294,7 +297,7 @@ ApplicationWindow {
         ExerciseView {
             id: exerciseView
             width: contentContainer.width ; height: contentContainer.height
-            anchors { horizontalCenter: contentContainer.horizontalCenter }
+            //anchors { horizontalCenter: contentContainer.horizontalCenter }
         }
     }
 
@@ -308,12 +311,12 @@ ApplicationWindow {
         target: minuetMenu
         onItemChanged: rhythmAnswerView.resetAnswers(model)
         onBreadcrumbPressed: rhythmAnswerView.resetAnswers()
-        onUserMessageChanged: window.userMessageChanged(message)
+        onUserMessageChanged: app.userMessageChanged(message)
     }*/
     Connections {
         target: exerciseView
         onAnswerClicked: rhythmAnswerView.answerClicked(answerImageSource, color)
-        onStateChanged: window.exerciseViewStateChanged()
+        onStateChanged: app.exerciseViewStateChanged()
         onShowCorrectAnswer: rhythmAnswerView.showCorrectAnswer(chosenExercises, chosenColors)
         onChosenExercisesChanged: rhythmAnswerView.fillCorrectAnswerGrid()
     }
