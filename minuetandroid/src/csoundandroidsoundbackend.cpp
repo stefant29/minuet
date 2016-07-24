@@ -98,15 +98,20 @@ void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedEx
     appendEvent(new drumstick::TempoEvent(m_queueId, 600000), 0);
     */
     unsigned int barStart = 0;
-    /*if (playMode == "rhythm") {
-        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 0);
-        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 60);
-        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 120);
-        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 180);
-        barStart = 240;
-    }*/
     QList<unsigned int> midiNotes;
     QList<unsigned int> barStartInfo;
+
+    if (playMode == "rhythm") {
+        for(int k = 0; k < 4; k++){
+            midiNotes.append(80);
+            barStartInfo.append(barStart++);
+        }
+        //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 0);
+        //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 60);
+        //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 120);
+        //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 180);
+        //barStart = 240;
+    }
 
     for (int i = 0; i < selectedExerciseOptions.size(); ++i) {
         QString sequence = selectedExerciseOptions[i].toObject()[QStringLiteral("sequence")].toString();
@@ -129,17 +134,21 @@ void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedEx
         }
         else {
             //TODO: Implement for rhythm
-            /*appendEvent(new drumstick::NoteOnEvent(9, 80, 120), barStart);
+            //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), barStart);
+            midiNotes.append(80);
+            barStartInfo.append(barStart);
             foreach(QString additionalNote, sequence.split(' ')) { // krazy:exclude=foreach
-                appendEvent(new drumstick::NoteOnEvent(9, 37, 120), barStart);
+                //appendEvent(new drumstick::NoteOnEvent(9, 37, 120), barStart);
+                midiNotes.append(37);
+                barStartInfo.append(barStart);
                 float dotted = 1;
                 if (additionalNote.endsWith('.')) {
                     dotted = 1.5;
                     additionalNote.chop(1);
                 }
-                barStart += dotted*60*(4.0/additionalNote.toInt());
+                barStart += dotted*1*(4.0/additionalNote.toInt());
             }
-        */}
+        }
     }
     appendEvent(midiNotes,barStartInfo);
 

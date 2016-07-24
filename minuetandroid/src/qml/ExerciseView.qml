@@ -284,9 +284,7 @@ Item {
                         exercisAnswerLength = (playMode == "rhythm") ? 4:1
                         exerciseController.randomlySelectExerciseOptions()
                         var selectedExerciseOptions = exerciseController.selectedExerciseOptions
-                        //temporary condition
-                        if(playMode != "rhythm")
-                            soundBackend.prepareFromExerciseOptions(selectedExerciseOptions, playMode)
+                        soundBackend.prepareFromExerciseOptions(selectedExerciseOptions, playMode)
                         var newChosenExercises = [];
                         for (var i = 0; i < selectedExerciseOptions.length; ++i)
                             newChosenExercises.push(selectedExerciseOptions[i].name);
