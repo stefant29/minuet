@@ -38,7 +38,7 @@ ApplicationWindow {
 
     function exerciseViewStateChanged() {
         if (exerciseView.state == "waitingForAnswer"){
-            rhythmAnswerView.resetAnswers()
+            exerciseView.resetAnswers()
             soundBackend.setQuestionLabel("play again")
         }
     }
@@ -117,7 +117,7 @@ ApplicationWindow {
            onCurrentExerciseChanged: {
                 exerciseController.currentExercise = currentExercise
                 exerciseView.setCurrentExercise(currentExercise)
-                rhythmAnswerView.resetAnswers()
+                exerciseView.resetAnswers()
            }
            onBackPressed: {
                soundBackend.stop()
@@ -284,15 +284,15 @@ ApplicationWindow {
         //anchors.fill: parent
         width: parent.width
         height: parent.height
-        RhythmAnswerView {
+        /*RhythmAnswerView {
             id: rhythmAnswerView
 
             anchors { bottom: parent.bottom; bottomMargin: 20; horizontalCenter: parent.horizontalCenter }
             visible: (exerciseController.currentExercise["playMode"] == "rhythm")
             exerciseView: exerciseView
 
-            onAnswerCompleted: exerciseView.checkAnswers(answers)
-        }
+            //onAnswerCompleted: exerciseView.checkAnswers(answers)
+        }*/
 
         ExerciseView {
             id: exerciseView
@@ -315,9 +315,9 @@ ApplicationWindow {
     }*/
     Connections {
         target: exerciseView
-        onAnswerClicked: rhythmAnswerView.answerClicked(answerImageSource, color)
+        //onAnswerClicked: rhythmAnswerView.answerClicked(answerImageSource, color)
         onStateChanged: app.exerciseViewStateChanged()
-        onShowCorrectAnswer: rhythmAnswerView.showCorrectAnswer(chosenExercises, chosenColors)
-        onChosenExercisesChanged: rhythmAnswerView.fillCorrectAnswerGrid()
+        //onShowCorrectAnswer: rhythmAnswerView.showCorrectAnswer(chosenExercises, chosenColors)
+        //onChosenExercisesChanged: rhythmAnswerView.fillCorrectAnswerGrid()
     }
 }

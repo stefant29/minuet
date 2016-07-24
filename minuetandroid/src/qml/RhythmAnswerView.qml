@@ -19,7 +19,7 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-
+/*
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
@@ -35,16 +35,16 @@ Column {
     property var correctAnswers
     property var correctColors: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
     property ExerciseView exerciseView
-    property var colors: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+    property var rhythmColors: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
 
     signal answerCompleted(var answers)
 
     function answerClicked(answerImageSource, color) {
         var tempAnswers = answers
         tempAnswers[currentAnswer] = answerImageSource
-        var tempColors = colors
+        var tempColors = rhythmColors
         tempColors[currentAnswer] = color
-        colors = tempColors
+        rhythmColors = tempColors
         currentAnswer++
         if (currentAnswer == 4) {
             answerCompleted(answers)
@@ -61,7 +61,7 @@ Column {
         currentAnswer = 0
         answers = ["current-rhythm.png", "unknown-rhythm.png", "unknown-rhythm.png", "unknown-rhythm.png"]
         correctAnswers = undefined
-        colors = ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+        rhythmColors = ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
         correctColors = ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
         for (var i = 0; i < 4; ++i)
             correctAnswerGrid.children[i].opacity = 0
@@ -71,7 +71,7 @@ Column {
         for (var i = 0; i < 4; ++i)
             tempAnswers[i] = chosenExercises[i] + ".png"
         answers = tempAnswers
-        colors = chosenColors
+        rhythmColors = chosenColors
         currentAnswer = 0
     }
     function fillCorrectAnswerGrid() {
@@ -130,7 +130,7 @@ Column {
 
                     width: app.width*0.85/8
                     height: 59
-                    color: colors[index]
+                    color: rhythmColors[index]
 
                     Text {
                         id: option
@@ -165,13 +165,13 @@ Column {
         onClicked: {
             if (currentAnswer > 0) {
                 var tempAnswers = answers
-                var tempColors = colors
+                var tempColors = rhythmColors
                 tempAnswers[currentAnswer] = "unknown-rhythm.png"
                 currentAnswer--
                 tempAnswers[currentAnswer] = "current-rhythm.png"
                 tempColors[currentAnswer] = "#ffffff"
                 answers = tempAnswers
-                colors = tempColors
+                rhythmColors = tempColors
             }
         }
         //style: MinuetButtonStyle{ labelHorizontalAlignment: Qt.AlignHCenter }
@@ -181,3 +181,4 @@ Column {
         onCurrentExerciseChanged: resetAnswers()
     }
 }
+*/

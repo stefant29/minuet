@@ -3,6 +3,10 @@
         <file alias="main.qml">qml/main.qml</file>
         <file alias="ExerciseView.qml">qml/ExerciseView.qml</file>
         <file alias="RhythmAnswerView.qml">qml/RhythmAnswerView.qml</file>
+        <file alias="BlackKey.qml">qml/pianoview/BlackKey.qml</file>
+        <file alias="Octave.qml">qml/pianoview/Octave.qml</file>
+        <file alias="PianoView.qml">qml/pianoview/PianoView.qml</file>
+        <file alias="WhiteKey.qml">qml/pianoview/WhiteKey.qml</file>
         <file>../data/exercises/chords-root-position-exercises.json</file>
         <file>../data/exercises/intervals-ascending-melodic-exercises.json</file>
         <file>../data/exercises/intervals-descending-melodic-exercises.json</file>

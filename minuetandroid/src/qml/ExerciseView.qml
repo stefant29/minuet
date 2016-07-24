@@ -24,9 +24,16 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.0
+//import "pianoview"
 
 Item {
     id: exerciseView
+
+    property int currentAnswer: 0
+    property var correctAnswers
+    property var correctColors: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+    property var rhythmColors: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+    property variant exerciseAnswers: []
     property var chosenExercises
     property int exercisAnswerLength:0
     property var chosenColors: [4]
@@ -35,9 +42,126 @@ Item {
     property int availableAnswersHeight: mainLayout.height - messageText.height - rowLayoutQuestion.height - pianoView.height - answerCategory.height - 2*mainLayout.anchors.margins
     signal answerHoverEnter(var chan, var pitch, var vel, var color)
     signal answerHoverExit(var chan, var pitch, var vel)
-    signal answerClicked(var answerImageSource, var color)
-    signal showCorrectAnswer(var chosenExercises, var chosenColors)
+    //signal answerClicked(var answerImageSource, var color)
+    //signal showCorrectAnswer(var chosenExercises, var chosenColors)
+    property var answers: [
+        "current-rhythm.png",
+        "unknown-rhythm.png",
+        "unknown-rhythm.png",
+        "unknown-rhythm.png"
+    ]
+    onChosenExercisesChanged: {
+        fillCorrectAnswerGrid()  
+    }
+    /*onAnswerCompleted:{
+        exerciseView.checkAnswers(answers)
+    }*/
 
+    //signal answerCompleted(var answers)
+
+    /*function answerClicked(answerImageSource, color) {
+
+        var tempAnswers = answers
+        tempAnswers[currentAnswer] = answerImageSource
+        var tempColors = rhythmColors
+        tempColors[currentAnswer] = color
+        rhythmColors = tempColors
+        currentAnswer++
+        if (currentAnswer == 4) {
+            answerCompleted(answers)
+            correctColors = exerciseView.chosenColors
+            for (var i = 0; i < 4; ++i)
+                correctAnswerGrid.children[i].opacity = answers[i].toString().split("/").pop().split(".")[0] != correctAnswers[i] ? 1:0
+        }
+        else {
+            tempAnswers[currentAnswer] = "current-rhythm.png"
+        }
+        answers = tempAnswers
+    }*/
+    /*function showCorrectAnswer(chosenExercises, chosenColors) {
+        var tempAnswers = answers
+        for (var i = 0; i < 4; ++i){
+            tempAnswers[i] = chosenExercises[i] + ".png"
+            if(yourAnswerGrid.children[i] == undefined){
+                yourAnswerOption.createObject(yourAnswerGrid, {model: tempAnswers[i], index: i})
+            }
+            yourAnswerGrid.children[i].border.color = "white"
+        }
+        answers = tempAnswers
+        rhythmColors = chosenColors
+        currentAnswer = 0
+    }*/
+    function answerClicked1(answerOptionClicked,answerLength){
+        if(exerciseController.currentExercise["playMode"] != "rhythm"){
+            exerciseAnswers.push(answerOptionClicked)
+            yourAnswerGrid.children[currentAnswer].model = answerOptionClicked
+            currentAnswer++
+            if(answerLength == exerciseAnswers.length){
+                for(var i = 0; i < answerLength; i++)
+                    /*if(yourAnswerGrid.children[i].model == chosenExercises[i])
+                        yourAnswerGrid.children[i].border.color = "#00FF00"
+                    else{
+                        yourAnswerGrid.children[i].border.color = "red"
+                    }*/
+                    checkAnswers(exerciseAnswers,answerLength)
+            }
+        }
+        else{
+            var tempAnswers = answers
+            tempAnswers[currentAnswer] = answerOptionClicked
+            var tempColors = rhythmColors
+            tempColors[currentAnswer] = color
+            rhythmColors = tempColors
+            currentAnswer++
+            if (currentAnswer == answerLength) {
+                //answerCompleted(answers)
+                checkAnswers(answers,answerLength)
+                correctColors = exerciseView.chosenColors
+                /*for (var i = 0; i < 4; ++i)
+                    correctAnswerGrid.children[i].opacity = answers[i].toString().split("/").pop().split(".")[0] != correctAnswers[i] ? 1:0*/
+            }
+            else {
+                tempAnswers[currentAnswer] = "current-rhythm.png"
+            }
+            answers = tempAnswers
+        }
+    }
+    function showCorrectAnswer1() {
+        if(exerciseController.currentExercise["playMode"] != "rhythm"){
+            for (var i = 0; i < 1; ++i){
+                yourAnswerGrid.children[i].border.color = "white"
+                yourAnswerGrid.children[i].model = chosenExercises[i]
+            }
+        }
+        else{
+            var tempAnswers = answers
+            for (var i = 0; i < 4; ++i){
+                tempAnswers[i] = chosenExercises[i] + ".png"
+                yourAnswerGrid.children[i].border.color = "white"
+            }
+            answers = tempAnswers
+            rhythmColors = chosenColors
+            currentAnswer = 0
+        }
+    }
+    function resetAnswers() {
+        currentAnswer = 0
+        answers = ["current-rhythm.png", "unknown-rhythm.png", "unknown-rhythm.png", "unknown-rhythm.png"]
+        correctAnswers = undefined
+        rhythmColors = ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+        correctColors = ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+        /*for (var i = 0; i < 4; ++i)
+            correctAnswerGrid.children[i].opacity = 0*/
+        for (var i = 0; i < yourAnswerGrid.children.length; ++i)
+            yourAnswerGrid.children[i].border.color = "white"
+        while(exerciseAnswers.length)
+            exerciseAnswers.pop()
+    }  
+    function fillCorrectAnswerGrid() {
+        /*for (var i = 0; i < 4; ++i)
+            correctAnswerGrid.children[i].opacity = 0*/
+        correctAnswers = exerciseView.chosenExercises
+    }
     function clearExerciseGrid() {
         exerciseView.visible = false
         for (var i = 0; i < answerGrid.children.length; ++i)
@@ -57,27 +181,42 @@ Item {
         animation.start()*/
         exerciseView.state = "nextQuestion"
     }
-    function evaluateAnswer(userAnswer,answerLength,playMode,correctAnswer){
-        var j=0
-        if(playMode!= "rhythm"){
-            yourAnswerOption.createObject(yourAnswerGrid, {model: userAnswer, index: j})
-            checkRightAnswer(userAnswer,correctAnswer)
-        }
-    }
-    function checkRightAnswer(userAnswer,correctAnswer){
-        if(userAnswer == correctAnswer)
-            yourAnswerGrid.children[0].border.color = "#00FF00"
-        else
-            yourAnswerGrid.children[0].border.color = "red"
-
-    }
     function clearYourAnswerGrid(){
         for (var i = 0; i < yourAnswerGrid.children.length; ++i)
             yourAnswerGrid.children[i].destroy()
     }
-
+    function createYourAnswerChildren(playMode){
+        var answerLength = 1
+        if(playMode == "rhythm"){
+            answerLength = 4
+            for (var i = 0; i < answerLength; ++i)
+                yourAnswerOption.createObject(yourAnswerGrid, {model: answers[i], index: i})
+        }
+        else{
+            for (var i = 0; i < answerLength; ++i)
+                yourAnswerOption.createObject(yourAnswerGrid, {model: "", index: i})
+        }
+    }
+    function clearYourAnswerGridOptions(){
+        var playMode = exerciseController.currentExercise["playMode"]
+        if(playMode == "rhythm"){
+            for(var i = 0 ; i < yourAnswerGrid.children.length; ++i){
+                yourAnswerGrid.children[i].model = answers[i]
+                yourAnswerGrid.children[i].index = i
+            }
+        }
+        else{
+            for(var i = 0 ; i < yourAnswerGrid.children.length; ++i){
+                yourAnswerGrid.children[i].model = ""
+                yourAnswerGrid.children[i].index = i
+            }
+        }
+    }
     function setCurrentExercise(currentExercise) {
+        var playMode = exerciseController.currentExercise["playMode"]
         clearExerciseGrid()
+        clearYourAnswerGrid()
+        createYourAnswerChildren(playMode)
         var currentExerciseOptions = currentExercise["options"];
         var length = currentExerciseOptions.length
 
@@ -88,19 +227,17 @@ Item {
         exerciseView.visible = true
         exerciseView.state = "initial"
     }
-    function fillCorrectAnswer(){
-        if(!yourAnswerGrid.children[0])
-            yourAnswerOption.createObject(yourAnswerGrid, {model: chosenExercises[0], index: 0})
-        else
-            yourAnswerGrid.children[0].model = chosenExercises[0]
-        yourAnswerGrid.children[0].border.color = "white"
-    }
-
-    function checkAnswers(answers) {
+    function checkAnswers(answers,answerLength) {
+        highlightRightAnswer()
         var answersOk = true
-        for(var i = 0; i < 4; ++i) {
-            if (answers[i].toString().split("/").pop().split(".")[0] != chosenExercises[i])
+        for(var i = 0; i < answerLength; ++i) {
+            if (answers[i].toString().split("/").pop().split(".")[0] != chosenExercises[i]){
                 answersOk = false
+                yourAnswerGrid.children[i].border.color = "red"
+            }
+            else{
+                yourAnswerGrid.children[i].border.color = "green"
+            }
         }
         if (answersOk)
             messageText.text = "Congratulations!<br/>You answered correctly!"
@@ -115,9 +252,7 @@ Item {
         id: mainLayout
         anchors.margins: 10
         clip: true
-        //spacing: 20
         anchors.horizontalCenter: parent.horizontalCenter
-        //anchors.top:parent.top
         height: parent.height
         width:parent.width
 
@@ -140,8 +275,9 @@ Item {
                 text: soundBackend.questionLabel
 
                 onClicked: {
-                    clearYourAnswerGrid()
+                    clearYourAnswerGridOptions()
                     if(newQuestionButton.text == "new question"){
+                        resetAnswers()
                         exerciseView.state = "waitingForAnswer"
                         var playMode = exerciseController.currentExercise["playMode"]
                         exerciseController.answerLength = (playMode == "rhythm") ? 4:1
@@ -162,6 +298,7 @@ Item {
                                     break
                                 }
                     }
+                    //answerHoverExit(0, exerciseController.chosenRootNote() + parseInt(model.sequence), 0)
                     soundBackend.play()
                 }
             }
@@ -173,10 +310,11 @@ Item {
                 onClicked: {
                     if (exerciseController.currentExercise["playMode"] != "rhythm") {
                         highlightRightAnswer()
-                        fillCorrectAnswer()
+                        showCorrectAnswer1()
                     }
                     else {
-                        showCorrectAnswer(chosenExercises, chosenColors)
+                        //showCorrectAnswer(chosenExercises, chosenColors)
+                        showCorrectAnswer1()
                         exerciseView.state = "nextQuestion"
                     }
                     soundBackend.setQuestionLabel("new question")
@@ -194,7 +332,6 @@ Item {
             anchors.bottom: answerCategory.top
             Flickable{
                 id:fickable
-                //anchors.horizontalCenter: parent.horizontalCenter
                 anchors.fill: parent
                 contentHeight: fickable.height
                 contentWidth: answerGrid.width
@@ -245,27 +382,27 @@ Item {
                                 onClicked: {
                                     if (exerciseController.currentExercise["playMode"] != "rhythm") {
                                         onExited()
-                                        evaluateAnswer(option.originalText,exerciseController.answerLength,exerciseController.currentExercise["playMode"],chosenExercises[0])
-                                        if (option.originalText == chosenExercises[0])
+                                        answerClicked1(option.originalText,1)
+                                        /*if (option.originalText == chosenExercises[0])
                                             messageText.text = "Congratulations!<br/>You answered correctly!"
                                         else
-                                            messageText.text = "Oops, not this time!<br/>Try again!"
-                                        answerHoverExit(0, exerciseController.chosenRootNote() + parseInt(model.sequence), 0)
+                                            messageText.text = "Oops, not this time!<br/>Try again!"*/
+                                        //answerHoverExit(0, exerciseController.chosenRootNote() + parseInt(model.sequence), 0)
                                         highlightRightAnswer()
-                                        //fillCorrectAnswer()
                                     }
                                     else {
-                                        answerClicked(rhythmImage.source, colors[answerRectangle.index])
+                                        //answerClicked(rhythmImage.source, colors[answerRectangle.index])
+                                        answerClicked1(rhythmImage.source, 4)
                                     }
                                 }
                                 hoverEnabled: true
                                 onEntered: {
                                     answerRectangle.color = Qt.darker(answerRectangle.color, 1.1)
-                                    if (exerciseController.currentExercise["playMode"] != "rhythm") {
+                                    /*if (exerciseController.currentExercise["playMode"] != "rhythm") {
                                         model.sequence.split(' ').forEach(function(note) {
                                             answerHoverEnter(0, exerciseController.chosenRootNote() + parseInt(note), 0, colors[answerRectangle.index])
                                         })
-                                    }
+                                    }*/
                                 }
                                 onExited: {
                                     answerRectangle.color = colors[answerRectangle.index]
@@ -283,6 +420,7 @@ Item {
                 ScrollBar.horizontal: ScrollBar{}
             }
         }
+        //TODO add a height
         RowLayout{
             id: answerCategory
             anchors { horizontalCenter: parent.horizontalCenter }
@@ -295,6 +433,7 @@ Item {
                      anchors.horizontalCenter: parent.horizontalCenter
                      anchors.centerIn: parent
                      spacing: 10;
+
                      //flow:Grid.TopToBottom
                      Component {
                          id: yourAnswerOption
@@ -305,7 +444,7 @@ Item {
                              property var model
                              property int index
 
-                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:119
+                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:(app.width-2*mainLayout.anchors.margins)/5
                              height: (exerciseController.currentExercise["playMode"] != "rhythm") ? 40:59
 
                              Text {
@@ -325,24 +464,23 @@ Item {
                                  id: rhythmImage
                                  anchors.centerIn: parent
                                  visible: exerciseController.currentExercise["playMode"] == "rhythm"
-                                 source: rhythmAnswerView.answers[index]
-                                 fillMode: Image.Pad
+                                 source: answers[index]
+                                 fillMode: Image.PreserveAspectFit
                              }
 
                              MouseArea{
                                  anchors.fill: parent
                                  onClicked:{
-                                    fillCorrectAnswer()
+                                    if(exerciseController.currentExercise["playMode"] != "rhythm" && yourAnswerGrid.children[0].model != "")
+                                        showCorrectAnswer1()
+                                    else{
+                                         if(currentAnswer == 4)
+                                        //showCorrectAnswer(chosenExercises,chosenColors)
+                                        showCorrectAnswer1()
+                                    }
                                  }
-                             }
 
-                             /*Image {
-                                 id: rhythmImage
-                                 anchors.centerIn: parent
-                                 visible: exerciseController.currentExercise["playMode"] == "rhythm"
-                                 source: (exerciseController.currentExercise["playMode"] == "rhythm") ? model.name + ".png":""
-                                 fillMode: Image.Pad
-                             }*/
+                             }
                          }
                      }
                  }
@@ -350,29 +488,43 @@ Item {
 
                  Layout.preferredWidth: app.width-mainLayout.anchors.margins//-(rowLayout.spacing/2)
             }
-            /*GroupBox {
-                 title: qsTr("Correct Answers")
-                 Flow {
-                     anchors.fill: parent
-                     spacing: 10
-                     Repeater {
-                         model: 4
-                         Label { text: "Button " + modelData }
-                     }
-                 }
-                 Layout.preferredWidth: app.width/2-mainLayout.anchors.margins//-(rowLayout.spacing/2)
-            }*/
         }
-        Rectangle{
+        Flickable{
             id:pianoView
+            clip: true
+            anchors { horizontalCenter: parent.horizontalCenter }
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin:mainLayout.anchors.margins
+            contentWidth: piano.width
+            height:100
+            width: parent.width - 2*mainLayout.anchors.margins
+            PianoView{
+                id: piano
+                visible: exerciseController.currentExercise["playMode"] != "rhythm"
+                anchors.fill: parent
+            }
+        }
+        Button {
+            id: backspaceButton
+            visible: exerciseController.currentExercise["playMode"] == "rhythm"
             anchors { horizontalCenter: parent.horizontalCenter }
             anchors.bottom: parent.bottom
             anchors.bottomMargin:mainLayout.anchors.margins
             width: app.width - 2*mainLayout.anchors.margins
             height:100
-            Rectangle{
-                anchors.fill: parent
-                color: "light gray"
+            text: "backspace"
+            enabled: currentAnswer > 0 && currentAnswer < 4
+            onClicked: {
+                if (currentAnswer > 0) {
+                    var tempAnswers = answers
+                    var tempColors = rhythmColors
+                    tempAnswers[currentAnswer] = "unknown-rhythm.png"
+                    currentAnswer--
+                    tempAnswers[currentAnswer] = "current-rhythm.png"
+                    tempColors[currentAnswer] = "#ffffff"
+                    answers = tempAnswers
+                    rhythmColors = tempColors
+                }
             }
         }
     }
