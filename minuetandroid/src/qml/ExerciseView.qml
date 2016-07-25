@@ -29,6 +29,8 @@ import QtQuick.Layouts 1.0
 Item {
     id: exerciseView
 
+    property int startPos: 0
+    property int endPos: 0
     property int currentAnswer: 0
     property var correctAnswers
     property var correctColors: ["#ffffff", "#ffffff", "#ffffff", "#ffffff"]
@@ -156,7 +158,8 @@ Item {
             yourAnswerGrid.children[i].border.color = "white"
         while(exerciseAnswers.length)
             exerciseAnswers.pop()
-    }  
+        piano.noteUnmark(0, exerciseController.chosenRootNote(), 0, "white")
+    }
     function fillCorrectAnswerGrid() {
         /*for (var i = 0; i < 4; ++i)
             correctAnswerGrid.children[i].opacity = 0*/
@@ -282,6 +285,7 @@ Item {
                         var playMode = exerciseController.currentExercise["playMode"]
                         exerciseController.answerLength = (playMode == "rhythm") ? 4:1
                         exercisAnswerLength = (playMode == "rhythm") ? 4:1
+
                         exerciseController.randomlySelectExerciseOptions()
                         var selectedExerciseOptions = exerciseController.selectedExerciseOptions
                         soundBackend.prepareFromExerciseOptions(selectedExerciseOptions, playMode)
@@ -295,7 +299,17 @@ Item {
                                     chosenColors[i] = answerGrid.children[j].color
                                     break
                                 }
+                        if(playMode!= "rhythm"){
+                            piano.noteMark(0, exerciseController.chosenRootNote(), 0, "white")
+                        }
                     }
+                    startPos = pianoView.contentX
+                    endPos = 7*piano.keyWidth*(Math.floor((exerciseController.chosenRootNote()-23)/12))
+                    if(endPos > 0)
+                         endPos += 2*piano.keyWidth
+                    if(startPos!=endPos)
+                        anim.start()
+
                     //answerHoverExit(0, exerciseController.chosenRootNote() + parseInt(model.sequence), 0)
                     soundBackend.play()
                 }
@@ -490,16 +504,19 @@ Item {
         Flickable{
             id:pianoView
             clip: true
+            boundsBehavior: Flickable.OvershootBounds
             anchors { horizontalCenter: parent.horizontalCenter }
             anchors.bottom: parent.bottom
             anchors.bottomMargin:mainLayout.anchors.margins
             contentWidth: piano.width
             height:100
             width: parent.width - 2*mainLayout.anchors.margins
+
             PianoView{
                 id: piano
                 visible: exerciseController.currentExercise["playMode"] != "rhythm"
-                anchors.fill: parent
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
             }
         }
         Button {
@@ -566,6 +583,12 @@ Item {
             }
         }
     ]
+    ParallelAnimation{
+        id:anim
+        loops: 1
+        NumberAnimation { target: pianoView; property: "contentX"; from: startPos; to: endPos}
+    }
+
     /*ParallelAnimation {
         id: animation
         loops: 2

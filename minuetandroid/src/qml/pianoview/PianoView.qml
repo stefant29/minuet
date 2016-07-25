@@ -41,9 +41,11 @@ Rectangle {
         noteMark.createObject(itemForPitch(pitch), { color: color })
     }
     function noteUnmark(chan, pitch, vel, color) {
-        var item = itemForPitch(pitch).children[1]
-        if (item != undefined)
-            item.destroy()
+        if(itemForPitch(pitch)!= undefined){
+            var item = itemForPitch(pitch).children[1]
+            if (item != undefined)
+                item.destroy()
+        }
     }
     function clearAllMarks() {
         for (var index = 21; index <= 108; ++index) {
