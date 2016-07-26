@@ -223,8 +223,8 @@ Item {
         var currentExerciseOptions = currentExercise["options"];
         var length = currentExerciseOptions.length
 
-        answerGrid.columns = Math.min(length, length)
-        answerGrid.rows = Math.ceil(availableAnswersHeight/((exerciseController.currentExercise["playMode"] != "rhythm") ? 60:79))
+        answerGrid.columns = Math.min(length,Math.floor(availableAnswers.width/((exerciseController.currentExercise["playMode"] != "rhythm") ? 140:139)))
+        answerGrid.rows = Math.ceil(length/answerGrid.columns)
         for (var i = 0; i < length; ++i)
             answerOption.createObject(answerGrid, {model: currentExerciseOptions[i], index: i, color: colors[i%24]})
         exerciseView.visible = true
@@ -345,16 +345,18 @@ Item {
             Flickable{
                 id:fickable
                 anchors.fill: parent
-                contentHeight: fickable.height
-                contentWidth: answerGrid.width
+                contentHeight: answerGrid.height
 
                 Grid {
                     id: answerGrid
+
                     anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     anchors.centerIn: parent
-                    spacing: 10;
-                    columns: 2; rows: 2
-                    flow:Grid.TopToBottom
+                    spacing: 10
+                    padding: 10
+                    //columns: 2; rows: 2
+
                     Component {
                         id: answerOption
 
@@ -429,7 +431,7 @@ Item {
                         }
                     }
                 }
-                ScrollBar.horizontal: ScrollBar{}
+                ScrollBar.vertical: ScrollBar{}
             }
         }
         //TODO add a height
