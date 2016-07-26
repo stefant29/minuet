@@ -60,7 +60,7 @@ void CsoundAndroidSoundBackend::openExerciseFile(){
     m_size = sfile.size();
 }
 
-void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<unsigned int> barStartInfo){
+void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<float> barStartInfo){
     //TODO : use grantlee processing or any other text template library
     QString content;
     QFile m_csdFileOpen("./template.csd");
@@ -97,9 +97,9 @@ void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedEx
         m_song->setInitialTempo(600000);
     appendEvent(new drumstick::TempoEvent(m_queueId, 600000), 0);
     */
-    unsigned int barStart = 0;
+    float barStart = 0;
     QList<unsigned int> midiNotes;
-    QList<unsigned int> barStartInfo;
+    QList<float> barStartInfo;
 
     if (playMode == "rhythm") {
         for(int k = 0; k < 4; k++){
@@ -150,11 +150,12 @@ void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedEx
             }
         }
     }
+
+    if (playMode == "rhythm"){
+        midiNotes.append(80);
+        barStartInfo.append(barStart);
+    }
     appendEvent(midiNotes,barStartInfo);
-
-    /*if (playMode == "rhythm")
-        appendEvent(new drumstick::NoteOnEvent(9, 80, 120), barStart);*/
-
 }
 
 void CsoundAndroidSoundBackend::prepareFromMidiFile(const QString &fileName){
