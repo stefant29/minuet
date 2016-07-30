@@ -32,7 +32,7 @@ include(FeatureSummary)
 
 #find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n)
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Quick Qml XmlPatterns QuickControls2)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Quick Qml XmlPatterns QuickControls2 Svg)
 
 set(CSOUND_LIBS_DIR $ENV{CSOUND_ANDROID_ROOT}/CsoundForAndroid/CsoundAndroid/src/main/jniLibs/armeabi-v7a)
 
@@ -54,4 +54,5 @@ sf_GMbank.sf2
 $ENV{CSOUND_ANDROID_ROOT}/pluginlibs/libfluidsynth/libs/armeabi-v7a/libfluidOpcodes.so)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
+install(DIRECTORY icons DESTINATION ${KDE_INSTALL_DATADIR}/minuet/qml)
 install(FILES ${minuetandroid_CSD} DESTINATION ${KDE_INSTALL_DATADIR})

@@ -19,6 +19,7 @@ target_link_libraries (
     Qt5::Qml
     Qt5::XmlPatterns 
     Qt5::QuickControls2
+    Qt5::Svg
 )
 
 #if (CMAKE_SYSTEM_NAME STREQUAL Android)

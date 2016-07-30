@@ -7,6 +7,10 @@
         <file alias="Octave.qml">qml/pianoview/Octave.qml</file>
         <file alias="PianoView.qml">qml/pianoview/PianoView.qml</file>
         <file alias="WhiteKey.qml">qml/pianoview/WhiteKey.qml</file>
+        <file alias="minuet-chords.svg">../icons/minuet-chords.svg</file>
+        <file alias="minuet-intervals.svg">../icons/minuet-intervals.svg</file>
+        <file alias="minuet-rhythm.svg">../icons/minuet-rhythm.svg</file>
+        <file alias="minuet-scales.svg">../icons/minuet-scales.svg</file>
         <file>../data/exercises/chords-root-position-exercises.json</file>
         <file>../data/exercises/intervals-ascending-melodic-exercises.json</file>
         <file>../data/exercises/intervals-descending-melodic-exercises.json</file>

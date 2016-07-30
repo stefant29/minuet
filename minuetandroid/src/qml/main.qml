@@ -200,7 +200,22 @@ ApplicationWindow {
                        id: delegateRect
                        width: stackView.width; height:exerciseName.height
 
-                       Label {
+                       Image {
+                           id: a
+
+                           source: (modelData._icon != undefined)? modelData._icon:""
+                           visible: modelData._icon != undefined
+                           fillMode: Image.Pad
+                           horizontalAlignment: Image.AlignHCenter
+                           verticalAlignment: Image.AlignVCenter
+                           anchors{
+                               left: parent.left
+                               verticalCenter: parent.verticalCenter
+                               margins: 10
+                           }
+                       }
+
+                       Text {
                            id: exerciseName
                            text: "technical term, do you have a musician friend?", modelData.name
                            leftPadding: 25
@@ -209,6 +224,7 @@ ApplicationWindow {
                            font.family: "cantarell"
                            font.bold: true
                            font.pixelSize: 12
+                           anchors.left: a.right
                        }
 
                        MouseArea{
@@ -220,12 +236,12 @@ ApplicationWindow {
                                delegateRect.color = "white"
                            }
                            onReleased: {
-                               var children = delegateRect.ListView.view.model[index].children
+                               var children = modelData.children
                                if (!children) {
                                    if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
                                    minuetMenu.selectedMenuItem = delegateRect
                                    soundBackend.setQuestionLabel("new question")
-                                   stackView.currentExercise = delegateRect.ListView.view.model[index]
+                                   stackView.currentExercise = modelData
                                    stackView.currentExerciseMenuItem = delegateRect
                                    titleText = modelData.name
                                    navigationMenu.close()

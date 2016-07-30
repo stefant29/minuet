@@ -5,6 +5,8 @@
       "root": "21..104",
       "playMode": "scale",
       "userMessage": "Hear the interval and then choose an answer from options below",
+      "numberOfSelectedOptions": 1,
+      "_icon": "minuet-intervals.svg",
       "children": [
         {
           "name": "Ascending Melodic Intervals",
