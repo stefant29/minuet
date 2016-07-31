@@ -54,12 +54,12 @@ public Q_SLOTS:
 
 private:
     CsEngine *m_csoundEngine;
-    void appendEvent(QList<unsigned int> midiNotes,QList<float> barStartInfo);
+    void appendEvent(QList<unsigned int> midiNotes,QList<float> barStartInfo, QString playMode);
     void openExerciseFile();
     void openCsdFile();
-    QString m_begLine;
-    QString m_endLine;
-    qint16 m_size;
+    QStringList m_begLine;
+    QStringList m_endLine;
+    QList<qint16> m_size;
 };
 
 #endif

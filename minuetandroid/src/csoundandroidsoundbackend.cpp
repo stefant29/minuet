@@ -40,44 +40,66 @@ CsoundAndroidSoundBackend::CsoundAndroidSoundBackend(QObject *parent):
 }
 
 void CsoundAndroidSoundBackend::openExerciseFile(){
-    QFile sfile("assets:/share/template.csd");
-    if (!sfile.open(QIODevice::ReadOnly | QIODevice::Text))
-        return;
+    QStringList templateList;
+    templateList.append("assets:/share/template.csd");
+    templateList.append("assets:/share/template_rhythm.csd");
+    
+    for (int i = 0; i < templateList.length(); i++){
+        QFile sfile(templateList[i]);
+        if (!sfile.open(QIODevice::ReadOnly | QIODevice::Text))
+            return;
 
-    QTextStream in(&sfile);
-    QString lineData;
-    while(!in.atEnd()){
-        lineData = in.readLine();
-        m_begLine = m_begLine + lineData + "\n";
-        if(lineData.contains("<CsScore>"))
-            break;
-    }
+        QTextStream in(&sfile);
+        QString lineData;
+        QString tempBeginLine="";
+        QString tempEndLine="";
+        while(!in.atEnd()){
+            lineData = in.readLine();
+            tempBeginLine = tempBeginLine  + lineData + "\n";
+            if(lineData.contains("<CsScore>")){
+                m_begLine.append(tempBeginLine);
+                break;
+            }
+        }
 
-    while(!in.atEnd()){
-        lineData = in.readLine();
-        m_endLine = m_endLine + lineData + "\n";
+        while(!in.atEnd()){
+            lineData = in.readLine();
+            tempEndLine = tempEndLine + lineData + "\n";
+        }
+        m_endLine.append(tempEndLine);
+        //m_size[i] = sfile.size();
     }
-    m_size = sfile.size();
 }
 
-void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<float> barStartInfo){
+void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<float> barStartInfo, QString playMode){
     //TODO : use grantlee processing or any other text template library
     QString content;
+    int templateNumber = playMode == "rhythm" ? 1:0;
+    QString fifthParam = "100";
     QFile m_csdFileOpen("./template.csd");
     if(!m_csdFileOpen.isOpen()){
         m_csdFileOpen.open(QIODevice::ReadWrite | QIODevice::Text);
     }
+    m_csdFileOpen.resize(0);
 
-    m_csdFileOpen.resize(m_size);
+    if (playMode == "rhythm") {
+        //QString wave = "f1 0 8 2  1 1 1 1 1 -1 -1 -1";
+        QString wave = "f 1 0 16384 10 1\n\n";
+        content = content + wave; /*+ "\n\nt 30\n\n";*/
+        fifthParam = "";
+    }
 
     for(int i=0 ; i<midiNotes.count() ; i++){
-        QString initScore = "i 1 " + QString::number(barStartInfo.at(i)) + " " + QString::number(1) + " " + QString::number(midiNotes.at(i)) + " 100"+ "\n" ;
+        QString initScore = "i 1 " + QString::number(barStartInfo.at(i)) + " " + QString::number(1) + " " + QString::number(midiNotes.at(i)) + " " + fifthParam+ "\n" ;
         content = content + initScore;
     }
 
-    QString instrInit = "i 99 0 " + QString::number(barStartInfo.at(barStartInfo.count()-1)+1) + "\ne\n";//instrument will be active till the end of the notes +1 second
-    content = content + instrInit;
-    QString templateContent = m_begLine + content + m_endLine;
+    if (playMode != "rhythm") {
+        QString instrInit = "i 99 0 " + QString::number(barStartInfo.at(barStartInfo.count()-1)+1) + "\ne\n";//instrument will be active till the end of the notes +1 second
+        content = content + instrInit;
+    }
+
+    QString templateContent = m_begLine[templateNumber] + content + m_endLine[templateNumber];
     m_csdFileOpen.seek(0);
     QByteArray contentByte = templateContent.toUtf8();
     m_csdFileOpen.write(contentByte);
@@ -155,7 +177,7 @@ void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedEx
         midiNotes.append(80);
         barStartInfo.append(barStart);
     }
-    appendEvent(midiNotes,barStartInfo);
+    appendEvent(midiNotes,barStartInfo,playMode);
 }
 
 void CsoundAndroidSoundBackend::prepareFromMidiFile(const QString &fileName){

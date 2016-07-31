@@ -50,6 +50,7 @@ add_subdirectory(data)
 
 set(minuetandroid_CSD
 template.csd
+template_rhythm.csd
 sf_GMbank.sf2
 $ENV{CSOUND_ANDROID_ROOT}/pluginlibs/libfluidsynth/libs/armeabi-v7a/libfluidOpcodes.so)
 
