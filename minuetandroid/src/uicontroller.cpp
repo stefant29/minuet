@@ -49,49 +49,36 @@ bool UiController::initialize()
 {
     QQmlApplicationEngine *engine = new QQmlApplicationEngine(this);
     QQmlContext *rootContext = engine->rootContext();
-    //rootContext->setContextProperty(QStringLiteral("core"), core);
-    //engine->load(QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::DataLocation, QStringLiteral("qml/Main.qml"))));
     CsEngine cs;
+
     QFile afile ("assets:/share/sf_GMbank.sf2");
-    if (afile.exists())
-    {
+    QFile ffile ("libs:/armeabi-v7a/libshare_libfluidOpcodes.so");
+    QString source = "assets:/share/minuet";
+    QString destination = "./";
+
+    if (afile.exists()){
             afile.copy("./sf_GMbank.sf2");
             QFile::setPermissions("./sf_GMbank.sf2",QFile::WriteOwner | QFile::ReadOwner);
     }
-/*    QFile efile ("assets:/share/midichn_advanced.mid");
-    if (efile.exists())
-    {
-            efile.copy("./midichn_advanced.mid");
-            QFile::setPermissions("./midichn_advanced.mid",QFile::WriteOwner | QFile::ReadOwner);
-    }*/
-    QFile ffile ("libs:/armeabi-v7a/libshare_libfluidOpcodes.so");
-    if (ffile.exists())
-    {
+
+    if (ffile.exists()){
             ffile.copy("./libshare_libfluidOpcodes.so");
             QFile::setPermissions("./libshare_libfluidOpcodes.so",QFile::WriteOwner | QFile::ReadOwner);
     }
-    QString source = "assets:/share/minuet";
-    QString destination = "./";
+
     copyDir(source,destination);
+
     Minuet::ISoundBackend *m_soundBackend;
     CsoundAndroidSoundBackend *m_csoundAndroidSoundBackend(new CsoundAndroidSoundBackend());
     m_soundBackend = m_csoundAndroidSoundBackend;
-    //ExerciseController *m_exerciseController = new ExerciseController(0);
-    //m_exerciseController->configureExercises();
     Minuet::IExerciseController *exerciseController = new Minuet::ExerciseController(0);
     ((Minuet::ExerciseController *)exerciseController)->initialize();
-    //engine.rootContext()->setContextProperty(QStringLiteral("exerciseCategories"), m_exerciseController->exercises()[QStringLiteral("exercises")].toArray());
+
     rootContext->setContextProperty("soundBackend", m_soundBackend); // forward c++ object that can be reached form
     rootContext->setContextProperty("exerciseController", exerciseController);
     engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-    //m_mainWindow->show();
     return true;
-
-
-
-    //QQmlApplicationEngine engine;
-
 }
 bool UiController::copyDir(const QString source, const QString destination)
 {
@@ -140,3 +127,4 @@ bool UiController::copyDir(const QString source, const QString destination)
 }
 
 }
+
