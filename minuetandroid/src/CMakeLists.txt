@@ -6,6 +6,8 @@ set(minuetandroid_SRCS
     isoundbackend.cpp
     iplugin.cpp
     iexercisecontroller.cpp
+    uicontroller.cpp
+    iuicontroller.cpp
 )
 qt5_add_resources(minuetandroid_SRCS resources.qrc)
 

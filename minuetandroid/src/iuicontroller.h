@@ -20,27 +20,27 @@
 **
 ****************************************************************************/
 
-#include "iuicontroller.h"
-#include "uicontroller.h"
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include <QDir>
-#include <QQuickStyle>
-//#include <QQmlDebuggingEnabler>
-//QQmlDebuggingEnabler enabler;
+#ifndef MINUET_IUICONTROLLER_H
+#define MINUET_IUICONTROLLER_H
 
+//#include "minuetinterfacesexport.h"
 
-int main(int argc, char *argv[])
+#include <QObject>
+
+namespace Minuet
 {
-    qputenv("QT_QUICK_CONTROLS_STYLE", "material");
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
- 
-    Minuet::IUiController *uiController = new Minuet::UiController(0);
-    ((Minuet::UiController *)uiController)->initialize();
 
-    return app.exec();
+class IUiController : public QObject
+{
+    Q_OBJECT
+
+public:
+    ~IUiController() override;
+
+protected:
+    explicit IUiController(QObject *parent = 0);
+};
+
 }
 
-//Copy exercise files from assets to root directory
+#endif
