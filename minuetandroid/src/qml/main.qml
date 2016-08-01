@@ -238,6 +238,7 @@ ApplicationWindow {
                            onReleased: {
                                var children = modelData.children
                                if (!children) {
+                                   if (uiController.getValue() == 1) toolBar.ToolTip.show("Press on Your Answer section to find the answers",10000)
                                    if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
                                    minuetMenu.selectedMenuItem = delegateRect
                                    soundBackend.setQuestionLabel("new question")

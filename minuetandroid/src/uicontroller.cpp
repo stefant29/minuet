@@ -76,10 +76,13 @@ bool UiController::initialize()
 
     rootContext->setContextProperty("soundBackend", m_soundBackend); // forward c++ object that can be reached form
     rootContext->setContextProperty("exerciseController", exerciseController);
+    rootContext->setContextProperty("uiController",this);
+
     engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return true;
 }
+
 bool UiController::copyDir(const QString source, const QString destination)
 {
 
@@ -124,6 +127,13 @@ bool UiController::copyDir(const QString source, const QString destination)
         }
     }
     return !error;
+}
+
+int UiController::getValue(){
+    int firstTime = m_settings.value("isFirstTime",1).toInt();
+    if (firstTime == 1)
+        m_settings.setValue("isFirstTime",0);
+    return firstTime;
 }
 
 }

@@ -26,6 +26,7 @@
 //#include "mainwindow.h"
 
 #include <iuicontroller.h>
+#include <QSettings>
 
 namespace Minuet
 {
@@ -40,10 +41,12 @@ public:
     ~UiController() override;
     UiController(QObject *parent = 0);
     bool initialize();
+    Q_INVOKABLE int getValue();
 
 private:
     //QScopedPointer<MainWindow> m_mainWindow;
     bool copyDir(const QString source, const QString destination);
+    QSettings m_settings;
 
 };
 
