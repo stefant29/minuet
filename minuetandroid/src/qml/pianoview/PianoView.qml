@@ -42,7 +42,7 @@ Rectangle {
     }
     function noteUnmark(chan, pitch, vel, color) {
         if(itemForPitch(pitch)!= undefined){
-            var item = itemForPitch(pitch).children[1]
+            var item = itemForPitch(pitch).children[0]
             if (item != undefined)
                 item.destroy()
         }
@@ -50,7 +50,7 @@ Rectangle {
     function clearAllMarks() {
         for (var index = 21; index <= 108; ++index) {
             noteOff(0, index, 0)
-            var markItem = itemForPitch(index).children[1]
+            var markItem = itemForPitch(index).children[0]
             if (markItem != undefined)
                 markItem.destroy()
         }

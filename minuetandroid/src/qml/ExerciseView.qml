@@ -232,6 +232,8 @@ Item {
     }
     function checkAnswers(answers,answerLength) {
         highlightRightAnswer()
+        if (exerciseController.currentExercise["playMode"] != "rhythm")
+            highlightRightNotes()
         var answersOk = true
         for(var i = 0; i < answerLength; ++i) {
             if (answers[i].toString().split("/").pop().split(".")[0] != chosenExercises[i]){
@@ -247,6 +249,15 @@ Item {
         else
             messageText.text = "Oops, not this time!<br/>Try again!"
         exerciseView.state = "nextQuestion"
+    }
+    function highlightRightNotes() {
+        for (var i = 0; i < answerGrid.children.length; ++i) {
+            if (answerGrid.children[i].model.name != chosenExercises[0])
+                answerRectangle = answerGrid.children[i]
+        }
+        answerRectangle.model.sequence.split(' ').forEach(function(note) {
+            piano.noteMark(0, exerciseController.chosenRootNote() + parseInt(note), 0, answerRectangle.color)
+        })
     }
 
     visible: false
@@ -322,6 +333,7 @@ Item {
                 onClicked: {
                     if (exerciseController.currentExercise["playMode"] != "rhythm") {
                         highlightRightAnswer()
+                        highlightRightNotes()
                         showCorrectAnswer1()
                     }
                     else {
@@ -403,6 +415,7 @@ Item {
                                             messageText.text = "Oops, not this time!<br/>Try again!"*/
                                         //answerHoverExit(0, exerciseController.chosenRootNote() + parseInt(model.sequence), 0)
                                         highlightRightAnswer()
+                                        highlightRightNotes()
                                     }
                                     else {
                                         //answerClicked(rhythmImage.source, colors[answerRectangle.index])
@@ -589,6 +602,12 @@ Item {
         id:anim
         loops: 1
         NumberAnimation { target: pianoView; property: "contentX"; from: startPos; to: endPos}
+    }
+
+    Connections {
+        target: exerciseController
+        onSelectedExerciseOptionsChanged: piano.clearAllMarks()
+        onCurrentExerciseChanged: piano.clearAllMarks()
     }
 
     /*ParallelAnimation {
