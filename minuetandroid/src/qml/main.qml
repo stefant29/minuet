@@ -138,19 +138,6 @@ ApplicationWindow {
                        verticalCenter: parent.verticalCenter
                        margins: 10
                    }
-
-                   MouseArea{
-                       anchors.fill: parent
-                       onClicked: {
-                           stackView.currentExerciseMenuItem = null
-                           exerciseController.currentExercise ={}
-                           stackView.pop()
-                           minuetMenu.exerciseArray.pop()
-                           currentExerciseParent.text = minuetMenu.exerciseArray.toString()
-                           minuetMenu.backPressed()
-                           titleText = "Minuet Mobile"
-                       }
-                   }
                }
 
                Label{
@@ -164,6 +151,19 @@ ApplicationWindow {
                        left: backButton.right
                        verticalCenter: parent.verticalCenter
                        margins: 10
+                   }
+               }
+
+               MouseArea{
+                   anchors.fill: parent
+                   onClicked: {
+                       stackView.currentExerciseMenuItem = null
+                       exerciseController.currentExercise ={}
+                       stackView.pop()
+                       minuetMenu.exerciseArray.pop()
+                       currentExerciseParent.text = minuetMenu.exerciseArray.toString()
+                       minuetMenu.backPressed()
+                       titleText = "Minuet Mobile"
                    }
                }
            }
