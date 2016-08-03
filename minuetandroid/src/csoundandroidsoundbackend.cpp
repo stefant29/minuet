@@ -25,7 +25,6 @@
 
 #include <QtMath>
 #include <QLoggingCategory>
-
 #include <QtQml>
 
 Q_DECLARE_LOGGING_CATEGORY(MINUETANDROID)
@@ -39,64 +38,67 @@ CsoundAndroidSoundBackend::CsoundAndroidSoundBackend(QObject *parent):
     setQuestionLabel("new question");
 }
 
-void CsoundAndroidSoundBackend::openExerciseFile(){
+void CsoundAndroidSoundBackend::openExerciseFile()
+{
     QStringList templateList;
-    templateList.append("assets:/share/template.csd");
-    templateList.append("assets:/share/template_rhythm.csd");
-    
-    for (int i = 0; i < templateList.length(); i++){
-        QFile sfile(templateList[i]);
+    templateList.append(QStringLiteral("assets:/share/template.csd"));
+    templateList.append(QStringLiteral("assets:/share/template_rhythm.csd"));
+
+    foreach (const QString &templateString, templateList) {
+        QFile sfile(templateString);
         if (!sfile.open(QIODevice::ReadOnly | QIODevice::Text))
             return;
 
         QTextStream in(&sfile);
         QString lineData;
-        QString tempBeginLine="";
-        QString tempEndLine="";
-        while(!in.atEnd()){
+        QString tempBeginLine;
+        QString tempEndLine;
+
+        while (!in.atEnd()) {
             lineData = in.readLine();
-            tempBeginLine = tempBeginLine  + lineData + "\n";
-            if(lineData.contains("<CsScore>")){
+            tempBeginLine = tempBeginLine + lineData + "\n";
+            if (lineData.contains("<CsScore>")) {
                 m_begLine.append(tempBeginLine);
                 break;
             }
         }
 
-        while(!in.atEnd()){
+        while (!in.atEnd()) {
             lineData = in.readLine();
-            tempEndLine = tempEndLine + lineData + "\n";
+            tempEndLine += lineData + "\n";
         }
         m_endLine.append(tempEndLine);
         //m_size[i] = sfile.size();
     }
 }
 
-void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<float> barStartInfo, QString playMode){
+void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes, QList<float> barStartInfo, QString playMode)
+{
     //TODO : use grantlee processing or any other text template library
-    QString content;
     int templateNumber = playMode == "rhythm" ? 1:0;
-    QString fifthParam = "100";
-    QFile m_csdFileOpen("./template.csd");
-    if(!m_csdFileOpen.isOpen()){
+    QString content;
+    QString fifthParam = QStringLiteral("100");
+    QFile m_csdFileOpen(QStringLiteral("./template.csd"));
+
+    if(!m_csdFileOpen.isOpen()) {
         m_csdFileOpen.open(QIODevice::ReadWrite | QIODevice::Text);
     }
     m_csdFileOpen.resize(0);
 
     if (playMode == "rhythm") {
-        //QString wave = "f1 0 8 2  1 1 1 1 1 -1 -1 -1";
-        QString wave = "f 1 0 16384 10 1\n\n";
-        content = content + wave; /*+ "\n\nt 30\n\n";*/
-        fifthParam = "";
+        QString wave = QStringLiteral("f 1 0 16384 10 1\n\n");
+        content += wave;
+        fifthParam = QStringLiteral("");
     }
 
-    for(int i=0 ; i<midiNotes.count() ; i++){
-        QString initScore = "i 1 " + QString::number(barStartInfo.at(i)) + " " + QString::number(1) + " " + QString::number(midiNotes.at(i)) + " " + fifthParam+ "\n" ;
-        content = content + initScore;
+    for(int i=0; i<midiNotes.count(); i++) {
+        QString initScore = QString("i 1 %1 %2 %3 %4\n").arg(QString::number(barStartInfo.at(i))).arg(QString::number(1)).arg(QString::number(midiNotes.at(i))).arg(fifthParam);
+        content += initScore;
     }
 
     if (playMode != "rhythm") {
         QString instrInit = "i 99 0 " + QString::number(barStartInfo.at(barStartInfo.count()-1)+1) + "\ne\n";//instrument will be active till the end of the notes +1 second
-        content = content + instrInit;
+        content += instrInit;
     }
 
     QString templateContent = m_begLine[templateNumber] + content + m_endLine[templateNumber];
@@ -105,48 +107,34 @@ void CsoundAndroidSoundBackend::appendEvent(QList<unsigned int> midiNotes,QList<
     m_csdFileOpen.write(contentByte);
 }
 
-CsoundAndroidSoundBackend::~CsoundAndroidSoundBackend(){
+CsoundAndroidSoundBackend::~CsoundAndroidSoundBackend()
+{
     delete m_csoundEngine;
 }
 
-void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedExerciseOptions,const QString &playMode){
-    /*Song *song = new Song;
-    song->setHeader(0, 1, 60);
-    song->setInitialTempo(600000);
-    m_song.reset(song);
-
-    if (m_song->initialTempo() == 0)
-        m_song->setInitialTempo(600000);
-    appendEvent(new drumstick::TempoEvent(m_queueId, 600000), 0);
-    */
+void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedExerciseOptions, const QString &playMode)
+{
     float barStart = 0;
     QList<unsigned int> midiNotes;
     QList<float> barStartInfo;
 
     if (playMode == "rhythm") {
-        for(int k = 0; k < 4; k++){
+        for(int k = 0; k < 4; ++k) {
             midiNotes.append(80);
             barStartInfo.append(barStart++);
         }
-        //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 0);
-        //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 60);
-        //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 120);
-        //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), 180);
-        //barStart = 240;
     }
 
-    for (int i = 0; i < selectedExerciseOptions.size(); ++i) {
+    int exerciseOptionsSize = selectedExerciseOptions.size();
+    for (int i = 0; i < exerciseOptionsSize; ++i) {
         QString sequence = selectedExerciseOptions[i].toObject()[QStringLiteral("sequence")].toString();
 
         unsigned int chosenRootNote = selectedExerciseOptions[i].toObject()[QStringLiteral("rootNote")].toString().toInt();
         if (playMode != "rhythm") {
-            //appendEvent(new drumstick::NoteOnEvent(1, chosenRootNote, 120), barStart);
-            //appendEvent(new drumstick::NoteOffEvent(1, chosenRootNote, 120), barStart + 60);
             midiNotes.append(chosenRootNote);
             barStartInfo.append(barStart);
 
             unsigned int j = 1;
-            //drumstick::SequencerEvent *ev;
             foreach(const QString &additionalNote, sequence.split(' ')) {
                 midiNotes.append(chosenRootNote+additionalNote.toInt());
                 barStartInfo.append((playMode == "scale") ? barStart+j:barStart);
@@ -155,12 +143,9 @@ void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedEx
             barStart++;
         }
         else {
-            //TODO: Implement for rhythm
-            //appendEvent(new drumstick::NoteOnEvent(9, 80, 120), barStart);
             midiNotes.append(80);
             barStartInfo.append(barStart);
             foreach(QString additionalNote, sequence.split(' ')) { // krazy:exclude=foreach
-                //appendEvent(new drumstick::NoteOnEvent(9, 37, 120), barStart);
                 midiNotes.append(37);
                 barStartInfo.append(barStart);
                 float dotted = 1;
@@ -173,44 +158,50 @@ void CsoundAndroidSoundBackend::prepareFromExerciseOptions(QJsonArray selectedEx
         }
     }
 
-    if (playMode == "rhythm"){
+    if (playMode == "rhythm") {
         midiNotes.append(80);
         barStartInfo.append(barStart);
     }
-    appendEvent(midiNotes,barStartInfo,playMode);
+    appendEvent(midiNotes, barStartInfo, playMode);
 }
 
-void CsoundAndroidSoundBackend::prepareFromMidiFile(const QString &fileName){
+void CsoundAndroidSoundBackend::prepareFromMidiFile(const QString &fileName)
+{
     Q_UNUSED(fileName)
 }
 
-void CsoundAndroidSoundBackend::play(){
+void CsoundAndroidSoundBackend::play()
+{
     m_csoundEngine->start();
     setState(PlayingState);
 }
 
-void CsoundAndroidSoundBackend::pause(){
-    
+void CsoundAndroidSoundBackend::pause()
+{
+
 }
 
-void CsoundAndroidSoundBackend::stop(){
+void CsoundAndroidSoundBackend::stop()
+{
     m_csoundEngine->stop();
     setState(StoppedState);
 }
 
-void CsoundAndroidSoundBackend::setPitch (qint8 pitch){
+void CsoundAndroidSoundBackend::setPitch (qint8 pitch)
+{
     Q_UNUSED(pitch)
 }
 
 
-void CsoundAndroidSoundBackend::setVolume (quint8 volume){
+void CsoundAndroidSoundBackend::setVolume (quint8 volume)
+{
     Q_UNUSED(volume)
 }
 
 
-void CsoundAndroidSoundBackend::setTempo (quint8 tempo){
+void CsoundAndroidSoundBackend::setTempo (quint8 tempo)
+{
     Q_UNUSED(tempo)
 }
 
 //#include "moc_csoundandroidsoundbackend.cpp"
-

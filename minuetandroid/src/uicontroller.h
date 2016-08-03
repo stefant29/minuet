@@ -38,14 +38,17 @@ class UiController : public IUiController
     Q_OBJECT
 
 public:
-    ~UiController() override;
     UiController(QObject *parent = 0);
+    ~UiController() override;
     bool initialize();
-    Q_INVOKABLE int getValue();
+
+public Q_SLOTS:
+    int isFirstTimeUser();
 
 private:
-    //QScopedPointer<MainWindow> m_mainWindow;
     bool copyDir(const QString source, const QString destination);
+
+private:
     QSettings m_settings;
 
 };

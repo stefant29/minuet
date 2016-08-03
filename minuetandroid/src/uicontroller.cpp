@@ -51,26 +51,26 @@ bool UiController::initialize()
     QQmlContext *rootContext = engine->rootContext();
     CsEngine cs;
 
-    QFile afile ("assets:/share/sf_GMbank.sf2");
-    QFile ffile ("libs:/armeabi-v7a/libshare_libfluidOpcodes.so");
-    QString source = "assets:/share/minuet";
-    QString destination = "./";
+    QFile afile (QStringLiteral("assets:/share/sf_GMbank.sf2"));
+    QFile ffile (QStringLiteral("libs:/armeabi-v7a/libshare_libfluidOpcodes.so"));
+    QString source = QStringLiteral("assets:/share/minuet");
+    QString destination = QStringLiteral("./");
 
     if (afile.exists()){
-            afile.copy("./sf_GMbank.sf2");
-            QFile::setPermissions("./sf_GMbank.sf2",QFile::WriteOwner | QFile::ReadOwner);
+            afile.copy(QStringLiteral("./sf_GMbank.sf2"));
+            QFile::setPermissions(QStringLiteral("./sf_GMbank.sf2"),QFile::WriteOwner | QFile::ReadOwner);
     }
 
     if (ffile.exists()){
-            ffile.copy("./libshare_libfluidOpcodes.so");
-            QFile::setPermissions("./libshare_libfluidOpcodes.so",QFile::WriteOwner | QFile::ReadOwner);
+            ffile.copy(QStringLiteral("./libshare_libfluidOpcodes.so"));
+            QFile::setPermissions(QStringLiteral("./libshare_libfluidOpcodes.so"),QFile::WriteOwner | QFile::ReadOwner);
     }
 
     copyDir(source,destination);
 
-    Minuet::ISoundBackend *m_soundBackend;
-    CsoundAndroidSoundBackend *m_csoundAndroidSoundBackend(new CsoundAndroidSoundBackend());
-    m_soundBackend = m_csoundAndroidSoundBackend;
+    Minuet::ISoundBackend *m_soundBackend = new CsoundAndroidSoundBackend();
+    //CsoundAndroidSoundBackend *m_csoundAndroidSoundBackend(new CsoundAndroidSoundBackend());
+    //m_soundBackend = m_csoundAndroidSoundBackend;
     Minuet::IExerciseController *exerciseController = new Minuet::ExerciseController(0);
     ((Minuet::ExerciseController *)exerciseController)->initialize();
 
@@ -129,10 +129,10 @@ bool UiController::copyDir(const QString source, const QString destination)
     return !error;
 }
 
-int UiController::getValue(){
-    int firstTime = m_settings.value("isFirstTime",1).toInt();
+int UiController::isFirstTimeUser(){
+    int firstTime = m_settings.value(QStringLiteral("isFirstTime"),1).toInt();
     if (firstTime == 1)
-        m_settings.setValue("isFirstTime",0);
+        m_settings.setValue(QStringLiteral("isFirstTime"),0);
     return firstTime;
 }
 

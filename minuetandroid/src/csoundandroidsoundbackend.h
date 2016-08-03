@@ -40,7 +40,6 @@ public:
     virtual ~CsoundAndroidSoundBackend() override;
 
 public Q_SLOTS:
-
     virtual void setPitch(qint8 pitch);
     virtual void setVolume(quint8 volume);
     virtual void setTempo (quint8 tempo);
@@ -53,13 +52,16 @@ public Q_SLOTS:
     virtual void stop() override;
 
 private:
-    CsEngine *m_csoundEngine;
     void appendEvent(QList<unsigned int> midiNotes,QList<float> barStartInfo, QString playMode);
     void openExerciseFile();
     void openCsdFile();
+
+private:
+    CsEngine *m_csoundEngine;
     QStringList m_begLine;
     QStringList m_endLine;
     QList<qint16> m_size;
+	
 };
 
 #endif

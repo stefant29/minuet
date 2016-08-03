@@ -87,10 +87,6 @@ ApplicationWindow {
                     transformOrigin: Menu.TopRight
 
                     MenuItem {
-                        text: "Settings"
-                    }
-
-                    MenuItem {
                         text: "About"
                     }
                 }
@@ -124,13 +120,6 @@ ApplicationWindow {
                exerciseView.clearExerciseGrid()
                exerciseView.clearYourAnswerGrid()
                 //pianoView.clearAllMarks()
-           }
-           function itemClicked(delegateRect, index) {
-               var model = delegateRect.ListView.view.model[index].options
-               if (model != undefined) {
-                   exerciseController.setExerciseOptions(model)
-                   minuetMenu.itemChanged(model)
-               }
            }
 
            //back button
@@ -167,8 +156,7 @@ ApplicationWindow {
                Label{
                    id: currentExerciseParent
                    text:""
-                   font.family: "cantarell"
-                   font.pixelSize: 20
+                   font{family: "cantarell"; pixelSize: 20}
                    elide: Label.ElideRight
                    verticalAlignment: Qt.AlignVCenter
                    Layout.fillWidth: true
@@ -178,7 +166,6 @@ ApplicationWindow {
                        margins: 10
                    }
                }
-
            }
 
            StackView {
@@ -188,8 +175,7 @@ ApplicationWindow {
                property Item currentExerciseMenuItem
 
                width: parent.width;
-               anchors.top: breadcrumb.bottom
-               anchors.bottom:parent.bottom
+               anchors{top: breadcrumb.bottom; bottom:parent.bottom}
                clip: true
                focus: true
 
@@ -221,9 +207,7 @@ ApplicationWindow {
                            leftPadding: 25
                            topPadding: 18
                            bottomPadding: 18
-                           font.family: "cantarell"
-                           font.bold: true
-                           font.pixelSize: 12
+                           font{family: "cantarell"; bold: true; pixelSize: 12}
                            anchors.left: a.right
                        }
 
@@ -238,7 +222,7 @@ ApplicationWindow {
                            onReleased: {
                                var children = modelData.children
                                if (!children) {
-                                   if (uiController.getValue() == 1) toolBar.ToolTip.show("Press on Your Answer section to find the answers",10000)
+                                   if (uiController.isFirstTimeUser() == 1) toolBar.ToolTip.show("Press on Your Answer section to find the answers",10000)
                                    if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
                                    minuetMenu.selectedMenuItem = delegateRect
                                    soundBackend.setQuestionLabel("new question")
@@ -284,7 +268,6 @@ ApplicationWindow {
                        ListView {
                            id: listView
                            anchors.fill: parent
-                           spacing: -2
                            delegate: categoryDelegate
                            ScrollIndicator.vertical: ScrollIndicator { }
                        }
