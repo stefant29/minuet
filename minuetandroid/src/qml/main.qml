@@ -187,7 +187,7 @@ ApplicationWindow {
                        width: stackView.width; height:exerciseName.height
 
                        Image {
-                           id: a
+                           id: parentIcon
 
                            source: (modelData._icon != undefined)? modelData._icon:""
                            visible: modelData._icon != undefined
@@ -208,7 +208,7 @@ ApplicationWindow {
                            topPadding: 18
                            bottomPadding: 18
                            font{family: "cantarell"; bold: true; pixelSize: 12}
-                           anchors.left: a.right
+                           anchors.left: parentIcon.right
                        }
 
                        MouseArea{
