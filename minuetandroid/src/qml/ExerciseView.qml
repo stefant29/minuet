@@ -30,6 +30,7 @@ Item {
     id: exerciseView
 
     property int startPos: 0
+    property int marginAll: mainLayout.anchors.margins
     property int endPos: 0
     property int currentAnswer: 0
     property var correctAnswers
@@ -41,7 +42,7 @@ Item {
     property var chosenColors: [4]
     property Item answerRectangle
     property var colors: ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f", "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928"]
-    property int availableAnswersHeight: mainLayout.height - messageText.height - rowLayoutQuestion.height - pianoView.height - answerCategory.height - 2*mainLayout.anchors.margins
+    property int availableAnswersHeight: mainLayout.height - messageText.height - rowLayoutQuestion.height - pianoView.height - answerCategory.height - 2*marginAll
     signal answerHoverEnter(var chan, var pitch, var vel, var color)
     signal answerHoverExit(var chan, var pitch, var vel)
     //signal answerClicked(var answerImageSource, var color)
@@ -272,16 +273,23 @@ Item {
 
         Text {
             id: messageText
-            width: parent.width
             wrapMode: Label.Wrap
             horizontalAlignment: Qt.AlignHCenter
-            anchors.top : parent.top
+            anchors{
+                top : parent.top
+                margins: marginAll
+                left: parent.left
+                right: parent.right
+            }
         }
 
         Row {
             id: rowLayoutQuestion
-            anchors { horizontalCenter: parent.horizontalCenter }
-            anchors.top: messageText.bottom
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: messageText.bottom
+                margins: marginAll
+            }
             spacing: 20
             Button {
                 id: newQuestionButton
@@ -348,12 +356,17 @@ Item {
 
         Rectangle{
             id:availableAnswers
-            width:app.width-mainLayout.anchors.margins*2 ; height: availableAnswersHeight
+            width:app.width-marginAll*2 ; height: availableAnswersHeight
             color: "#475057"
             radius: 5
             clip: true
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: answerCategory.top
+            anchors{
+                horizontalCenter: parent.horizontalCenter
+                bottom: answerCategory.top
+                margins: marginAll
+                top: rowLayoutQuestion.bottom
+            }
+
             Flickable{
                 id:fickable
                 anchors.fill: parent
@@ -450,15 +463,19 @@ Item {
         //TODO add a height
         RowLayout{
             id: answerCategory
-            anchors { horizontalCenter: parent.horizontalCenter }
-            anchors.bottom: pianoView.top
-            anchors.margins: mainLayout.anchors.margins
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: pianoView.top
+                margins: marginAll
+            }
             GroupBox {
                  title: qsTr("Your Answers")
                  Row{
                      id: yourAnswerGrid
-                     anchors.horizontalCenter: parent.horizontalCenter
-                     anchors.centerIn: parent
+                     anchors{
+                         horizontalCenter: parent.horizontalCenter
+                         fill: parent
+                     }
                      spacing: 10;
 
                      //flow:Grid.TopToBottom
@@ -471,7 +488,7 @@ Item {
                              property var model
                              property int index
 
-                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:(app.width-2*mainLayout.anchors.margins)/5
+                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:(app.width-2*marginAll)/5
                              height: (exerciseController.currentExercise["playMode"] != "rhythm") ? 40:59
 
                              Text {
@@ -512,20 +529,21 @@ Item {
                      }
                  }
 
-
-                 Layout.preferredWidth: app.width-mainLayout.anchors.margins//-(rowLayout.spacing/2)
+                 Layout.preferredWidth: app.width-2*marginAll
             }
         }
         Flickable{
             id:pianoView
             clip: true
             boundsBehavior: Flickable.OvershootBounds
-            anchors { horizontalCenter: parent.horizontalCenter }
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin:mainLayout.anchors.margins
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                margins: marginAll
+            }
             contentWidth: piano.width
             height:100
-            width: parent.width - 2*mainLayout.anchors.margins
+            width: parent.width - 2*marginAll
 
             PianoView{
                 id: piano
@@ -536,13 +554,15 @@ Item {
         }
         Button {
             id: backspaceButton
-            visible: exerciseController.currentExercise["playMode"] == "rhythm"
-            anchors { horizontalCenter: parent.horizontalCenter }
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin:mainLayout.anchors.margins
-            width: app.width - 2*mainLayout.anchors.margins
-            height:100
+
             text: "backspace"
+            width: app.width - 2*marginAll
+            height:100
+            visible: exerciseController.currentExercise["playMode"] == "rhythm"
+            anchors { horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+                margins: marginAll
+            }
             enabled: currentAnswer > 0 && currentAnswer < 4
             onClicked: {
                 if (currentAnswer > 0) {
