@@ -428,7 +428,6 @@ Item {
                                             messageText.text = "Oops, not this time!<br/>Try again!"*/
                                         //answerHoverExit(0, exerciseController.chosenRootNote() + parseInt(model.sequence), 0)
                                         highlightRightAnswer()
-                                        highlightRightNotes()
                                     }
                                     else {
                                         //answerClicked(rhythmImage.source, colors[answerRectangle.index])
@@ -474,7 +473,7 @@ Item {
                      id: yourAnswerGrid
                      anchors{
                          horizontalCenter: parent.horizontalCenter
-                         fill: parent
+                         centerIn: parent
                      }
                      spacing: 10;
 
@@ -488,7 +487,7 @@ Item {
                              property var model
                              property int index
 
-                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:(app.width-2*marginAll)/5
+                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:parent.width/4-7.5
                              height: (exerciseController.currentExercise["playMode"] != "rhythm") ? 40:59
 
                              Text {
@@ -510,6 +509,7 @@ Item {
                                  visible: exerciseController.currentExercise["playMode"] == "rhythm"
                                  source: answers[index]
                                  fillMode: Image.PreserveAspectFit
+                                 sourceSize.width: parent.width
                              }
 
                              MouseArea{
