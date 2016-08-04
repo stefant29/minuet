@@ -253,7 +253,7 @@ Item {
     }
     function highlightRightNotes() {
         for (var i = 0; i < answerGrid.children.length; ++i) {
-            if (answerGrid.children[i].model.name != chosenExercises[0])
+            if (answerGrid.children[i].model.name == chosenExercises[0])
                 answerRectangle = answerGrid.children[i]
         }
         answerRectangle.model.sequence.split(' ').forEach(function(note) {
