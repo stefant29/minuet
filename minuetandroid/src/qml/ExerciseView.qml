@@ -487,7 +487,7 @@ Item {
                              property var model
                              property int index
 
-                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:parent.width/4-7.5
+                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:(app.width-2*marginAll)/4-10
                              height: (exerciseController.currentExercise["playMode"] != "rhythm") ? 40:59
 
                              Text {
