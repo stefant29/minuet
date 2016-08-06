@@ -558,10 +558,10 @@ Item {
 
             text: "backspace"
             width: app.width - 2*marginAll
-            height:100
+            height: 50
             visible: exerciseController.currentExercise["playMode"] == "rhythm"
             anchors { horizontalCenter: parent.horizontalCenter
-                bottom: parent.bottom
+                top: answerCategory.bottom
                 margins: marginAll
             }
             enabled: currentAnswer > 0 && currentAnswer < 4
