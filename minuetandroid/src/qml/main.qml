@@ -206,7 +206,7 @@ ApplicationWindow {
                        Text {
                            id: exerciseName
                            text: "technical term, do you have a musician friend?", modelData.name
-                           leftPadding: 25
+                           leftPadding: 12
                            topPadding: 17
                            bottomPadding: 17
                            font{family: "cantarell"; bold: true; pixelSize: 14}

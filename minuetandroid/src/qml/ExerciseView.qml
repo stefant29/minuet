@@ -230,6 +230,7 @@ Item {
             answerOption.createObject(answerGrid, {model: currentExerciseOptions[i], index: i, color: colors[i%24]})
         exerciseView.visible = true
         exerciseView.state = "initial"
+        messageText.text = exerciseController.currentExercise["userMessage"]
     }
     function checkAnswers(answers,answerLength) {
         highlightRightAnswer()
