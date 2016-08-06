@@ -199,15 +199,17 @@ ApplicationWindow {
                                verticalCenter: parent.verticalCenter
                                margins: 10
                            }
+                           sourceSize.height: 30
+                           sourceSize.width : 30
                        }
 
                        Text {
                            id: exerciseName
                            text: "technical term, do you have a musician friend?", modelData.name
                            leftPadding: 25
-                           topPadding: 18
-                           bottomPadding: 18
-                           font{family: "cantarell"; bold: true; pixelSize: 12}
+                           topPadding: 17
+                           bottomPadding: 17
+                           font{family: "cantarell"; bold: true; pixelSize: 14}
                            anchors.left: parentIcon.right
                        }
 
