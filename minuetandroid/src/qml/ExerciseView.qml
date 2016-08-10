@@ -465,7 +465,7 @@ Item {
             id: answerCategory
             anchors {
                 horizontalCenter: parent.horizontalCenter
-                bottom: pianoView.top
+                bottom: (exerciseController.currentExercise["playMode"] != "rhythm") ? pianoView.top:backspaceButton.top
                 margins: marginAll
             }
             GroupBox {
@@ -561,7 +561,7 @@ Item {
             height: 50
             visible: exerciseController.currentExercise["playMode"] == "rhythm"
             anchors { horizontalCenter: parent.horizontalCenter
-                top: answerCategory.bottom
+                bottom: mainLayout.bottom
                 margins: marginAll
             }
             enabled: currentAnswer > 0 && currentAnswer < 4
