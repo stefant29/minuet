@@ -506,11 +506,12 @@ Item {
                              }
                              Image {
                                  id: rhythmImage
+
+                                 width: 70
+                                 height: 35
                                  anchors.centerIn: parent
                                  visible: exerciseController.currentExercise["playMode"] == "rhythm"
                                  source: answers[index]
-                                 fillMode: Image.PreserveAspectFit
-                                 sourceSize.width: parent.width
                              }
 
                              MouseArea{
