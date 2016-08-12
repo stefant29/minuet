@@ -88,6 +88,7 @@ ApplicationWindow {
 
                     MenuItem {
                         text: "About"
+                        onTriggered: aboutDialog.open()
                     }
                 }
             }
@@ -300,6 +301,71 @@ ApplicationWindow {
             id: exerciseView
             width: contentContainer.width ; height: contentContainer.height
             //anchors { horizontalCenter: contentContainer.horizontalCenter }
+        }
+    }
+
+    Popup{
+        id: aboutDialog
+        modal: true
+        focus: true
+        x: (app.width - width) / 2
+        y: app.height / 6
+        width: Math.min(app.width, app.height) * 0.9
+        contentHeight: aboutColumn.height
+
+        Column {
+            id: aboutColumn
+            spacing: 20
+
+            Image {
+                id: icon
+                source: "minuet.svgz"
+                fillMode: Image.PreserveAspectFit
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: Qt.openUrlExternally("https://www.kde.org/applications/education/minuet/")
+                }
+            }
+
+            Label {
+                width: aboutDialog.availableWidth
+                wrapMode: Label.Wrap
+                //horizontalAlignment: Text.AlignJustify
+                text: "Minuet is a <a href='http://kde.org'>KDE</a> " + "application for music education."
+                onLinkActivated: Qt.openUrlExternally(link)
+                font.pixelSize: 13
+            }
+
+            Label {
+                width: aboutDialog.availableWidth
+                wrapMode: Label.WordWrap
+                //horizontalAlignment: Text.AlignJustify
+                text: "In case you want to learn more about Minuet, you can find more information "+
+                        "<a href='https://www.kde.org/applications/education/minuet/'>in the official site</a><br>"+
+                        "<br>Please use <a href='http://bugs.kde.org'>our bug tracker</a> to report bugs."
+                onLinkActivated: Qt.openUrlExternally(link)
+                font.pixelSize: 13
+            }
+
+            Label {
+                width: aboutDialog.availableWidth
+                wrapMode: Label.WordWrap
+                //horizontalAlignment: Text.AlignJustify
+                text: "Developer<br>Sandro Andrade &lt;<a href='mailto:sandroandrade@kde.org'>sandroandrade@kde.org</a>&gt;"
+                onLinkActivated: Qt.openUrlExternally(link)
+                font.pixelSize: 13
+            }
+
+            Label {
+                width: aboutDialog.availableWidth
+                wrapMode: Label.WordWrap
+                //horizontalAlignment: Text.AlignJustify
+                text: "Icons Designer<br>Alessandro Longo &lt;<a href='mailto:alessandro.longo@kdemail.net'>alessandro.longo@kdemail.net</a>&gt;"
+                onLinkActivated: Qt.openUrlExternally(link)
+                font.pixelSize: 13
+            }
         }
     }
 

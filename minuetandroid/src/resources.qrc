@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+	<file alias="minuet.svgz">../icons/sc-apps-minuet.svgz</file>
         <file alias="main.qml">qml/main.qml</file>
         <file alias="ExerciseView.qml">qml/ExerciseView.qml</file>
         <file alias="RhythmAnswerView.qml">qml/RhythmAnswerView.qml</file>
