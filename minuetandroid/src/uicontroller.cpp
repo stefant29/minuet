@@ -37,7 +37,7 @@ namespace Minuet
 
 UiController::UiController(QObject *parent)
     : IUiController(parent)//,
-      //m_mainWindow(new MainWindow(qobject_cast<Core *>(parent)))
+    //m_mainWindow(new MainWindow(qobject_cast<Core *>(parent)))
 {
 }
 
@@ -57,13 +57,13 @@ bool UiController::initialize()
     QString destination = QStringLiteral("./");
 
     if (afile.exists()){
-            afile.copy(QStringLiteral("./sf_GMbank.sf2"));
-            QFile::setPermissions(QStringLiteral("./sf_GMbank.sf2"),QFile::WriteOwner | QFile::ReadOwner);
+        afile.copy(QStringLiteral("./sf_GMbank.sf2"));
+        QFile::setPermissions(QStringLiteral("./sf_GMbank.sf2"),QFile::WriteOwner | QFile::ReadOwner);
     }
 
     if (ffile.exists()){
-            ffile.copy(QStringLiteral("./libshare_libfluidOpcodes.so"));
-            QFile::setPermissions(QStringLiteral("./libshare_libfluidOpcodes.so"),QFile::WriteOwner | QFile::ReadOwner);
+        ffile.copy(QStringLiteral("./libshare_libfluidOpcodes.so"));
+        QFile::setPermissions(QStringLiteral("./libshare_libfluidOpcodes.so"),QFile::WriteOwner | QFile::ReadOwner);
     }
 
     copyDir(source,destination);
@@ -137,4 +137,3 @@ int UiController::isFirstTimeUser(){
 }
 
 }
-

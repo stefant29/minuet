@@ -61,7 +61,7 @@ private:
     QStringList m_begLine;
     QStringList m_endLine;
     QList<qint16> m_size;
-	
+
 };
 
 #endif

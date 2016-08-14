@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     qputenv("QT_QUICK_CONTROLS_STYLE", "material");
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
- 
+
     Minuet::IUiController *uiController = new Minuet::UiController(0);
     ((Minuet::UiController *)uiController)->initialize();
 

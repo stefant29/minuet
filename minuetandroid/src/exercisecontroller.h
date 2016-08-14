@@ -35,7 +35,7 @@ namespace Minuet
 {
 
 //class Core;
- 
+
 //class MINUETSHELL_EXPORT ExerciseController : public IExerciseController
 class ExerciseController : public IExerciseController
 {
@@ -44,7 +44,7 @@ class ExerciseController : public IExerciseController
 public:
     explicit ExerciseController(QObject *parent= 0);
     virtual ~ExerciseController();
- 
+
     //bool initialize(Core *core);
     bool initialize();
 
@@ -55,7 +55,7 @@ public:
 
 public Q_SLOTS:
     virtual void randomlySelectExerciseOptions();
- 
+
 private:
     bool mergeJsonFiles(const QString directoryName, QJsonObject &targetObject, bool applyDefinitionsFlag = false, QString commonKey = "", QString mergeKey = "");
     QJsonArray applyDefinitions(QJsonArray exercises, QJsonArray definitions, QJsonObject collectedProperties = QJsonObject());

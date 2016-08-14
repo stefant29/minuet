@@ -34,7 +34,7 @@
 
 namespace Minuet
 {
-    
+
 ExerciseController::ExerciseController(QObject *parent) :
     IExerciseController(parent),
     m_chosenRootNote(0)
@@ -56,10 +56,10 @@ bool ExerciseController::initialize()
     bool definitionsMerge = mergeJsonFiles("definitions", m_definitions);
     bool exercisesMerge = mergeJsonFiles("exercises", m_exercises, true, "name", "children");
 
-     QFile file("./merged-exercises.json");
-     file.open(QIODevice::WriteOnly);
-     file.write(QJsonDocument(m_exercises).toJson());
-     file.close();
+    QFile file("./merged-exercises.json");
+    file.open(QIODevice::WriteOnly);
+    file.write(QJsonDocument(m_exercises).toJson());
+    file.close();
 
     return definitionsMerge & exercisesMerge;
 }
@@ -172,7 +172,7 @@ QJsonArray ExerciseController::applyDefinitions(QJsonArray exercises, QJsonArray
                         exerciseObject.remove(key);
                     }
                 exerciseObject[QStringLiteral("children")] = applyDefinitions(exerciseObject[QStringLiteral("children")].toArray(),
-                                                                              filteredDefinitions, collectedProperties);
+                        filteredDefinitions, collectedProperties);
             }
             else {
                 foreach(const QString &key, collectedProperties.keys())
@@ -220,16 +220,16 @@ QJsonArray ExerciseController::mergeJsonArrays(QJsonArray oldFile, QJsonArray ne
                 QJsonObject newFileObject = i1->toObject();
                 QJsonObject oldFileObject = i2->toObject();
                 if (i2->isObject() &&
-                    i1->isObject() &&
-                    !commonKey.isEmpty() &&
-                    oldFileObject[commonKey] == newFileObject[commonKey]) {
-                        QJsonObject jsonObject = oldFile[i2-oldFile.constBegin()].toObject();
-                        jsonObject[mergeKey] = mergeJsonArrays(oldFileObject[mergeKey].toArray(),
-                                                            newFileObject[mergeKey].toArray(),
-                                                            commonKey,
-                                                            mergeKey);
-                        oldFile[i2-oldFile.constBegin()] = jsonObject;
-                        break;
+                        i1->isObject() &&
+                        !commonKey.isEmpty() &&
+                        oldFileObject[commonKey] == newFileObject[commonKey]) {
+                    QJsonObject jsonObject = oldFile[i2-oldFile.constBegin()].toObject();
+                    jsonObject[mergeKey] = mergeJsonArrays(oldFileObject[mergeKey].toArray(),
+                                                           newFileObject[mergeKey].toArray(),
+                                                           commonKey,
+                                                           mergeKey);
+                    oldFile[i2-oldFile.constBegin()] = jsonObject;
+                    break;
                 }
             }
             if (i2 == oldFile.constEnd())
