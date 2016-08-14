@@ -3,7 +3,6 @@
 	<file alias="minuet.svgz">../icons/sc-apps-minuet.svgz</file>
         <file alias="main.qml">qml/main.qml</file>
         <file alias="ExerciseView.qml">qml/ExerciseView.qml</file>
-        <file alias="RhythmAnswerView.qml">qml/RhythmAnswerView.qml</file>
         <file alias="BlackKey.qml">qml/pianoview/BlackKey.qml</file>
         <file alias="Octave.qml">qml/pianoview/Octave.qml</file>
         <file alias="PianoView.qml">qml/pianoview/PianoView.qml</file>
