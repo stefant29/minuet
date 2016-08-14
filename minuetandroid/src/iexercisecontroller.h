@@ -23,8 +23,6 @@
 #ifndef MINUET_IEXERCISECONTROLLER_H
 #define MINUET_IEXERCISECONTROLLER_H
 
-//#include "minuetinterfacesexport.h"
-
 #include <QObject>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -32,7 +30,7 @@
 namespace Minuet
 {
 
-class MINUETINTERFACES_EXPORT IExerciseController : public QObject
+class IExerciseController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QJsonArray exercises READ exercises)

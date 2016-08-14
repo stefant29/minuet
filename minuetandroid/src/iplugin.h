@@ -23,14 +23,12 @@
 #ifndef MINUET_IPLUGIN_H
 #define MINUET_IPLUGIN_H
 
-//#include "minuetinterfacesexport.h"
-
 #include <QObject>
 
 namespace Minuet
 {
 
-class MINUETINTERFACES_EXPORT IPlugin : public QObject
+class IPlugin : public QObject
 {
     Q_OBJECT
 

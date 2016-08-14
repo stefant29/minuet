@@ -25,14 +25,12 @@
 
 #include "iplugin.h"
 
-//#include "minuetinterfacesexport.h"
-
 #include <QJsonArray>
 
 namespace Minuet
 {
 
-class MINUETINTERFACES_EXPORT ISoundBackend : public IPlugin
+class ISoundBackend : public IPlugin
 {
     Q_OBJECT
 
