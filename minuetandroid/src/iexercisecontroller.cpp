@@ -44,4 +44,3 @@ QJsonArray IExerciseController::selectedExerciseOptions() const
 }
 
 }
-

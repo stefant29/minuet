@@ -25,7 +25,7 @@
 
 #include "iplugin.h"
 
-#include "minuetinterfacesexport.h"
+//#include "minuetinterfacesexport.h"
 
 #include <QJsonArray>
 

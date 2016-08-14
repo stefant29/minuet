@@ -19,7 +19,6 @@
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **
 ****************************************************************************/
-//ask if minuetandroid or minuet
 #ifndef MINUET_CSOUNDANDROIDSOUNDBACKEND_H
 #define MINUET_CSOUNDANDROIDSOUNDBACKEND_H
 
@@ -31,7 +30,6 @@ class CsoundAndroidSoundBackend : public Minuet::ISoundBackend
 {
     Q_OBJECT
 
-    //Q_PLUGIN_METADATA(IID "org.kde.minuet.IPlugin" FILE "csoundandroidsoundbackend.json")
     Q_INTERFACES(Minuet::IPlugin)
     Q_INTERFACES(Minuet::ISoundBackend)
 

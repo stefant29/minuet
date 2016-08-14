@@ -68,7 +68,6 @@ void CsoundAndroidSoundBackend::openExerciseFile()
             tempEndLine += lineData + "\n";
         }
         m_endLine.append(tempEndLine);
-        //m_size[i] = sfile.size();
     }
 }
 

@@ -42,5 +42,3 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
-
-//Copy exercise files from assets to root directory

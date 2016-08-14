@@ -23,10 +23,7 @@
 #ifndef MINUET_EXERCISECONTROLLER_H
 #define MINUET_EXERCISECONTROLLER_H
 
-//#include <interfaces/iexercisecontroller.h>
 #include "iexercisecontroller.h"
-
-//#include "minuetshellexport.h"
 
 #include <QStringList>
 #include <QJsonObject>
@@ -34,9 +31,6 @@
 namespace Minuet
 {
 
-//class Core;
-
-//class MINUETSHELL_EXPORT ExerciseController : public IExerciseController
 class ExerciseController : public IExerciseController
 {
     Q_OBJECT
@@ -45,7 +39,6 @@ public:
     explicit ExerciseController(QObject *parent= 0);
     virtual ~ExerciseController();
 
-    //bool initialize(Core *core);
     bool initialize();
 
     Q_INVOKABLE unsigned int chosenRootNote();

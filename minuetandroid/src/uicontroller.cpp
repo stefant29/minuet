@@ -37,7 +37,6 @@ namespace Minuet
 
 UiController::UiController(QObject *parent)
     : IUiController(parent)//,
-    //m_mainWindow(new MainWindow(qobject_cast<Core *>(parent)))
 {
 }
 
@@ -69,8 +68,6 @@ bool UiController::initialize()
     copyDir(source,destination);
 
     Minuet::ISoundBackend *m_soundBackend = new CsoundAndroidSoundBackend();
-    //CsoundAndroidSoundBackend *m_csoundAndroidSoundBackend(new CsoundAndroidSoundBackend());
-    //m_soundBackend = m_csoundAndroidSoundBackend;
     Minuet::IExerciseController *exerciseController = new Minuet::ExerciseController(0);
     ((Minuet::ExerciseController *)exerciseController)->initialize();
 

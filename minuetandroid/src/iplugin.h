@@ -23,7 +23,7 @@
 #ifndef MINUET_IPLUGIN_H
 #define MINUET_IPLUGIN_H
 
-#include "minuetinterfacesexport.h"
+//#include "minuetinterfacesexport.h"
 
 #include <QObject>
 

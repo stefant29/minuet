@@ -23,15 +23,11 @@
 #ifndef MINUET_UICONTROLLER_H
 #define MINUET_UICONTROLLER_H
 
-//#include "mainwindow.h"
-
 #include <iuicontroller.h>
 #include <QSettings>
 
 namespace Minuet
 {
-
-//class Core;
 
 class UiController : public IUiController
 {

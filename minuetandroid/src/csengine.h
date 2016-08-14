@@ -37,10 +37,6 @@ public:
     explicit CsEngine();
     void run();
     Q_INVOKABLE void stop();
-    //Q_INVOKABLE void setChannel(const QString &channel, MYFLT value);
-    //Q_INVOKABLE void csEvent(const QString &event_string);
-    //Q_INVOKABLE double getChannel(const char *channel);
-
 };
 
 #endif // CSENGINE_H

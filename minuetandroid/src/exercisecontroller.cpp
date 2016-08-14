@@ -22,10 +22,6 @@
 
 #include "exercisecontroller.h"
 
-//#include <drumstick/alsaevent.h>
-
-//#include <KLocalizedString>
-
 #include <QDir>
 #include <qqml.h>
 #include <QDateTime>
@@ -48,11 +44,8 @@ ExerciseController::~ExerciseController()
 {
 }
 
-//bool ExerciseController::initialize(Core *core)
 bool ExerciseController::initialize()
 {
-    //Q_UNUSED(core)
-
     bool definitionsMerge = mergeJsonFiles("definitions", m_definitions);
     bool exercisesMerge = mergeJsonFiles("exercises", m_exercises, true, "name", "children");
 
@@ -124,7 +117,6 @@ bool ExerciseController::mergeJsonFiles(const QString directoryName, QJsonObject
         foreach (const QString &json, jsonDir.entryList(QDir::Files)) {
             QFile jsonFile(jsonDir.absoluteFilePath(json));
             if (!jsonFile.open(QIODevice::ReadOnly)) {
-                //m_errorString = i18n("Couldn't open json file \"%1\".", jsonDir.absoluteFilePath(json));
                 return false;
             }
             QJsonParseError error;

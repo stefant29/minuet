@@ -79,4 +79,3 @@ void ISoundBackend::setState(State state)
 }
 
 }
-
