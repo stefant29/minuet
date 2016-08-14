@@ -54,7 +54,7 @@ Item {
         "unknown-rhythm.png"
     ]
     onChosenExercisesChanged: {
-        fillCorrectAnswerGrid()  
+        fillCorrectAnswerGrid()
     }
     /*onAnswerCompleted:{
         exerciseView.checkAnswers(answers)
@@ -175,7 +175,7 @@ Item {
         for (var i = 0; i < answerGrid.children.length; ++i) {
             answerGrid.children[i].enabled = false
             //if (answerGrid.children[i].model.name != chosenExercises[0])
-                answerGrid.children[i].opacity = 0.25
+            answerGrid.children[i].opacity = 0.25
             //else
             //    answerRectangle = answerGrid.children[i]
         }
@@ -326,7 +326,7 @@ Item {
                     startPos = pianoView.contentX
                     endPos = 7*piano.keyWidth*(Math.floor((exerciseController.chosenRootNote()-23)/12))
                     if(endPos > 0)
-                         endPos += 2*piano.keyWidth
+                        endPos += 2*piano.keyWidth
                     if(startPos!=endPos)
                         anim.start()
 
@@ -469,69 +469,69 @@ Item {
                 margins: marginAll
             }
             GroupBox {
-                 title: qsTr("Your Answers")
-                 Row{
-                     id: yourAnswerGrid
-                     anchors{
-                         horizontalCenter: parent.horizontalCenter
-                         centerIn: parent
-                     }
-                     spacing: 10;
+                title: qsTr("Your Answers")
+                Row{
+                    id: yourAnswerGrid
+                    anchors{
+                        horizontalCenter: parent.horizontalCenter
+                        centerIn: parent
+                    }
+                    spacing: 10;
 
-                     //flow:Grid.TopToBottom
-                     Component {
-                         id: yourAnswerOption
+                    //flow:Grid.TopToBottom
+                    Component {
+                        id: yourAnswerOption
 
-                         Rectangle {
-                             id: yourAnswerRectangle
+                        Rectangle {
+                            id: yourAnswerRectangle
 
-                             property var model
-                             property int index
+                            property var model
+                            property int index
 
-                             width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:(app.width-2*marginAll)/4-10
-                             height: (exerciseController.currentExercise["playMode"] != "rhythm") ? 40:59
+                            width: (exerciseController.currentExercise["playMode"] != "rhythm") ? 120:(app.width-2*marginAll)/4-10
+                            height: (exerciseController.currentExercise["playMode"] != "rhythm") ? 40:59
 
-                             Text {
-                                 id: yourAnswerOptionText
+                            Text {
+                                id: yourAnswerOptionText
 
-                                 property string yourAnswerOriginalText: model
+                                property string yourAnswerOriginalText: model
 
-                                 width: parent.width - 4
-                                 visible: exerciseController.currentExercise["playMode"] != "rhythm"
-                                 text: model
-                                 anchors.centerIn: parent
-                                 horizontalAlignment: Qt.AlignHCenter
-                                 color: "black"
-                                 wrapMode: Text.Wrap
-                             }
-                             Image {
-                                 id: rhythmImage
+                                width: parent.width - 4
+                                visible: exerciseController.currentExercise["playMode"] != "rhythm"
+                                text: model
+                                anchors.centerIn: parent
+                                horizontalAlignment: Qt.AlignHCenter
+                                color: "black"
+                                wrapMode: Text.Wrap
+                            }
+                            Image {
+                                id: rhythmImage
 
-                                 width: 70
-                                 height: 35
-                                 anchors.centerIn: parent
-                                 visible: exerciseController.currentExercise["playMode"] == "rhythm"
-                                 source: answers[index]
-                             }
+                                width: 70
+                                height: 35
+                                anchors.centerIn: parent
+                                visible: exerciseController.currentExercise["playMode"] == "rhythm"
+                                source: answers[index]
+                            }
 
-                             MouseArea{
-                                 anchors.fill: parent
-                                 onClicked:{
+                            MouseArea{
+                                anchors.fill: parent
+                                onClicked:{
                                     if(exerciseController.currentExercise["playMode"] != "rhythm" && yourAnswerGrid.children[0].model != "")
                                         showCorrectAnswer1()
                                     else{
-                                         if(currentAnswer == 4)
-                                        //showCorrectAnswer(chosenExercises,chosenColors)
-                                        showCorrectAnswer1()
+                                        if(currentAnswer == 4)
+                                            //showCorrectAnswer(chosenExercises,chosenColors)
+                                            showCorrectAnswer1()
                                     }
-                                 }
+                                }
 
-                             }
-                         }
-                     }
-                 }
+                            }
+                        }
+                    }
+                }
 
-                 Layout.preferredWidth: app.width-2*marginAll
+                Layout.preferredWidth: app.width-2*marginAll
             }
         }
         Flickable{

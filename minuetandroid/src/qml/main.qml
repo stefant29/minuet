@@ -97,149 +97,149 @@ ApplicationWindow {
 
     //TODO: Have an icon next to the name for each type of main exercise(chords,intervals,rhythm) in navigation drawer
     Drawer{
-       id: navigationMenu
-       width: Math.min(app.width, app.height) * 0.9; height: app.height
+        id: navigationMenu
+        width: Math.min(app.width, app.height) * 0.9; height: app.height
 
-       //loads the exercises from exercise controller
-       Item {
-           id: minuetMenu
+        //loads the exercises from exercise controller
+        Item {
+            id: minuetMenu
 
-           property variant exerciseArray: []
-           property Item selectedMenuItem : null
-           signal backPressed
-           readonly property alias currentExercise: stackView.currentExercise
-           signal itemChanged(var model)
-           width: parent.width; height: parent.height
+            property variant exerciseArray: []
+            property Item selectedMenuItem : null
+            signal backPressed
+            readonly property alias currentExercise: stackView.currentExercise
+            signal itemChanged(var model)
+            width: parent.width; height: parent.height
 
-           onCurrentExerciseChanged: {
+            onCurrentExerciseChanged: {
                 exerciseController.currentExercise = currentExercise
                 exerciseView.setCurrentExercise(currentExercise)
                 exerciseView.resetAnswers()
-           }
-           onBackPressed: {
-               soundBackend.stop()
-               exerciseView.clearExerciseGrid()
-               exerciseView.clearYourAnswerGrid()
+            }
+            onBackPressed: {
+                soundBackend.stop()
+                exerciseView.clearExerciseGrid()
+                exerciseView.clearYourAnswerGrid()
                 //pianoView.clearAllMarks()
-           }
+            }
 
-           //back button
-           Item {
-               id: breadcrumb
-               width: parent.width; height: (stackView.depth > 1) ? 50:0
-               Image {
-                   height: parent.height/2
-                   id: backButton
-                   fillMode: Image.Stretch
-                   horizontalAlignment: Image.AlignHCenter
-                   verticalAlignment: Image.AlignVCenter
-                   source: "back@2x.png"
-                   anchors{
-                       left: parent.left
-                       verticalCenter: parent.verticalCenter
-                       margins: 10
-                   }
-               }
+            //back button
+            Item {
+                id: breadcrumb
+                width: parent.width; height: (stackView.depth > 1) ? 50:0
+                Image {
+                    height: parent.height/2
+                    id: backButton
+                    fillMode: Image.Stretch
+                    horizontalAlignment: Image.AlignHCenter
+                    verticalAlignment: Image.AlignVCenter
+                    source: "back@2x.png"
+                    anchors{
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                        margins: 10
+                    }
+                }
 
-               Label{
-                   id: currentExerciseParent
-                   text:""
-                   font{family: "cantarell"; pixelSize: 20}
-                   elide: Label.ElideRight
-                   verticalAlignment: Qt.AlignVCenter
-                   Layout.fillWidth: true
-                   anchors{
-                       left: backButton.right
-                       verticalCenter: parent.verticalCenter
-                       margins: 10
-                   }
-               }
+                Label{
+                    id: currentExerciseParent
+                    text:""
+                    font{family: "cantarell"; pixelSize: 20}
+                    elide: Label.ElideRight
+                    verticalAlignment: Qt.AlignVCenter
+                    Layout.fillWidth: true
+                    anchors{
+                        left: backButton.right
+                        verticalCenter: parent.verticalCenter
+                        margins: 10
+                    }
+                }
 
-               MouseArea{
-                   anchors.fill: parent
-                   onClicked: {
-                       stackView.currentExerciseMenuItem = null
-                       exerciseController.currentExercise ={}
-                       stackView.pop()
-                       minuetMenu.exerciseArray.pop()
-                       currentExerciseParent.text = minuetMenu.exerciseArray.toString()
-                       minuetMenu.backPressed()
-                       titleText = "Minuet Mobile"
-                   }
-               }
-           }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        stackView.currentExerciseMenuItem = null
+                        exerciseController.currentExercise ={}
+                        stackView.pop()
+                        minuetMenu.exerciseArray.pop()
+                        currentExerciseParent.text = minuetMenu.exerciseArray.toString()
+                        minuetMenu.backPressed()
+                        titleText = "Minuet Mobile"
+                    }
+                }
+            }
 
-           StackView {
-               id: stackView
+            StackView {
+                id: stackView
 
-               property var currentExercise
-               property Item currentExerciseMenuItem
+                property var currentExercise
+                property Item currentExerciseMenuItem
 
-               width: parent.width;
-               anchors{top: breadcrumb.bottom; bottom:parent.bottom}
-               clip: true
-               focus: true
+                width: parent.width;
+                anchors{top: breadcrumb.bottom; bottom:parent.bottom}
+                clip: true
+                focus: true
 
-               Component {
-                   id: categoryDelegate
+                Component {
+                    id: categoryDelegate
 
-                   Rectangle {
-                       id: delegateRect
-                       width: stackView.width; height:exerciseName.height
+                    Rectangle {
+                        id: delegateRect
+                        width: stackView.width; height:exerciseName.height
 
-                       Image {
-                           id: parentIcon
+                        Image {
+                            id: parentIcon
 
-                           source: (modelData._icon != undefined)? modelData._icon:""
-                           visible: modelData._icon != undefined
-                           fillMode: Image.Pad
-                           horizontalAlignment: Image.AlignHCenter
-                           verticalAlignment: Image.AlignVCenter
-                           anchors{
-                               left: parent.left
-                               verticalCenter: parent.verticalCenter
-                               margins: 10
-                           }
-                           sourceSize.height: 30
-                           sourceSize.width : 30
-                       }
+                            source: (modelData._icon != undefined)? modelData._icon:""
+                            visible: modelData._icon != undefined
+                            fillMode: Image.Pad
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+                            anchors{
+                                left: parent.left
+                                verticalCenter: parent.verticalCenter
+                                margins: 10
+                            }
+                            sourceSize.height: 30
+                            sourceSize.width : 30
+                        }
 
-                       Text {
-                           id: exerciseName
-                           text: "technical term, do you have a musician friend?", modelData.name
-                           leftPadding: 12
-                           topPadding: 17
-                           bottomPadding: 17
-                           font{family: "cantarell"; bold: true; pixelSize: 14}
-                           anchors.left: parentIcon.right
-                       }
+                        Text {
+                            id: exerciseName
+                            text: "technical term, do you have a musician friend?", modelData.name
+                            leftPadding: 12
+                            topPadding: 17
+                            bottomPadding: 17
+                            font{family: "cantarell"; bold: true; pixelSize: 14}
+                            anchors.left: parentIcon.right
+                        }
 
-                       MouseArea{
-                           anchors.fill: parent
-                           onPressed: {
-                               delegateRect.color =  "#E0E0E0"
-                           }
-                           onCanceled: {
-                               delegateRect.color = "white"
-                           }
-                           onReleased: {
-                               var children = modelData.children
-                               if (!children) {
-                                   if (uiController.isFirstTimeUser() == 1) toolBar.ToolTip.show("Press on Your Answer section to find the answers",10000)
-                                   if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
-                                   minuetMenu.selectedMenuItem = delegateRect
-                                   soundBackend.setQuestionLabel("new question")
-                                   stackView.currentExercise = modelData
-                                   stackView.currentExerciseMenuItem = delegateRect
-                                   titleText = modelData.name
-                                   navigationMenu.close()
-                               }
-                               else {
-                                   delegateRect.color = "white"
-                                   stackView.push(categoryMenu.createObject(stackView, {model: children}))
-                                   currentExerciseParent.text = modelData.name
-                                   minuetMenu.exerciseArray.push(modelData.name)
-                                   /*var root = delegateRect.ListView.view.model[index].root
+                        MouseArea{
+                            anchors.fill: parent
+                            onPressed: {
+                                delegateRect.color =  "#E0E0E0"
+                            }
+                            onCanceled: {
+                                delegateRect.color = "white"
+                            }
+                            onReleased: {
+                                var children = modelData.children
+                                if (!children) {
+                                    if (uiController.isFirstTimeUser() == 1) toolBar.ToolTip.show("Press on Your Answer section to find the answers",10000)
+                                    if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
+                                    minuetMenu.selectedMenuItem = delegateRect
+                                    soundBackend.setQuestionLabel("new question")
+                                    stackView.currentExercise = modelData
+                                    stackView.currentExerciseMenuItem = delegateRect
+                                    titleText = modelData.name
+                                    navigationMenu.close()
+                                }
+                                else {
+                                    delegateRect.color = "white"
+                                    stackView.push(categoryMenu.createObject(stackView, {model: children}))
+                                    currentExerciseParent.text = modelData.name
+                                    minuetMenu.exerciseArray.push(modelData.name)
+                                    /*var root = delegateRect.ListView.view.model[index].root
                                    if (root != undefined) {
                                        exerciseController.setMinRootNote(root.split('.')[0])
                                        exerciseController.setMaxRootNote(root.split('.')[2])
@@ -254,32 +254,32 @@ ApplicationWindow {
                                            exerciseController.setAnswerLength(4)
                                        }
                                    }*/
-                               }
-                           }
-                       }
-                   }
-               }
+                                }
+                            }
+                        }
+                    }
+                }
 
-               Component {
-                   id: categoryMenu
+                Component {
+                    id: categoryMenu
 
-                   Rectangle {
-                       property alias model: listView.model
+                    Rectangle {
+                        property alias model: listView.model
 
-                       width: stackView.width; height: parent.height
+                        width: stackView.width; height: parent.height
 
-                       ListView {
-                           id: listView
-                           anchors.fill: parent
-                           delegate: categoryDelegate
-                           ScrollIndicator.vertical: ScrollIndicator { }
-                       }
-                   }
-               }
+                        ListView {
+                            id: listView
+                            anchors.fill: parent
+                            delegate: categoryDelegate
+                            ScrollIndicator.vertical: ScrollIndicator { }
+                        }
+                    }
+                }
 
-               Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseController.exercises})) }
-           }
-       }
+                Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseController.exercises})) }
+            }
+        }
     }
 
     Item {
@@ -343,8 +343,8 @@ ApplicationWindow {
                 wrapMode: Label.WordWrap
                 //horizontalAlignment: Text.AlignJustify
                 text: "In case you want to learn more about Minuet, you can find more information "+
-                        "<a href='https://www.kde.org/applications/education/minuet/'>in the official site</a><br>"+
-                        "<br>Please use <a href='http://bugs.kde.org'>our bug tracker</a> to report bugs."
+                      "<a href='https://www.kde.org/applications/education/minuet/'>in the official site</a><br>"+
+                      "<br>Please use <a href='http://bugs.kde.org'>our bug tracker</a> to report bugs."
                 onLinkActivated: Qt.openUrlExternally(link)
                 font.pixelSize: 13
             }
