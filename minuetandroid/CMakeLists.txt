@@ -49,10 +49,11 @@ add_subdirectory(src)
 add_subdirectory(data)
 
 set(minuetandroid_CSD
-template.csd
-template_rhythm.csd
-sf_GMbank.sf2
-$ENV{CSOUND_ANDROID_ROOT}/pluginlibs/libfluidsynth/libs/armeabi-v7a/libfluidOpcodes.so)
+    template.csd
+    template_rhythm.csd
+    sf_GMbank.sf2
+    $ENV{CSOUND_ANDROID_ROOT}/pluginlibs/libfluidsynth/libs/armeabi-v7a/libfluidOpcodes.so
+)
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 install(DIRECTORY icons DESTINATION ${KDE_INSTALL_DATADIR}/minuet/qml)

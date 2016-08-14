@@ -25,7 +25,6 @@ import QtQuick.Controls 2.0
 
 Rectangle {
     property int keyWidth: (app.width - 2*mainLayout.anchors.margins)/10
-    //property int keyHeight: 3.4*keyWidth
     property int keyHeight: parent.height - octaveNumber.height
 
     function noteOn(chan, pitch, vel) {
@@ -75,15 +74,17 @@ Rectangle {
     width: 3*keyWidth+7*(7*keyWidth); height: parent.height
     radius: 5
     color: "#141414"
+
     Flow {
         id:octaveNumber
         height: 20
         width: parent.width
         anchors.left: parent.left
         anchors.leftMargin: 2*keyWidth
-        //spacing: 10
+
         Repeater {
             model: 7
+
             Label {
                 text: "Octave " + (1+modelData)
                 width: 7*keyWidth
@@ -92,6 +93,7 @@ Rectangle {
             }
         }
     }
+
     Item {
         id: keyboard
 
@@ -115,6 +117,7 @@ Rectangle {
             color: "#A40E09"
         }
     }
+
     Component {
         id: noteMark
 

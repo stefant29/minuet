@@ -31,11 +31,6 @@ ApplicationWindow {
     visible: true
     width: 360;height: 520
 
-    /*function userMessageChanged(message) {
-     //   pianoView.visible = (message != "rhythm" && message != "exercise")
-        rhythmAnswerView.visible = (message == "rhythm")
-    }*/
-
     function exerciseViewStateChanged() {
         if (exerciseView.state == "waitingForAnswer"){
             exerciseView.resetAnswers()
@@ -43,6 +38,7 @@ ApplicationWindow {
         }
     }
     property string titleText: "Minuet Mobile"
+
     //contains title and button
     header: ToolBar{
         Material.foreground: "white"
@@ -95,7 +91,6 @@ ApplicationWindow {
         }
     }
 
-    //TODO: Have an icon next to the name for each type of main exercise(chords,intervals,rhythm) in navigation drawer
     Drawer{
         id: navigationMenu
         width: Math.min(app.width, app.height) * 0.9; height: app.height
@@ -120,7 +115,6 @@ ApplicationWindow {
                 soundBackend.stop()
                 exerciseView.clearExerciseGrid()
                 exerciseView.clearYourAnswerGrid()
-                //pianoView.clearAllMarks()
             }
 
             //back button
@@ -239,21 +233,6 @@ ApplicationWindow {
                                     stackView.push(categoryMenu.createObject(stackView, {model: children}))
                                     currentExerciseParent.text = modelData.name
                                     minuetMenu.exerciseArray.push(modelData.name)
-                                    /*var root = delegateRect.ListView.view.model[index].root
-                                   if (root != undefined) {
-                                       exerciseController.setMinRootNote(root.split('.')[0])
-                                       exerciseController.setMaxRootNote(root.split('.')[2])
-                                   }
-                                   var playMode = delegateRect.ListView.view.model[index].playMode
-                                   if (playMode != undefined) {
-                                       if (playMode == "scale") exerciseController.setPlayMode(0) // ScalePlayMode
-                                       if (playMode == "chord") exerciseController.setPlayMode(1) // ChordPlayMode
-                                       exerciseController.setAnswerLength(1)
-                                       if (playMode == "rhythm") {
-                                           exerciseController.setPlayMode(2) // RhythmPlayMode
-                                           exerciseController.setAnswerLength(4)
-                                       }
-                                   }*/
                                 }
                             }
                         }
@@ -284,23 +263,12 @@ ApplicationWindow {
 
     Item {
         id: contentContainer
-        //anchors.fill: parent
         width: parent.width
         height: parent.height
-        /*RhythmAnswerView {
-            id: rhythmAnswerView
-
-            anchors { bottom: parent.bottom; bottomMargin: 20; horizontalCenter: parent.horizontalCenter }
-            visible: (exerciseController.currentExercise["playMode"] == "rhythm")
-            exerciseView: exerciseView
-
-            //onAnswerCompleted: exerciseView.checkAnswers(answers)
-        }*/
 
         ExerciseView {
             id: exerciseView
             width: contentContainer.width ; height: contentContainer.height
-            //anchors { horizontalCenter: contentContainer.horizontalCenter }
         }
     }
 
@@ -332,7 +300,6 @@ ApplicationWindow {
             Label {
                 width: aboutDialog.availableWidth
                 wrapMode: Label.Wrap
-                //horizontalAlignment: Text.AlignJustify
                 text: "Minuet is a <a href='http://kde.org'>KDE</a> " + "application for music education."
                 onLinkActivated: Qt.openUrlExternally(link)
                 font.pixelSize: 13
@@ -341,7 +308,6 @@ ApplicationWindow {
             Label {
                 width: aboutDialog.availableWidth
                 wrapMode: Label.WordWrap
-                //horizontalAlignment: Text.AlignJustify
                 text: "In case you want to learn more about Minuet, you can find more information "+
                       "<a href='https://www.kde.org/applications/education/minuet/'>in the official site</a><br>"+
                       "<br>Please use <a href='http://bugs.kde.org'>our bug tracker</a> to report bugs."
@@ -352,7 +318,6 @@ ApplicationWindow {
             Label {
                 width: aboutDialog.availableWidth
                 wrapMode: Label.WordWrap
-                //horizontalAlignment: Text.AlignJustify
                 text: "Developer<br>Sandro Andrade &lt;<a href='mailto:sandroandrade@kde.org'>sandroandrade@kde.org</a>&gt;"
                 onLinkActivated: Qt.openUrlExternally(link)
                 font.pixelSize: 13
@@ -361,7 +326,6 @@ ApplicationWindow {
             Label {
                 width: aboutDialog.availableWidth
                 wrapMode: Label.WordWrap
-                //horizontalAlignment: Text.AlignJustify
                 text: "Icons Designer<br>Alessandro Longo &lt;<a href='mailto:alessandro.longo@kdemail.net'>alessandro.longo@kdemail.net</a>&gt;"
                 onLinkActivated: Qt.openUrlExternally(link)
                 font.pixelSize: 13
@@ -369,23 +333,8 @@ ApplicationWindow {
         }
     }
 
-    /*Connections {
-        target: minuetMenu
-        onItemChanged: exerciseView.itemChanged(model)
-        onBreadcrumbPressed: exerciseView.clearExerciseGrid()
-        onUserMessageChanged: exerciseView.changeUserMessage(message)
-    }*/
-    /*Connections {
-        target: minuetMenu
-        onItemChanged: rhythmAnswerView.resetAnswers(model)
-        onBreadcrumbPressed: rhythmAnswerView.resetAnswers()
-        onUserMessageChanged: app.userMessageChanged(message)
-    }*/
     Connections {
         target: exerciseView
-        //onAnswerClicked: rhythmAnswerView.answerClicked(answerImageSource, color)
         onStateChanged: app.exerciseViewStateChanged()
-        //onShowCorrectAnswer: rhythmAnswerView.showCorrectAnswer(chosenExercises, chosenColors)
-        //onChosenExercisesChanged: rhythmAnswerView.fillCorrectAnswerGrid()
     }
 }
