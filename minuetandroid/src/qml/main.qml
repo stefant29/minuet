@@ -63,6 +63,7 @@ ApplicationWindow {
             Label {
                 id: titleLabel
                 text: titleText
+                font{family: "cantarell"; pixelSize: 14}
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
@@ -205,7 +206,7 @@ ApplicationWindow {
                             leftPadding: 12
                             topPadding: 17
                             bottomPadding: 17
-                            font{family: "cantarell"; bold: true; pixelSize: 14}
+                            font{family: "cantarell"; pixelSize: 14}
                             anchors.left: parentIcon.right
                         }
 
@@ -312,7 +313,7 @@ ApplicationWindow {
                 wrapMode: Label.WordWrap
                 linkColor: aboutlinkColor
                 text: "In case you want to learn more about Minuet, you can find more information "+
-                      "<a href='https://www.kde.org/applications/education/minuet/'>in the official site</a><br>"+
+                      "<a href='https://www.kde.org/applications/education/minuet/'>in the official site</a>.<br>"+
                       "<br>Please use <a href='http://bugs.kde.org'>our bug tracker</a> to report bugs."
                 onLinkActivated: Qt.openUrlExternally(link)
                 font.pixelSize: 13
@@ -322,7 +323,7 @@ ApplicationWindow {
                 width: aboutDialog.availableWidth
                 wrapMode: Label.WordWrap
                 linkColor: aboutlinkColor
-                text: "Developer<br>Sandro Andrade &lt;<a href='mailto:sandroandrade@kde.org'>sandroandrade@kde.org</a>&gt;"+
+                text: "Developers:<br>Sandro Andrade &lt;<a href='mailto:sandroandrade@kde.org'>sandroandrade@kde.org</a>&gt;"+
                       "<br>Ayush Shah &lt;<a href='mailto:1595ayush@gmail.com'>1595ayush@gmail.com</a>&gt;"
                 onLinkActivated: Qt.openUrlExternally(link)
                 font.pixelSize: 13
@@ -332,7 +333,7 @@ ApplicationWindow {
                 width: aboutDialog.availableWidth
                 wrapMode: Label.WordWrap
                 linkColor: aboutlinkColor
-                text: "Icons Designer<br>Alessandro Longo &lt;<a href='mailto:alessandro.longo@kdemail.net'>alessandro.longo@kdemail.net</a>&gt;"
+                text: "Icon Designer:<br>Alessandro Longo &lt;<a href='mailto:alessandro.longo@kdemail.net'>alessandro.longo@kdemail.net</a>&gt;"
                 onLinkActivated: Qt.openUrlExternally(link)
                 font.pixelSize: 13
             }

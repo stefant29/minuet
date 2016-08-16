@@ -27,6 +27,7 @@
 #include <QQmlContext>
 #include <QDir>
 #include <QQuickStyle>
+#include <QThread>
 //#include <QQmlDebuggingEnabler>
 //QQmlDebuggingEnabler enabler;
 
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     Minuet::IUiController *uiController = new Minuet::UiController(0);
+    QThread::sleep(3);
     ((Minuet::UiController *)uiController)->initialize();
 
     return app.exec();
