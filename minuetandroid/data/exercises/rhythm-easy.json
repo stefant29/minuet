@@ -1,7 +1,7 @@
 {
   "exercises": [
     {
-      "name": "Rhythm",
+      "name": "Rhythms",
       "playMode": "rhythm",
       "userMessage": "Hear the rhythm and then choose an answer from options below",
       "template": "lilypond-templates/rhythm.ly.tmpl",

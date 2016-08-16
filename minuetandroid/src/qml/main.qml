@@ -42,6 +42,7 @@ ApplicationWindow {
 
     //contains title and button
     header: ToolBar{
+        Material.primary: "#181818"
         Material.foreground: "white"
         id:toolBar
 
@@ -59,11 +60,14 @@ ApplicationWindow {
                 }
                 onClicked: navigationMenu.open()
             }
+ 
+            FontLoader {source: "qrc:/Roboto-Regular.ttf"}
+            FontLoader {source: "qrc:/Roboto-Bold.ttf"}
 
             Label {
                 id: titleLabel
                 text: titleText
-                font{family: "cantarell"; pixelSize: 14}
+                font { family: "Roboto"; weight: Font.Bold; pixelSize: 16 }
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
@@ -95,7 +99,7 @@ ApplicationWindow {
 
     Drawer{
         id: navigationMenu
-        width: Math.min(app.width, app.height) * 0.9; height: app.height
+        width: Math.min(app.width, app.height) * 0.75; height: app.height
 
         //loads the exercises from exercise controller
         Item {
@@ -119,10 +123,19 @@ ApplicationWindow {
                 exerciseView.clearYourAnswerGrid()
             }
 
+            Image {
+                id: drawerImage
+                source: "qrc:/minuet-drawer.png"
+                width: parent.width
+                height: 0.53125*width
+                fillMode: Image.PreserveAspectFit
+            }
+
             //back button
             Item {
                 id: breadcrumb
                 width: parent.width; height: (stackView.depth > 1) ? 50:0
+                anchors { top: drawerImage.bottom }
                 Image {
                     height: parent.height/2
                     id: backButton
@@ -140,7 +153,7 @@ ApplicationWindow {
                 Label{
                     id: currentExerciseParent
                     text:""
-                    font{family: "cantarell"; pixelSize: 20}
+                    font{family: "Roboto"; weight: Font.Bold; pixelSize: 16}
                     elide: Label.ElideRight
                     verticalAlignment: Qt.AlignVCenter
                     Layout.fillWidth: true
@@ -167,6 +180,7 @@ ApplicationWindow {
 
             StackView {
                 id: stackView
+                z: -10
 
                 property var currentExercise
                 property Item currentExerciseMenuItem
@@ -206,7 +220,7 @@ ApplicationWindow {
                             leftPadding: 12
                             topPadding: 17
                             bottomPadding: 17
-                            font{family: "cantarell"; pixelSize: 14}
+                            font{family: "Roboto"; pixelSize: 14}
                             anchors.left: parentIcon.right
                         }
 
@@ -260,6 +274,7 @@ ApplicationWindow {
 
                 Component.onCompleted: { stackView.push(categoryMenu.createObject(stackView, {model: exerciseController.exercises})) }
             }
+
         }
     }
 

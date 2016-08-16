@@ -218,6 +218,7 @@ Item {
             id: messageText
             wrapMode: Label.Wrap
             horizontalAlignment: Qt.AlignHCenter
+            font{family: "Roboto"; pixelSize: 14}
             anchors{
                 top : parent.top
                 margins: marginAll

@@ -46,5 +46,10 @@
         <file alias="back@4x.png">../images/back@4x.png</file>
 	<file alias="template.csd">../template.csd</file>
 	<file alias="template_rhythm.csd">../template_rhythm.csd</file>
+
+	<file alias="Roboto-Regular.ttf">fonts/roboto/Roboto-Regular.ttf</file>
+	<file alias="Roboto-Bold.ttf">fonts/roboto/Roboto-Bold.ttf</file>
+
+	<file alias="minuet-drawer.png">images/minuet-drawer.png</file>
     </qresource>
 </RCC>
