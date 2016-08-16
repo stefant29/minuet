@@ -220,6 +220,11 @@ ApplicationWindow {
                             leftPadding: 12
                             topPadding: 17
                             bottomPadding: 17
+                            FontMetrics { id: fontMetrics; font.family: "Roboto" }
+                            width: parent.width - 2*leftPadding
+                            height: 2*fontMetrics.height + 10
+                            verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.WordWrap
                             font{family: "Roboto"; pixelSize: 14}
                             anchors.left: parentIcon.right
                         }
