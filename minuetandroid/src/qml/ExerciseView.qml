@@ -217,7 +217,7 @@ Item {
 
         Text {
             id: messageText
-            wrapMode: Label.Wrap
+            wrapMode: Label.WordWrap
             horizontalAlignment: Qt.AlignHCenter
             font{family: "Roboto"; pixelSize: 14}
             anchors{
@@ -348,7 +348,7 @@ Item {
                                 anchors.centerIn: parent
                                 horizontalAlignment: Qt.AlignHCenter
                                 color: "black"
-                                wrapMode: Text.Wrap
+                                wrapMode: Text.WordWrap
                             }
 
                             Image {
@@ -387,7 +387,7 @@ Item {
             }
 
             GroupBox {
-                title: qsTr("Your Answers")
+                title: qsTr("Your Answer(s)")
 
                 Row{
                     id: yourAnswerGrid
@@ -420,7 +420,7 @@ Item {
                                 anchors.centerIn: parent
                                 horizontalAlignment: Qt.AlignHCenter
                                 color: "black"
-                                wrapMode: Text.Wrap
+                                wrapMode: Text.WordWrap
                             }
 
                             Image {

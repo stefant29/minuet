@@ -314,6 +314,7 @@ ApplicationWindow {
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
                 text: "Hi, what kind of ear training exercise do you want to practice today?"
+                font { family: "Roboto" }
             }
             Grid {
                 rows: 2
@@ -368,6 +369,7 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                             horizontalAlignment: Text.AlignHCenter
                             text: modelData.title
+                            font { family: "Roboto" }
                         }
                     }
                 }
@@ -411,7 +413,7 @@ ApplicationWindow {
 
             Label {
                 width: aboutDialog.availableWidth
-                wrapMode: Label.Wrap
+                wrapMode: Label.WordWrap
                 linkColor: aboutlinkColor
                 text: "Minuet is a <a href='http://kde.org'>KDE</a> " + "application for music education."
                 onLinkActivated: Qt.openUrlExternally(link)
