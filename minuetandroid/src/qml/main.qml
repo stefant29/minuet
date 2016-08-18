@@ -400,7 +400,14 @@ ApplicationWindow {
                     anchors.fill: parent
                     onClicked: Qt.openUrlExternally("https://www.kde.org/applications/education/minuet/")
                 }
+                Label {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: icon.bottom
+                    anchors.topMargin: -10
+                    text: "Minuet v0.2"
+                }
             }
+            Item { height: 10 }
 
             Label {
                 width: aboutDialog.availableWidth
