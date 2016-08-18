@@ -37,7 +37,7 @@ ApplicationWindow {
             soundBackend.setQuestionLabel("play again")
         }
     }
-    property string titleText: "Minuet Mobile"
+    property string titleText: "Minuet"
     property string aboutlinkColor: "#3F51B5"
 
     //contains title and button
@@ -173,7 +173,7 @@ ApplicationWindow {
                         minuetMenu.exerciseArray.pop()
                         currentExerciseParent.text = minuetMenu.exerciseArray.toString()
                         minuetMenu.backPressed()
-                        titleText = "Minuet Mobile"
+                        titleText = "Minuet"
                     }
                 }
             }

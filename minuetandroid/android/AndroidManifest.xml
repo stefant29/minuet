@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="0.0.3" package="org.kde.minuet" android:installLocation="auto" android:versionCode="7">
         <application android:name="org.qtproject.qt5.android.bindings.QtApplication"
-                     android:label="Minuet Mobile"
+                     android:label="Minuet"
 		     android:icon="@drawable/minuet"
 		     android:theme="@style/MinuetTheme">
                 <activity android:name="org.qtproject.qt5.android.bindings.QtActivity"
-                          android:label="Minuet Mobile"
+                          android:label="Minuet"
 			  android:screenOrientation="portrait"
                           android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation">
                         <intent-filter>
