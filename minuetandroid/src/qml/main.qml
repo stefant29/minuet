@@ -331,7 +331,7 @@ ApplicationWindow {
                         Image {
                             source: modelData.icon
                             fillMode: Image.PreserveAspectFit
-                            sourceSize.width: frame.width/4; sourceSize.height: sourceSize.width
+                            sourceSize.width: frame.width/4;
                             width: frame.width/4; height: width
                             anchors.horizontalCenter: parent.horizontalCenter
                             MouseArea {
