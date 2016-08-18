@@ -190,9 +190,10 @@ Item {
         }
         if (answersOk)
             messageText.text = "Congratulations!<br/>You answered correctly!"
-        else
+        else{
             messageText.text = "Oops, not this time!<br/>Try again!"
-        if (uiController.isFirstTimeUser() == 1) toolBar.ToolTip.show("Click on the red rectangle(s) to know the \nright answer(s)",10000)
+            if (uiController.isFirstTimeUser() == 1) toolBar.ToolTip.show("Click on the red rectangle(s) to know the \nright answer(s)",10000)
+        }
         exerciseView.state = "nextQuestion"
     }
     function highlightRightNotes() {
