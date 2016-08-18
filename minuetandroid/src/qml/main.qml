@@ -67,6 +67,7 @@ ApplicationWindow {
             Label {
                 id: titleLabel
                 text: titleText
+                wrapMode: Text.WordWrap
                 font { family: "Roboto"; weight: Font.Bold; pixelSize: 16 }
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
@@ -97,7 +98,7 @@ ApplicationWindow {
         }
     }
 
-    Drawer{
+    Drawer {
         id: navigationMenu
         width: Math.min(app.width, app.height) * 0.75; height: app.height
 
@@ -165,8 +166,10 @@ ApplicationWindow {
                 }
 
                 MouseArea{
+                    id: breadcrumbMouseArea
                     anchors.fill: parent
                     onClicked: {
+                        frame.visible = true
                         stackView.currentExerciseMenuItem = null
                         exerciseController.currentExercise ={}
                         stackView.pop()
@@ -240,7 +243,8 @@ ApplicationWindow {
                             onReleased: {
                                 var children = modelData.children
                                 if (!children) {
-                                    if (uiController.isFirstTimeUser() == 1) toolBar.ToolTip.show("Press on Your Answer section to find the answers",10000)
+                                    frame.visible = false
+//                                    if (uiController.isFirstTimeUser() == 1) toolBar.ToolTip.show("Press on Your Answer section to find the answers",10000)
                                     if (minuetMenu.selectedMenuItem != undefined && minuetMenu.selectedMenuItem!=delegateRect) minuetMenu.selectedMenuItem.color = "white"
                                     minuetMenu.selectedMenuItem = delegateRect
                                     soundBackend.setQuestionLabel("new question")
@@ -250,6 +254,7 @@ ApplicationWindow {
                                     navigationMenu.close()
                                 }
                                 else {
+                                    frame.visible = true
                                     delegateRect.color = "white"
                                     stackView.push(categoryMenu.createObject(stackView, {model: children}))
                                     currentExerciseParent.text = modelData.name
@@ -292,6 +297,75 @@ ApplicationWindow {
             id: exerciseView
             width: contentContainer.width ; height: contentContainer.height
         }
+        
+        Frame {
+            id: frame
+            anchors { fill: parent; margins: 15 }
+            Label {
+                id: greetings
+                width: parent.width
+                wrapMode: Text.WordWrap
+                horizontalAlignment: Text.AlignHCenter
+                text: "Hi, what kind of ear training exercise do you want to practice today?"
+            }
+            Grid {
+                rows: 2
+                columns: 2
+                anchors.centerIn: parent
+                spacing: 40
+                Repeater {
+                    model: [
+                        { icon: "qrc:/minuet-chords.svg", title: "Chords" },
+                        { icon: "qrc:/minuet-intervals.svg", title: "Intervals" },
+                        { icon: "qrc:/minuet-rhythms.svg", title: "Rhythms" },
+                        { icon: "qrc:/minuet-scales.svg", title: "Scales" }
+                    ]
+                    Column {
+                        Image {
+                            source: modelData.icon
+                            fillMode: Image.PreserveAspectFit
+                            sourceSize.width: frame.width/4; sourceSize.height: sourceSize.width
+                            width: frame.width/4; height: width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    frame.visible = true
+                                    stackView.currentExerciseMenuItem = null
+                                    exerciseController.currentExercise ={}
+                                    titleText = "Minuet"
+                                    
+                                    while (stackView.depth > 1) {
+                                        stackView.pop()
+                                        minuetMenu.exerciseArray.pop()
+                                        currentExerciseParent.text = minuetMenu.exerciseArray.toString()
+                                        minuetMenu.backPressed()
+                                    }
+                                    
+                                    for (var i = 0; i < exerciseController.exercises.length; ++i) {
+                                        if (exerciseController.exercises[i].name == modelData.title) {
+                                            frame.visible = true
+                                            stackView.push(categoryMenu.createObject(stackView, {model: exerciseController.exercises[i].children}))
+                                            currentExerciseParent.text = exerciseController.exercises[i].name
+                                            minuetMenu.exerciseArray.push(exerciseController.exercises[i].name)
+                                            break
+                                        }
+                                    }
+                                    navigationMenu.open()
+                                }
+                            }
+                        }
+                        Label {
+                            width: frame.width/4
+                            wrapMode: Text.WordWrap
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            text: modelData.title
+                        }
+                    }
+                }
+            }
+        }
     }
 
     Popup{
@@ -312,6 +386,8 @@ ApplicationWindow {
                 source: "minuet.svgz"
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
+                sourceSize.width: 60; sourceSize.height: 60
+                width: 60; height: 60
 
                 MouseArea {
                     anchors.fill: parent
