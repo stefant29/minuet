@@ -24,7 +24,6 @@
 #define MINUET_UICONTROLLER_H
 
 #include <iuicontroller.h>
-#include <QSettings>
 
 namespace Minuet
 {
@@ -45,8 +44,7 @@ private:
     bool copyDir(const QString source, const QString destination);
 
 private:
-    QSettings m_settings;
-
+    int m_firstTime;
 };
 
 }

@@ -36,7 +36,8 @@ namespace Minuet
 {
 
 UiController::UiController(QObject *parent)
-    : IUiController(parent)//,
+    : IUiController(parent),
+      m_firstTime(1)
 {
 }
 
@@ -127,10 +128,11 @@ bool UiController::copyDir(const QString source, const QString destination)
 }
 
 int UiController::isFirstTimeUser(){
-    int firstTime = m_settings.value(QStringLiteral("isFirstTime"),1).toInt();
-    if (firstTime == 1)
-        m_settings.setValue(QStringLiteral("isFirstTime"),0);
-    return firstTime;
+    if (m_firstTime){
+        m_firstTime = 0;
+        return 1;
+    }
+    return 0;
 }
 
 }
