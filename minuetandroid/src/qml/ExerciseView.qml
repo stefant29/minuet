@@ -209,6 +209,7 @@ Item {
     Rectangle {
         id: mainLayout
         anchors.margins: 10
+        color: "transparent"
         clip: true
         anchors.horizontalCenter: parent.horizontalCenter
         height: parent.height
@@ -297,12 +298,10 @@ Item {
             }
         }
 
-        Rectangle{
+        GroupBox {
+            title: qsTr("Available Answers")
             id:availableAnswers
             width:app.width-marginAll*2 ; height: availableAnswersHeight
-            color: "#475057"
-            radius: 5
-            clip: true
             anchors{
                 horizontalCenter: parent.horizontalCenter
                 bottom: answerCategory.top
@@ -314,6 +313,7 @@ Item {
                 id:fickable
                 anchors.fill: parent
                 contentHeight: answerGrid.height
+                clip: true
 
                 Grid {
                     id: answerGrid
@@ -374,7 +374,7 @@ Item {
                         }
                     }
                 }
-                ScrollBar.vertical: ScrollBar{}
+                ScrollBar.vertical: ScrollBar{ }
             }
         }
 

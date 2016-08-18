@@ -288,10 +288,17 @@ ApplicationWindow {
         }
     }
 
+    Image {
+        source: "qrc:/minuet-background.png"
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectFit
+    }
+
     Item {
         id: contentContainer
         width: parent.width
         height: parent.height
+        
 
         ExerciseView {
             id: exerciseView

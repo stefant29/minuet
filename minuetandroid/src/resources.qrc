@@ -51,5 +51,6 @@
 	<file alias="Roboto-Bold.ttf">fonts/roboto/Roboto-Bold.ttf</file>
 
 	<file alias="minuet-drawer.png">images/minuet-drawer.png</file>
+	<file alias="minuet-background.png">images/minuet-background.png</file>
     </qresource>
 </RCC>
