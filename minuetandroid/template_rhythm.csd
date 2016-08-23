@@ -2,7 +2,7 @@
 <CsOptions>
 ; Select audio/midi flags here according to platform
 ;;;RT audio out, midi in, note=p4 and velocity=p5
---opcode-lib=./libshare_libfluidOpcodes.so
+--opcode-lib=/data/data/org.kde.minuet/qt-reserved-files/share/libfluidOpcodes.so
 -odac 
 ;-+rtmidi=virtual -M0d --midi-key=4 --midi-velocity-amp=5
 ;-iadc    ;;;uncomment -iadc if RT audio input is needed too

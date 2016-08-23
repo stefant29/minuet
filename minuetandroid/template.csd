@@ -1,7 +1,7 @@
 <CsoundSynthesizer>
 <CsOptions>
 ; Select audio/midi flags here according to platform
---opcode-lib=./libshare_libfluidOpcodes.so
+--opcode-lib=/data/data/org.kde.minuet/qt-reserved-files/share/libfluidOpcodes.so
 -odac         ;;;realtime audio out and realtime midi in
 ;-iadc    ;;;uncomment -iadc if realtime audio input is needed too
 ; For Non-realtime ouput leave only the line below:
