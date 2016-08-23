@@ -1,0 +1,22 @@
+Format : 9-Patch PNG (recommended)
+
+Dimensions
+
+ - LDPI:
+    - Portrait: 200x320px
+    - Landscape: 320x200px
+ - MDPI:
+    - Portrait: 320x480px
+    - Landscape: 480x320px
+ - HDPI:
+    - Portrait: 480x800px
+    - Landscape: 800x480px
+ - XHDPI:
+    - Portrait: 720px1280px
+    - Landscape: 1280x720px
+ - XXHDPI
+    - Portrait: 960x1600px
+    - Landscape: 1600x960px
+ - XXXHDPI 
+    - Portrait: 1280x1920px
+    - Landscape: 1920x1280px
