@@ -391,7 +391,7 @@ ApplicationWindow {
 
             Image {
                 id: icon
-                source: "minuet.svgz"
+                source: "minuet.png"
                 fillMode: Image.PreserveAspectFit
                 anchors.horizontalCenter: parent.horizontalCenter
                 sourceSize.width: 60; sourceSize.height: 60

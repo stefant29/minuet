@@ -111,7 +111,9 @@ QJsonArray ExerciseController::exercises() const
 bool ExerciseController::mergeJsonFiles(const QString directoryName, QJsonObject &targetObject, bool applyDefinitionsFlag, QString commonKey, QString mergeKey)
 {
     m_errorString.clear();
-    QStringList jsonDirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, directoryName, QStandardPaths::LocateDirectory);
+    //QStringList jsonDirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, directoryName, QStandardPaths::LocateDirectory);
+    QStringList jsonDirs;
+    jsonDirs += "/data/data/org.kde.minuet/qt-reserved-files/share/minuet/" + directoryName;
     foreach (const QString &jsonDirString, jsonDirs) {
         QDir jsonDir(jsonDirString);
         foreach (const QString &json, jsonDir.entryList(QDir::Files)) {

@@ -16,7 +16,7 @@ nchnls = 2
 
 giengine fluidEngine
 ; soundfont path to manual/examples
-isfnum	 fluidLoad "./sf_GMbank.sf2", giengine, 1
+isfnum	 fluidLoad "/data/data/org.kde.minuet/qt-reserved-files/share/sf_GMbank.sf2", giengine, 1
          fluidProgramSelect giengine, 1, isfnum, 0, 0
 
 instr 1

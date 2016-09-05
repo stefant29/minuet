@@ -49,24 +49,6 @@ bool UiController::initialize()
 {
     QQmlApplicationEngine *engine = new QQmlApplicationEngine(this);
     QQmlContext *rootContext = engine->rootContext();
-    CsEngine cs;
-
-    QFile afile (QStringLiteral("assets:/share/sf_GMbank.sf2"));
-    QFile ffile (QStringLiteral("libs:/armeabi-v7a/libshare_libfluidOpcodes.so"));
-    QString source = QStringLiteral("assets:/share/minuet");
-    QString destination = QStringLiteral("./");
-
-    if (afile.exists()){
-        afile.copy(QStringLiteral("./sf_GMbank.sf2"));
-        QFile::setPermissions(QStringLiteral("./sf_GMbank.sf2"),QFile::WriteOwner | QFile::ReadOwner);
-    }
-
-    if (ffile.exists()){
-        ffile.copy(QStringLiteral("./libshare_libfluidOpcodes.so"));
-        QFile::setPermissions(QStringLiteral("./libshare_libfluidOpcodes.so"),QFile::WriteOwner | QFile::ReadOwner);
-    }
-
-    copyDir(source,destination);
 
     Minuet::ISoundBackend *m_soundBackend = new CsoundAndroidSoundBackend();
     Minuet::IExerciseController *exerciseController = new Minuet::ExerciseController(0);
@@ -79,52 +61,6 @@ bool UiController::initialize()
     engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return true;
-}
-
-bool UiController::copyDir(const QString source, const QString destination)
-{
-
-    QDir qdir(destination);
-    if(!qdir.exists())
-    {
-        qdir.mkpath(destination);
-    }
-    QDir directory(source);
-    bool error = false;
-    if (!directory.exists())
-    {
-        return false;
-    }
-
-
-    QStringList files = directory.entryList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
-
-
-    QList<QString>::iterator f = files.begin();
-
-
-    for (; f != files.end(); ++f)
-    {
-        QString filePath = QDir::toNativeSeparators(directory.path() + '/' + (*f));
-        QString dPath = destination + "/" + directory.relativeFilePath(filePath);
-        QFileInfo fi(filePath);
-        if (fi.isFile() || fi.isSymLink())
-        {
-            QFile::copy(filePath, dPath);
-            QFile::setPermissions(dPath, QFile::ReadOwner);
-        }
-        else if (fi.isDir())
-        {
-
-            QDir ddir(dPath);
-            ddir.mkpath(dPath);
-            if (!copyDir(filePath, dPath))
-            {
-                error = true;
-            }
-        }
-    }
-    return !error;
 }
 
 int UiController::isFirstTimeUser(){
