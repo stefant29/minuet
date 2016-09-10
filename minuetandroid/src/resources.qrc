@@ -28,9 +28,6 @@
 	<file alias="menu.png">../images/menu.png</file>		
         <file alias="back@2x.png">../images/back@2x.png</file>
 
-	<file alias="template.csd">../template.csd</file>
-	<file alias="template_rhythm.csd">../template_rhythm.csd</file>
-
 	<file alias="Roboto-Regular.ttf">fonts/roboto/Roboto-Regular.ttf</file>
 	<file alias="Roboto-Bold.ttf">fonts/roboto/Roboto-Bold.ttf</file>
 
