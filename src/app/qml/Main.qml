@@ -187,6 +187,40 @@ ApplicationWindow {
         }
     }
 
+    ////////////////////////////////////////////
+    Rectangle {
+        id: rect
+        width: 150
+        height: 150
+        anchors.centerIn: parent
+        color: "green"
+        ListView {
+            anchors.fill: parent
+            model: contents
+            delegate: ItemDelegate {
+                width: parent.width
+                text: modelData.menuName
+                onClicked: {
+                    console.log(modelData.pluginName + "/" + modelData.mainPage)
+                    pluginMainPageLoader.source = "file://" + modelData.pluginName + "/" + modelData.mainPage
+                }
+            }
+        }
+    }
+    Rectangle {
+        width: 500
+        height: 500
+        anchors.top: rect.bottom;
+        anchors.horizontalCenter: rect.horizontalCenter
+        anchors.margins: 20
+        color: "grey"
+        Loader {
+            anchors.fill: parent
+            id: pluginMainPageLoader
+        }
+    }
+    ////////////////////////////////////////////
+
     AboutDialog {
         id: aboutDialog
     }
