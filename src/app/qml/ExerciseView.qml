@@ -353,7 +353,7 @@ Item {
                                         if (parent.parent == answerGrid) {
                                             if (!animation.running)
                                                 model.sequence.split(' ').forEach(function(note) {
-                                                    pianoView.noteUnmark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0)
+                                                   pianoView.noteUnmark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0)
                                                 })
                                             sheetMusicView.model = [core.exerciseController.chosenRootNote()]
                                         }
@@ -414,12 +414,21 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             Layout.preferredWidth: parent.width
             spacing: (parent.width/2 - sheetMusicView.width)/2
-            PianoView {
+
+            InstrumentView {
+                id: pianoView
+                width: parent.width/2 - 10
+                height: 150
+                visible: currentExercise != undefined && currentExercise["playMode"] != "rhythm"
+            }
+
+            /* PianoView {
                 id: pianoView
                 width: parent.width/2 - 10
                 visible: currentExercise != undefined && currentExercise["playMode"] != "rhythm"
                 ScrollIndicator.horizontal: ScrollIndicator { active: true }
-            }
+            } */
+
             SheetMusicView {
                 id: sheetMusicView
 
