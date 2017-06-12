@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <!-- QML files -->
         <file alias="Main.qml">qml/Main.qml</file>
         <file alias="AboutDialog.qml">qml/AboutDialog.qml</file>
         <file alias="MinuetMenu.qml">qml/MinuetMenu.qml</file>
@@ -12,17 +11,14 @@
         <file alias="Octave.qml">qml/PianoView/Octave.qml</file>
         <file alias="PianoView.qml">qml/PianoView/PianoView.qml</file>
         <file alias="WhiteKey.qml">qml/PianoView/WhiteKey.qml</file>
-
-        <!-- SheetMusicView -->
-	<file alias="Bravura.otf">qml/SheetMusicView/Bravura.otf</file>
-	<file alias="BravuraText.qml">qml/SheetMusicView/BravuraText.qml</file>
-	<file alias="Clef.qml">qml/SheetMusicView/Clef.qml</file>
-	<file alias="Note.qml">qml/SheetMusicView/Note.qml</file>
-	<file alias="Score.qml">qml/SheetMusicView/Score.qml</file>
-	<file alias="Sequence.qml">qml/SheetMusicView/Sequence.qml</file>
-	<file alias="SheetMusicView.qml">qml/SheetMusicView/SheetMusicView.qml</file>
-
-        <!-- Images -->
+        <file alias="InstrumentView.qml">qml/InstrumentView/InstrumentView.qml</file>
+        <file alias="Bravura.otf">qml/SheetMusicView/Bravura.otf</file>
+        <file alias="BravuraText.qml">qml/SheetMusicView/BravuraText.qml</file>
+        <file alias="Clef.qml">qml/SheetMusicView/Clef.qml</file>
+        <file alias="Note.qml">qml/SheetMusicView/Note.qml</file>
+        <file alias="Score.qml">qml/SheetMusicView/Score.qml</file>
+        <file alias="Sequence.qml">qml/SheetMusicView/Sequence.qml</file>
+        <file alias="SheetMusicView.qml">qml/SheetMusicView/SheetMusicView.qml</file>
         <file>qml/images/minuet-background.png</file>
         <file>qml/images/minuet-drawer.png</file>
         <file alias="menu.png">qml/images/menu.png</file>
@@ -33,7 +29,6 @@
         <file alias="minuet-intervals.svg">icons/22-actions-minuet-intervals.svg</file>
         <file alias="minuet-rhythms.svg">icons/22-actions-minuet-rhythms.svg</file>
         <file alias="minuet-scales.svg">icons/22-actions-minuet-scales.svg</file>
-
         <file alias="exercise-images/current-rhythm.png">../../data/exercise-images/current-rhythm.png</file>
         <file alias="exercise-images/eighth-dot-sixteenth.png">../../data/exercise-images/eighth-dot-sixteenth.png</file>
         <file alias="exercise-images/eighth-eighth.png">../../data/exercise-images/eighth-eighth.png</file>
@@ -44,8 +39,6 @@
         <file alias="exercise-images/sixteenth-sixteenth-eighth.png">../../data/exercise-images/sixteenth-sixteenth-eighth.png</file>
         <file alias="exercise-images/sixteenth-sixteenth-sixteenth-sixteenth.png">../../data/exercise-images/sixteenth-sixteenth-sixteenth-sixteenth.png</file>
         <file alias="exercise-images/unknown-rhythm.png">../../data/exercise-images/unknown-rhythm.png</file>
-
-        <!-- Qt Quick Controls 2 configuration files -->
         <file>qtquickcontrols2.conf</file>
         <file>+android/qtquickcontrols2.conf</file>
         <file>+windows/qtquickcontrols2.conf</file>
