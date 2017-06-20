@@ -52,4 +52,12 @@ Item {
             id: pluginMainPageLoader2
         }
     }
+
+    Component.onCompleted: {
+        //load the first available plugin instrument
+        if (!contents[0])
+            console.log("No plugin available!")
+        else
+            pluginMainPageLoader2.source = "file://"   contents[0].pluginName   "/"   contents[0].mainPage
+    }
 }
