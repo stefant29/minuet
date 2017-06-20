@@ -58,6 +58,6 @@ Item {
         if (!contents[0])
             console.log("No plugin available!")
         else
-            pluginMainPageLoader2.source = "file://"   contents[0].pluginName   "/"   contents[0].mainPage
+            pluginMainPageLoader2.source = "file://" + contents[0].pluginName + "/" + contents[0].mainPage
     }
 }
