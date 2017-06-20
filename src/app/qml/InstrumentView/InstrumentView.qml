@@ -25,6 +25,55 @@ import QtQuick 2.7
 Item {
     property alias pluginMainPageLoader2: pluginMainPageLoader2
 
+    function noteOn(chan, pitch, vel) {
+        if (pluginMainPageLoader2.item) {
+            pluginMainPageLoader2.item.noteOn()
+            console.log("noteOn()")
+        }
+    }
+    function noteOff(chan, pitch, vel) {
+        if (pluginMainPageLoader2.item) {
+            pluginMainPageLoader2.item.noteOff()
+            console.log("noteOff()")
+        }
+    }
+    function noteMark(chan, pitch, vel, color) {
+        if (pluginMainPageLoader2.item) {
+            pluginMainPageLoader2.item.noteUnmark()
+            console.log("noteUnmark()")
+        }
+    }
+    function noteUnmark(chan, pitch, vel, color) {
+        if (pluginMainPageLoader2.item) {
+            pluginMainPageLoader2.item.noteUnmark()
+            console.log("noteUnmark()")
+        }
+    }
+    function clearAllMarks() {
+        if (pluginMainPageLoader2.item) {
+            pluginMainPageLoader2.item.clearAllMarks()
+            console.log("clearAllMarks()")
+        }
+    }
+    function scrollToNote(pitch) {
+        if (pluginMainPageLoader2.item) {
+            pluginMainPageLoader2.item.scrollToNote()
+            console.log("scrollToNote()")
+        }
+    }
+    function highlightKey(pitch, color) {
+        if (pluginMainPageLoader2.item) {
+            pluginMainPageLoader2.item.highlightKey()
+            console.log("highlightKey()")
+        }
+    }
+    function itemForPitch(pitch) {
+        if (pluginMainPageLoader2.item) {
+            pluginMainPageLoader2.item.itemForPitch()
+            console.log("itemForPitch()")
+        }
+    }
+
     TabBar {
         id: tabBar
         anchors.top: parent.top
@@ -50,6 +99,13 @@ Item {
         Loader {
             anchors.fill: parent
             id: pluginMainPageLoader2
+
+//            MouseArea {
+//                anchors.fill: parent
+//                onClicked: {
+//                    console.print("PIANOOOO")
+//                }
+//            }
         }
     }
 
@@ -57,7 +113,9 @@ Item {
         //load the first available plugin instrument
         if (!contents[0])
             console.log("No plugin available!")
-        else
+        else {
             pluginMainPageLoader2.source = "file://" + contents[0].pluginName + "/" + contents[0].mainPage
+            print("*** item set: " + pluginMainPageLoader2.item)
+        }
     }
 }
