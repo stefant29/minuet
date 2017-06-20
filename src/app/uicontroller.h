@@ -60,9 +60,10 @@ class UiController : public IUiController
 public:
     UiController(QObject *parent = 0);
     ~UiController() override;
+    QQmlApplicationEngine *engine;
 
     bool initialize(Core *core);
-    bool initialize2(QQmlApplicationEngine *engine);
+    bool initializePlugins();
     virtual QString errorString() const;
 
 private:

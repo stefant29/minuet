@@ -56,32 +56,33 @@ UiController::~UiController()
 {
 }
 
-bool UiController::initialize2(QQmlApplicationEngine *engine)
+bool UiController::initializePlugins()
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-     QDir dir(qApp->applicationDirPath());
-     dir.cd("plugins");
-     qDebug()<<qApp->applicationDirPath();
-     QString contents;
-     QJsonArray mergedArray;
-     foreach(const QString &fileName, dir.entryList(QStringList() << "*.json")) {
-         QFile dfile(dir.absoluteFilePath(fileName));
-         dfile.open(QIODevice::ReadOnly);
-         QJsonObject jsonObject = QJsonDocument::fromJson(dfile.readAll()).object();
-         QDir pluginDir(dir);
-         pluginDir.cd(fileName.split('.').first());
-         jsonObject["pluginName"] = pluginDir.absolutePath();
-         mergedArray.append(jsonObject);
-         dfile.close();
-     }
-     engine->rootContext()->setContextProperty("contents", mergedArray);
+    QString directoryName = "plugins";
+    QString minuet_dir = QStandardPaths::locate(QStandardPaths::AppDataLocation, directoryName, QStandardPaths::LocateDirectory);
+    QDir dir(minuet_dir);
+    qDebug()<<qApp->applicationDirPath();
+    QString contents;
+    QJsonArray mergedArray;
+    foreach(const QString &fileName, dir.entryList(QStringList() << "*.json")) {
+        QFile dfile(dir.absoluteFilePath(fileName));
+        dfile.open(QIODevice::ReadOnly);
+        QJsonObject jsonObject = QJsonDocument::fromJson(dfile.readAll()).object();
+        QDir pluginDir(dir);
+        pluginDir.cd(fileName.split('.').first());
+        jsonObject["pluginName"] = pluginDir.absolutePath();
+        mergedArray.append(jsonObject);
+        dfile.close();
+    }
+    engine->rootContext()->setContextProperty("contents", mergedArray);
 }
 
 bool UiController::initialize(Core *core)
 {
     m_errorString.clear();
-    QQmlApplicationEngine *engine = new QQmlApplicationEngine(this);
+    engine = new QQmlApplicationEngine(this);
     QQmlContext *rootContext = engine->rootContext();
     rootContext->setContextProperty(QStringLiteral("core"), core);
 #ifndef Q_OS_ANDROID
@@ -90,7 +91,7 @@ bool UiController::initialize(Core *core)
     rootContext->setContextObject(new DummyAndroidLocalizer(engine));
 #endif
 
-    initialize2(engine);
+    initializePlugins();
     engine->load(QUrl("qrc:/Main.qml"));
 
     return true;
