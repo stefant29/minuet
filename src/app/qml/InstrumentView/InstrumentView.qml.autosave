@@ -26,11 +26,13 @@ Item {
     property alias pluginMainPageLoader2: pluginMainPageLoader2
 
     function noteOn(chan, pitch, vel) {
-        if (pluginMainPageLoader2.item)
+        if (pluginMainPageLoader2.item) {
             pluginMainPageLoader2.item.noteOn(chan, pitch, vel)
+            console.log("noteOn()")
+        }
     }
     function noteOff(chan, pitch, vel) {
-        if (pluginMainPageLoader2.item)
+        if (pluginMainPageLoader2.item) {
             pluginMainPageLoader2.item.noteOff(chan, pitch, vel)
     }
     function noteMark(chan, pitch, vel, color) {

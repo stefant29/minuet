@@ -8,10 +8,6 @@
         <file alias="ImageItemDelegate.qml">qml/ImageItemDelegate.qml</file>
         <file alias="+android/MinuetMenuContainer.qml">+android/qml/MinuetMenuContainer.qml</file>
         <file alias="ExerciseView.qml">qml/ExerciseView.qml</file>
-        <file alias="BlackKey.qml">plugins/PianoView/BlackKey.qml</file>
-        <file alias="Octave.qml">plugins/PianoView/Octave.qml</file>
-        <file alias="PianoView.qml">plugins/PianoView/PianoView.qml</file>
-        <file alias="WhiteKey.qml">plugins/PianoView/WhiteKey.qml</file>
 
         <!-- SheetMusicView -->
     <file alias="InstrumentView.qml">qml/InstrumentView/InstrumentView.qml</file>
