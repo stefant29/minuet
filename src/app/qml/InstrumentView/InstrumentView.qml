@@ -23,7 +23,9 @@ import QtQuick.Controls 2.2
 import QtQuick 2.7
 
 Item {
-    property alias pluginMainPageLoader2: pluginMainPageLoader2
+    id: instrumentView
+
+    property alias source: pluginMainPageLoader2.source
 
     function noteOn(chan, pitch, vel) {
         if (pluginMainPageLoader2.item)
@@ -69,13 +71,14 @@ Item {
                 text: qsTr(modelData.menuName)
                 onClicked: {
                     console.log(modelData.pluginName + "/" + modelData.mainPage)
-                    pluginMainPageLoader2.source = "file://" + modelData.pluginName + "/" + modelData.mainPage
+                    pluginMainPageLoader2.setSource("file://" + modelData.pluginName + "/" + modelData.mainPage)
                 }
             }
         }
     }
 
     Rectangle {
+        id: frame
         width: parent.width
         height: parent.height - tabBar.height
         anchors.bottom: parent.bottom
@@ -83,13 +86,6 @@ Item {
         Loader {
             anchors.fill: parent
             id: pluginMainPageLoader2
-
-//            MouseArea {
-//                anchors.fill: parent
-//                onClicked: {
-//                    console.print("PIANOOOO")
-//                }
-//            }
         }
     }
 
@@ -97,9 +93,7 @@ Item {
         //load the first available plugin instrument
         if (!contents[0])
             console.log("No plugin available!")
-        else {
+        else
             pluginMainPageLoader2.source = "file://" + contents[0].pluginName + "/" + contents[0].mainPage
-            print("*** item set: " + pluginMainPageLoader2.item)
-        }
     }
 }

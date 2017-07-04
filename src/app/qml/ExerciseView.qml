@@ -31,6 +31,7 @@ Item {
     visible: currentExercise != undefined
 
     property var currentExercise
+    property var chosenExercises
     
     QtObject {
         id: internal
@@ -153,7 +154,7 @@ Item {
         else
             messageText.text = ""
         core.exerciseController.randomlySelectExerciseOptions()
-        var chosenExercises = core.exerciseController.selectedExerciseOptions
+        chosenExercises = core.exerciseController.selectedExerciseOptions
         core.soundController.prepareFromExerciseOptions(chosenExercises)
         if (currentExercise["playMode"] != "rhythm") {
             instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
@@ -166,6 +167,15 @@ Item {
             internal.currentExercise++
     }
 
+    function applyCurrentQuestion() {
+        core.soundController.prepareFromExerciseOptions(chosenExercises)
+        if (currentExercise["playMode"] != "rhythm") {
+            instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
+            instrumentView.scrollToNote(core.exerciseController.chosenRootNote())
+            sheetMusicView.model = [core.exerciseController.chosenRootNote()]
+            sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
+        }
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -420,6 +430,11 @@ Item {
                 width: parent.width/2 - 10
                 height: 150
                 visible: currentExercise != undefined && currentExercise["playMode"] != "rhythm"
+
+                onSourceChanged: {
+                    if (chosenExercises)
+                        applyCurrentQuestion()
+                }
             }
 
             SheetMusicView {
