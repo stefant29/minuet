@@ -87,13 +87,6 @@ Rectangle {
         color: string_color
     }
 
-    Rectangle {
-        id: rightBar
-        width: is_nut ? string_size * 4 : string_size; height: parent.height
-        anchors {right: parent.right; top: parent.top; bottom: parent.bottom}
-        visible: is_end ? false : true
-        color: "#D9D9D9"
-    }
 
     Repeater {
         id: press_marks
@@ -115,15 +108,23 @@ Rectangle {
         id: bar
         width: 5 * string_size
         radius: width * 0.5
-        visible: (endBar - startBar) > 0
+        visible: is_nut==false && (endBar - startBar) > 0
         color: fretBoard.mark_color
         border.width: 1
         border.color: "black"
-        anchors.top: fretBoard.ids[startBar] ? fretBoard.ids[startBar].top : parent.top
-        anchors.bottom: fretBoard.ids[endBar] ? fretBoard.ids[endBar].bottom : parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: - width / 2
-        anchors.bottomMargin: - width / 2
+        anchors {   top: fretBoard.ids[startBar] ? fretBoard.ids[startBar].top : parent.top
+                    bottom: fretBoard.ids[endBar] ? fretBoard.ids[endBar].bottom : parent.bottom
+                    horizontalCenter: parent.horizontalCenter
+                    topMargin: - width / 2
+                    bottomMargin: - width / 2 }
+    }
+
+    Rectangle {
+        id: rightBar
+        width: is_nut ? string_size * 4 : string_size; height: parent.height
+        anchors {right: parent.right; top: parent.top; bottom: parent.bottom}
+        visible: is_end ? false : true
+        color: "#D9D9D9"
     }
 
 }

@@ -45,7 +45,7 @@
     {
       "tags": ["chord", "root-position", "major", "9", "extended"],
       "name": "Major 9",
-      "sequence": ["4 7 10 14", "0 1 -1 0", "0 1 0 3"],
+      "sequence": ["4 7 10 14", "0 1 -1 0", "-3 -2 -3 0"],
       "stringsUsed": ["1 4", "0 3"]
     },
     {

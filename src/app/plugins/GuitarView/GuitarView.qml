@@ -176,7 +176,7 @@ Flickable {
         }
         /* compute root's fret by substracting the converted guitar index 
          *    into a piano index from the root's piano index */
-        flickable.rootFret = ((flickable.rootName+11)-guitarToPiano(lastString+start))%12
+        flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
         /* get the root's fret */
         var aux = guitar.frets[flickable.rootFret].press
         /* set the root's note in the aux array*/
@@ -225,7 +225,7 @@ Flickable {
         radius: 5
         color: "#141414"
         
-        property var frets: [fretBoard1, fretBoard2, fretBoard3, fretBoard4, fretBoard5, fretBoard6, fretBoard7,
+        property var frets: [nut, fretBoard1, fretBoard2, fretBoard3, fretBoard4, fretBoard5, fretBoard6, fretBoard7,
          fretBoard8, fretBoard9, fretBoard10, fretBoard11, fretBoard12, fretBoard13, fretBoard14, fretBoard15,
          fretBoard16, fretBoard17,  fretBoard18, fretBoard19, fretBoard20, fretBoard21, fretBoard22
         ]
