@@ -55,10 +55,10 @@ bool ExerciseController::initialize(Core *core)
     bool definitionsMerge = mergeJsonFiles("definitions", m_definitions);
     bool exercisesMerge = mergeJsonFiles("exercises", m_exercises, true, "name", "children");
 
-//    QFile file("merged-exercises.json");
-//    file.open(QIODevice::WriteOnly);
-//    file.write(QJsonDocument(m_exercises).toJson());
-//    file.close();
+    QFile file("merged-exercises.json");
+    file.open(QIODevice::WriteOnly);
+    file.write(QJsonDocument(m_exercises).toJson());
+    file.close();
 
     return definitionsMerge & exercisesMerge;
 }

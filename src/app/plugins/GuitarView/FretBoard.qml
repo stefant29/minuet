@@ -1,10 +1,50 @@
 import QtQuick 2.7
 
 Rectangle {
-    width: 70; height: (string1.height + string1.anchors.topMargin) * 6 + string1.anchors.topMargin
+    id: fretBoard
+    height: (string1.height + string1.anchors.topMargin) * 6 + string1.anchors.topMargin
     color: "#4b3020"
-    property int string_size: 3
-    property string string_color: "#FFFFFF"
+    property double string_size: 3
+    property string string_color: "#FFF2E6"
+    property bool show_fret_marker: false
+    property bool show_two_markers: false
+    property bool is_nut: false
+    property bool is_end: false
+    property var press: [false, false, false, false, false, false]
+    property var ids: [string1, string2, string3, string4, string5, string6]
+
+    Rectangle {
+        id: fret_marker1
+        height: 6.5 * string_size; width: height
+        radius: width * 0.5
+        visible: show_fret_marker
+        opacity: 0.7
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            horizontalCenterOffset:  - string_size / 2
+            verticalCenter: parent.verticalCenter
+            verticalCenterOffset: show_two_markers ? -(parent.height - (string1.y - parent.y)) / 4 : 0
+        }
+        color: "#E2E2E2"
+        border.width: string_size / 2
+        border.color: "#535353"
+    }
+
+    Rectangle {
+        id: fret_marker2
+        height: fret_marker1.height; width: height
+        radius: width * 0.5
+        visible: show_two_markers
+        opacity: fret_marker1.opacity
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            verticalCenter: parent.verticalCenter
+            verticalCenterOffset: show_two_markers ? (parent.height - (string1.y - parent.y)) / 4 : 0
+        }
+        color: "#E2E2E2"
+        border.width: string_size / 2
+        border.color: "#535353"
+    }
 
     Rectangle {
         id: string1
@@ -45,16 +85,27 @@ Rectangle {
     }
 
     Rectangle {
-        id: leftBar
-        width: string_size; height: parent.height
-        anchors {left: parent.left; leftMargin: -string_size/3; top: parent.top; bottom: parent.bottom}
-        color: string_color
+        id: rightBar
+        width: is_nut ? string_size * 4 : string_size; height: parent.height
+        anchors {right: parent.right; top: parent.top; bottom: parent.bottom}
+        visible: is_end ? false : true
+        color: "#D9D9D9"
     }
 
-    Rectangle {
-        id: rightBar
-        width: string_size; height: parent.height
-        anchors {right: parent.right; top: parent.top; bottom: parent.bottom}
-        color: string_color
+    Repeater {
+        id: press_marks
+        model: fretBoard.press
+
+        Rectangle {
+            id: press1
+            height: 3 * string_size; width: height
+            radius: width * 0.5
+            visible: is_end || is_nut ? false : modelData
+            color: "yellow"
+            border.width: 1
+            border.color: "black"
+            anchors.centerIn: fretBoard.ids[index]
+        }
     }
+
 }

@@ -36,6 +36,7 @@ Item {
             pluginMainPageLoader2.item.noteOff(chan, pitch, vel)
     }
     function noteMark(chan, pitch, vel, color) {
+        print(chan + "  " + pitch + "  " + vel + "  " + color)
         if (pluginMainPageLoader2.item)
             pluginMainPageLoader2.item.noteMark(chan, pitch, vel, color)
     }

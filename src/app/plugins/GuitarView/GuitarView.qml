@@ -7,7 +7,7 @@
 ** published by the Free Software Foundation; either version 2 of
 ** the License or (at your option) version 3 or any later version
 ** accepted by the membership of KDE e.V. (or its successor approved
-** by the membership of KDE e.V.), which shall act as a proxy 
+** by the membership of KDE e.V.), which shall act as a proxy
 ** defined in Section 14 of version 3 of the license.
 **
 ** This program is distributed in the hope that it will be useful,
@@ -26,22 +26,21 @@ import QtQuick.Controls 2.0
 Flickable {
     id: flickable
 
-    width: Math.min(parent.width, guitar.width)
-    height: keyHeight + 30
+    width: guitar.width
+    height: 156.4
     contentWidth: guitar.width
     boundsBehavior: Flickable.OvershootBounds
     clip: true
-
-    property int keyWidth: Math.max(16, (parent.width - 80) / 52)
-    property int keyHeight: 3.4 * keyWidth
 
     function noteOn(chan, pitch, vel) {
     }
     function noteOff(chan, pitch, vel) {
     }
     function noteMark(chan, pitch, vel, color) {
+        fretBoard4.press = [false, true, true, false, true, false];
     }
     function noteUnmark(chan, pitch, vel, color) {
+        fretBoard4.press = [false, false, false, false, false, false];
     }
     function clearAllMarks() {
     }
@@ -55,56 +54,43 @@ Flickable {
     Rectangle {
         id: guitar
 
-        width: fretBoard1.width * 10 + 55*4+40*6; height: parent.height
+        width: board.board_width * 410 + 8.5; height: parent.height
         anchors.horizontalCenter: parent.horizontalCenter
         radius: 5
         color: "#141414"
 
-        Row {
-            id: fretBoardNumber
-            width: parent.width; height: 18
-            anchors.left: parent.left
-
-            Repeater {
-                model: 20
-
-                Label {
-                    text: modelData < 10 ? i18nc("technical term, do you have a musician friend?", "Octave") + " " + (1 + modelData) :
-                                          i18nc("technical term, do you have a musician friend?", "Oct") + (1 + modelData)
-                    width: modelData < 10 ? board.fretBoard_width : modelData < 14 ? 55 : 40;
-                    color: "white"
-                    height: parent.height
-                }
-            }
-        }
-
         Item {
             id: board
-            anchors {top: fretBoardNumber.bottom; left: parent.left; right: parent.right}
-            height: fretBoard1.height * 1.1
+            width: parent.width
+            height: fretBoard1.height
+            anchors.centerIn: parent
 
-            property alias fretBoard_width: fretBoard1.width
+            property double board_width: 2.5
 
-            FretBoard { id: fretBoard1; anchors.left: parent.left}
-            FretBoard { id: fretBoard2; anchors.left: fretBoard1.right}
-            FretBoard { id: fretBoard3; anchors.left: fretBoard2.right}
-            FretBoard { id: fretBoard4; anchors.left: fretBoard3.right}
-            FretBoard { id: fretBoard5; anchors.left: fretBoard4.right}
-            FretBoard { id: fretBoard6; anchors.left: fretBoard5.right}
-            FretBoard { id: fretBoard7; anchors.left: fretBoard6.right}
-            FretBoard { id: fretBoard8; anchors.left: fretBoard7.right}
-            FretBoard { id: fretBoard9; anchors.left: fretBoard8.right}
-            FretBoard { id: fretBoard10; anchors.left: fretBoard9.right}
-            FretBoard { id: fretBoard11; anchors.left: fretBoard10.right; width: 55}
-            FretBoard { id: fretBoard12; anchors.left: fretBoard11.right; width: 55}
-            FretBoard { id: fretBoard13; anchors.left: fretBoard12.right; width: 55}
-            FretBoard { id: fretBoard14; anchors.left: fretBoard13.right; width: 55}
-            FretBoard { id: fretBoard15; anchors.left: fretBoard14.right; width: 40}
-            FretBoard { id: fretBoard16; anchors.left: fretBoard15.right; width: 40}
-            FretBoard { id: fretBoard17; anchors.left: fretBoard16.right; width: 40}
-            FretBoard { id: fretBoard18; anchors.left: fretBoard17.right; width: 40}
-            FretBoard { id: fretBoard19; anchors.left: fretBoard18.right; width: 40}
-            FretBoard { id: fretBoard20; anchors.left: fretBoard19.right; width: 40}
+            FretBoard { id: nut;         anchors.left: parent.left     ;  width: board.board_width * 8.5; is_nut: true}
+            FretBoard { id: fretBoard1;  anchors.left: nut.right       ;  width: board.board_width * 29.466}
+            FretBoard { id: fretBoard2;  anchors.left: fretBoard1.right;  width: board.board_width * 27.812}
+            FretBoard { id: fretBoard3;  anchors.left: fretBoard2.right;  width: board.board_width * 26.251; show_fret_marker: true}
+            FretBoard { id: fretBoard4;  anchors.left: fretBoard3.right;  width: board.board_width * 24.788}
+            FretBoard { id: fretBoard5;  anchors.left: fretBoard4.right;  width: board.board_width * 23.387; show_fret_marker: true}
+            FretBoard { id: fretBoard6;  anchors.left: fretBoard5.right;  width: board.board_width * 22.075}
+            FretBoard { id: fretBoard7;  anchors.left: fretBoard6.right;  width: board.board_width * 20.836; show_fret_marker: true}
+            FretBoard { id: fretBoard8;  anchors.left: fretBoard7.right;  width: board.board_width * 19.666}
+            FretBoard { id: fretBoard9;  anchors.left: fretBoard8.right;  width: board.board_width * 18.562; show_fret_marker: true}
+            FretBoard { id: fretBoard10; anchors.left: fretBoard9.right;  width: board.board_width * 17.521}
+            FretBoard { id: fretBoard11; anchors.left: fretBoard10.right; width: board.board_width * 16.537}
+            FretBoard { id: fretBoard12; anchors.left: fretBoard11.right; width: board.board_width * 15.609; show_fret_marker: true; show_two_markers: true}
+            FretBoard { id: fretBoard13; anchors.left: fretBoard12.right; width: board.board_width * 14.733}
+            FretBoard { id: fretBoard14; anchors.left: fretBoard13.right; width: board.board_width * 13.906}
+            FretBoard { id: fretBoard15; anchors.left: fretBoard14.right; width: board.board_width * 13.126; show_fret_marker: true}
+            FretBoard { id: fretBoard16; anchors.left: fretBoard15.right; width: board.board_width * 12.289}
+            FretBoard { id: fretBoard17; anchors.left: fretBoard16.right; width: board.board_width * 11.693; show_fret_marker: true}
+            FretBoard { id: fretBoard18; anchors.left: fretBoard17.right; width: board.board_width * 11.037}
+            FretBoard { id: fretBoard19; anchors.left: fretBoard18.right; width: board.board_width * 10.418}
+            FretBoard { id: fretBoard20; anchors.left: fretBoard19.right; width: board.board_width * 9.833}
+            FretBoard { id: fretBoard21; anchors.left: fretBoard20.right; width: board.board_width * 9.282}
+            FretBoard { id: fretBoard22; anchors.left: fretBoard21.right; width: board.board_width * 9.760}
+            FretBoard { id: chords;      anchors.left: fretBoard22.right; width: board.board_width * 30; is_end: true}
         }
     }
 
