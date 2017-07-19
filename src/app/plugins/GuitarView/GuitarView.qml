@@ -62,7 +62,6 @@ Flickable {
                 flickable.stringsUsed[i++] = string
             })
         }
-        print("seq: " + flickable.sequence)
     }
     /* change the opacity of unused strings to a given value */
     function setUnusedStrings(value) {
@@ -93,7 +92,6 @@ Flickable {
                         startBar = i;
                     endBar = i;
             }
-        print("start: " + startBar + "    endBar: " + endBar + "   stringsUsed: " + flickable.stringsUsed) 
         // set the start and end of the bar into the saved fret
         guitar.frets[flickable.barFret].startBar = startBar + parseInt(flickable.stringsUsed[0])
         guitar.frets[flickable.barFret].endBar = endBar + parseInt(flickable.stringsUsed[0])
@@ -104,7 +102,9 @@ Flickable {
         guitar.frets[flickable.barFret].endBar = -1
     }
     function markNotes(model, color) {
-        setRoot(0, core.exerciseController.chosenRootNote(), 0, color, model)
+        clearAllMarks()
+
+        setOneRoot(0, core.exerciseController.chosenRootNote(), 0, color, model)
         /* select the right sequence from the model into flickable.sequence */
         setSequence(model.sequence, model.stringsUsed)
         /* change the opacity of unused strings to 0.3 */
@@ -118,7 +118,6 @@ Flickable {
             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
             /* get the press array from the current fret */
             var aux = guitar.frets[index].press
-//             print(index + " " + aux + " " + flickable.stringsUsed[0])
             aux[i + parseInt(flickable.stringsUsed[0])] = true
             /* update the press array of the current fret with the modified aux array 
              *    and set the fret's color */
@@ -140,17 +139,26 @@ Flickable {
          setUnusedStrings(1)
         /* delete the bar from guitar */
          clearBar()
+        /* reset root notes */
+        setRoot(0, core.exerciseController.chosenRootNote(), 0, "white");
     }
     /* aditional method to bring the instrument to its initial state */
     function clean() {
         if (flickable.stringsUsed)
              setUnusedStrings(1)
     }
-    /* set the root name and fret, then draw the root note on the guitar */
-    function setRoot(chan, pitch, vel, color, model) {
+    /* set the root for each chord */
+    function setRoot(chan, pitch, vel, color) {
+        for (var i = 0; i < answerGrid.children.length; ++i)
+            setOneRoot(chan, pitch, vel, color, answerGrid.children[i].model)
+    }
+    /*
+     * set the root name and fret for the givn pitch and model,
+     * then draw the root note on the guitar
+     */
+    function setOneRoot(chan, pitch, vel, color, model) {
         flickable.rootName = pitch%12
         var sequence = model.sequence
-        print("setR: " + sequence + "    model.stringsUsed: " + model.stringsUsed)
         var i = 0
         var start = -1
         /* get the last index of the right sequence: [1] for C->E and [2] for F->B */
@@ -159,13 +167,11 @@ Flickable {
             sequence[1].split(' ').forEach(function(note) {
                 lastString++
             })
-            print("seq in setRoot: " + sequence[1])
             start = parseInt(model.stringsUsed[0][0])
         } else {
             sequence[2].split(' ').forEach(function(note) {
                 lastString++
             })
-            print("seq in setRoot: " + sequence[2])
             start = parseInt(model.stringsUsed[1][0])
         }
         /* compute root's fret by substracting the converted guitar index 
@@ -173,7 +179,6 @@ Flickable {
         flickable.rootFret = ((flickable.rootName+11)-guitarToPiano(lastString+start))%12
         /* get the root's fret */
         var aux = guitar.frets[flickable.rootFret].press
-        print("lastString: " + lastString + "     start: " + start)
         /* set the root's note in the aux array*/
         aux[lastString+start] = true
         /* assign the new press array to root's fret and set the color */
@@ -198,7 +203,8 @@ Flickable {
         var i
         for (i = 0; i < guitar.frets.length; i++)
             guitar.frets[i].press = [false, false, false, false, false, false]
-        clearBar()
+        /* delete the bar from guitar */
+         clearBar()
     }
     function scrollToNote(pitch) {
         flickable.contentX = guitar.frets[flickable.rootFret].x - flickable.width/2

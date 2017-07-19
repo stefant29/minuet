@@ -48,7 +48,7 @@ Flickable {
         })
     }
 
-    function setRoot(chan, pitch, vel, color, sequence) {
+    function setRoot(chan, pitch, vel, color) {
         flickable.noteMark(0, pitch, 0, color)
     }
     function clean() {

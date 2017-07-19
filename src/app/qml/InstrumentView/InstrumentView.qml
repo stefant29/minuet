@@ -27,9 +27,9 @@ Item {
 
     property alias source: pluginMainPageLoader2.source
 
-    function setRoot(chan, pitch, vel, color, model) {
+    function setRoot(chan, pitch, vel, color) {
         if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.setRoot(chan, pitch, vel, color, model)
+            pluginMainPageLoader2.item.setRoot(chan, pitch, vel, color)
     }
     function markNotes(model, color) {
         if (pluginMainPageLoader2.item)

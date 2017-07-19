@@ -110,7 +110,7 @@ Rectangle {
             anchors.centerIn: fretBoard.ids[index]
         }
     }
-    
+
     Rectangle {
         id: bar
         width: 5 * string_size
