@@ -25,58 +25,58 @@ import QtQuick 2.7
 Item {
     id: instrumentView
 
-    property alias source: pluginMainPageLoader2.source
+    property alias source: pluginLoader.source
 
     function setRoot(chan, pitch, vel, color) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.setRoot(chan, pitch, vel, color)
+        if (pluginLoader.item)
+            pluginLoader.item.setRoot(chan, pitch, vel, color)
     }
     function markNotes(model, color) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.markNotes(model, color)
+        if (pluginLoader.item)
+            pluginLoader.item.markNotes(model, color)
     }
 
     function unmarkNotes(sequence) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.unmarkNotes(sequence)
+        if (pluginLoader.item)
+            pluginLoader.item.unmarkNotes(sequence)
     }
     function clean() {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.clean()
+        if (pluginLoader.item)
+            pluginLoader.item.clean()
     }
 
 
     function noteOn(chan, pitch, vel) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.noteOn(chan, pitch, vel)
+        if (pluginLoader.item)
+            pluginLoader.item.noteOn(chan, pitch, vel)
     }
     function noteOff(chan, pitch, vel) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.noteOff(chan, pitch, vel)
+        if (pluginLoader.item)
+            pluginLoader.item.noteOff(chan, pitch, vel)
     }
     function noteMark(chan, pitch, vel, color) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.noteMark(chan, pitch, vel, color)
+        if (pluginLoader.item)
+            pluginLoader.item.noteMark(chan, pitch, vel, color)
     }
     function noteUnmark(chan, pitch, vel, color) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.noteUnmark(chan, pitch, vel, color)
+        if (pluginLoader.item)
+            pluginLoader.item.noteUnmark(chan, pitch, vel, color)
     }
     function clearAllMarks() {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.clearAllMarks()
+        if (pluginLoader.item)
+            pluginLoader.item.clearAllMarks()
     }
     function scrollToNote(pitch) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.scrollToNote(pitch)
+        if (pluginLoader.item)
+            pluginLoader.item.scrollToNote(pitch)
     }
     function highlightKey(pitch, color) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.highlightKey(pitch, color)
+        if (pluginLoader.item)
+            pluginLoader.item.highlightKey(pitch, color)
     }
     function itemForPitch(pitch) {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.itemForPitch(pitch)
+        if (pluginLoader.item)
+            pluginLoader.item.itemForPitch(pitch)
     }
 
     TabBar {
@@ -90,7 +90,7 @@ Item {
                 text: qsTr(modelData.menuName)
                 onClicked: {
                     console.log(modelData.pluginName + "/" + modelData.mainPage)
-                    pluginMainPageLoader2.setSource("file://" + modelData.pluginName + "/" + modelData.mainPage)
+                    pluginLoader.setSource("file://" + modelData.pluginName + "/" + modelData.mainPage)
                 }
             }
         }
@@ -104,7 +104,7 @@ Item {
         color: "grey"
         Loader {
             anchors.fill: parent
-            id: pluginMainPageLoader2
+            id: pluginLoader
         }
     }
 
@@ -113,6 +113,6 @@ Item {
         if (!contents[0])
             console.log("No plugin available!")
         else
-            pluginMainPageLoader2.source = "file://" + contents[0].pluginName + "/" + contents[0].mainPage
+            pluginLoader.source = "file://" + contents[0].pluginName + "/" + contents[0].mainPage
     }
 }
