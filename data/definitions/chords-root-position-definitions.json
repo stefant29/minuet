@@ -3,17 +3,35 @@
     {
       "tags": ["chord", "root-position", "minor", "triad"],
       "name": "Minor",
-      "sequence": "3 7"
+      "sequence": "3 7",
+      "usedAE": [1, 2, 3, 4, 5],
+      "barAE": true,
+      "seqAE": [0, 1, 2, 2, 0],
+      "usedFB": "1 2 3 4 5 6",
+      "barFB": true,
+      "seqFB": "0 0 0 2 2 0"
     },
     {
       "tags": ["chord", "root-position", "major", "triad"],
       "name": "Major",
-      "sequence": "4 7"
+      "sequence": "4 7",
+      "usedAE": "1 2 3 4 5",
+      "barAE": true,
+      "seqAE": "0 1 2 2 0",
+      "usedFB": "1 2 3 4 5 6",
+      "barFB": true,
+      "seqFB": "0 0 0 2 2 0"
     },
     {
       "tags": ["chord", "root-position", "minor", "7", "seventh"],
       "name": "Minor 7",
-      "sequence": "3 7 10"
+      "sequence": "3 7 10",
+      "usedAE": "1 2 3 4 5",
+      "barAE": true,
+      "seqAE": "0 1 2 2 0",
+      "usedFB": "1 2 3 4 5 6",
+      "barFB": true,
+      "seqFB": "0 0 0 2 2 0"
     },
     {
       "tags": ["chord", "root-position", "dominant", "7", "seventh"],

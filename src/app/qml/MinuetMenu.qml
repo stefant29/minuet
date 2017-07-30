@@ -109,7 +109,7 @@ Item {
                     width: parent.width; height: 50
                     text: i18nc("technical term, do you have a musician friend?", modelData.name)
                     onClicked: {
-                        exerciseView.resetTest()
+                        exerciseView.instrumentView.resetTest()
                         var children = modelData.children
                         if (!children) {
                             currentExercise = modelData

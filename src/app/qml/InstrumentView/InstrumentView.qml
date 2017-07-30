@@ -27,6 +27,42 @@ Item {
 
     property alias source: pluginMainPageLoader2.source
 
+    function clearUserAnswers() {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.clearUserAnswers()
+    }
+
+    function checkAnswers() {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.checkAnswers()
+    }
+    
+    function highlightRightAnswer() {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.highlightRightAnswer()
+    }
+
+    function resetTest() {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.resetTest()
+    }
+
+    function nextTestExercise() {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.nextTestExercise()
+    }
+
+    function generateNewQuestion() {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.generateNewQuestion()
+    }
+
+    function applyCurrentQuestion() {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.applyCurrentQuestion()
+    }
+
+
     function noteOn(chan, pitch, vel) {
         if (pluginMainPageLoader2.item)
             pluginMainPageLoader2.item.noteOn(chan, pitch, vel)

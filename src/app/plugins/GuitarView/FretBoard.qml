@@ -2,7 +2,7 @@ import QtQuick 2.7
 
 Rectangle {
     id: fretBoard
-    height: (string1.height + string1.anchors.topMargin) * 6 + string1.anchors.topMargin
+    height: (string_E1.height + string_E1.anchors.topMargin) * 6 + string_E1.anchors.topMargin
     color: "#4b3020"
     property double string_size: 3
     property string string_color: "#FFF2E6"
@@ -11,7 +11,7 @@ Rectangle {
     property bool is_nut: false
     property bool is_end: false
     property var press: [false, false, false, false, false, false]
-    property var ids: [string1, string2, string3, string4, string5, string6]
+    property var ids: [string_E1, string_B, string_G, string_D, string_A, string_E2]
 
     Rectangle {
         id: fret_marker1
@@ -23,7 +23,7 @@ Rectangle {
             horizontalCenter: parent.horizontalCenter
             horizontalCenterOffset:  - string_size / 2
             verticalCenter: parent.verticalCenter
-            verticalCenterOffset: show_two_markers ? -(parent.height - (string1.y - parent.y)) / 4 : 0
+            verticalCenterOffset: show_two_markers ? -(parent.height - (string_E1.y - parent.y)) / 4 : 0
         }
         color: "#E2E2E2"
         border.width: string_size / 2
@@ -39,7 +39,7 @@ Rectangle {
         anchors {
             horizontalCenter: parent.horizontalCenter
             verticalCenter: parent.verticalCenter
-            verticalCenterOffset: show_two_markers ? (parent.height - (string1.y - parent.y)) / 4 : 0
+            verticalCenterOffset: show_two_markers ? (parent.height - (string_E1.y - parent.y)) / 4 : 0
         }
         color: "#E2E2E2"
         border.width: string_size / 2
@@ -47,40 +47,40 @@ Rectangle {
     }
 
     Rectangle {
-        id: string1
+        id: string_E1
         width: parent.width; height: string_size
         anchors { left: parent.left; top: parent.top; topMargin: 3 * height}
         color: string_color
     }
 
     Rectangle {
-        id: string2
+        id: string_B
         width: parent.width; height: string_size
-        anchors { left: parent.left; top: string1.bottom; topMargin: 3 * height}
+        anchors { left: parent.left; top: string_E1.bottom; topMargin: 3 * height}
         color: string_color
     }
     Rectangle {
-        id: string3
+        id: string_G
         width: parent.width; height: string_size
-        anchors { left: parent.left; top: string2.bottom; topMargin: 3 * height}
+        anchors { left: parent.left; top: string_B.bottom; topMargin: 3 * height}
         color: string_color
     }
     Rectangle {
-        id: string4
+        id: string_D
         width: parent.width; height: string_size
-        anchors { left: parent.left; top: string3.bottom; topMargin: 3 * height}
+        anchors { left: parent.left; top: string_G.bottom; topMargin: 3 * height}
         color: string_color
     }
     Rectangle {
-        id: string5
+        id: string_A
         width: parent.width; height: string_size
-        anchors { left: parent.left; top: string4.bottom; topMargin: 3 * height}
+        anchors { left: parent.left; top: string_D.bottom; topMargin: 3 * height}
         color: string_color
     }
     Rectangle {
-        id: string6
+        id: string_E2
         width: parent.width; height: string_size
-        anchors { left: parent.left; top: string5.bottom; topMargin: 3 * height}
+        anchors { left: parent.left; top: string_A.bottom; topMargin: 3 * height}
         color: string_color
     }
 
