@@ -87,7 +87,7 @@ Flickable {
             
             
             
-                 3     0/6       2    5    1    
+                 3     0/5       2    4    1    
             
             C C# D D#   E   F F# G G# A A# B
             0 1  2 3    4   5 6  7 8  9 10 11
@@ -96,25 +96,20 @@ Flickable {
     }
     
     function getNameNote2(index) {
-        if (index == 3) {
+        if (index == 3)                     // D  ->  2
             return 2
-        }
-        else if (index == 0 || index == 6) {
+        else if (index == 0 || index == 5)  // E  ->  4
             return 4
-        }
-        else if (index == 2) {
+        else if (index == 2)                // G  ->  7
             return 7
-        }
-        else if (index == 5) {
+        else if (index == 4)                // A  ->  9
             return 9
-        }
-        else if (index == 1) {
+        else if (index == 1)                // B  ->  11
             return 11
-        }
     }
     
     function getNameNote(pitch) {
-        return (pitch-20-3-1)%12
+        return pitch%12   //(pitch-21)%12
     }
 
     function applyCurrentQuestion() {
@@ -126,18 +121,33 @@ Flickable {
     }
     function noteMark(chan, pitch, vel, color) {
         var aux = [false, false, false, false, false, false]
-        var len = internal.rightAnswerRectangle.model.usedAE.length
-        print("MARK NOTE: " + pitch + "    " + internal.rightAnswerRectangle.model.usedAE[len-1])
         var noteName = getNameNote(pitch)
-        var lastStringNote = getNameNote2(internal.rightAnswerRectangle.model.usedAE[len-1])
-        print("noteName: " + noteName)
-        print("lastStringNote: " + lastStringNote)
-        var dif = ((noteName+12)-lastStringNote)%12
-        print("dif: " + dif)
-        print("---fret: " + guitar.frets[dif].press)
-        aux[internal.rightAnswerRectangle.model.usedAE[len-1]-1] = true
-        guitar.frets[dif].press = aux
-        print("---fret: " + guitar.frets[dif].press)
+        
+        
+        if (noteName <= 4) {
+            var len = internal.rightAnswerRectangle.model.usedCE.length
+                        print("MARK NOTE: " + pitch + "   ultima nota din cele alese este: " + internal.rightAnswerRectangle.model.usedCE[len-1])
+            
+            var lastStringNote = getNameNote2(internal.rightAnswerRectangle.model.usedCE[len-1])
+                        print("noteName: " + noteName)
+                        print("lastStringNote: " + lastStringNote)
+            var dif = ((noteName+12)-lastStringNote)%12
+                        print("dif: " + (dif-1))
+            aux[internal.rightAnswerRectangle.model.usedCE[len-1]] = true
+            guitar.frets[dif-1].press = aux
+        } else {
+            var len = internal.rightAnswerRectangle.model.usedFB.length
+                        print("MARK NOTE: " + pitch + "   ultima nota din cele alese este: " + internal.rightAnswerRectangle.model.usedFB[len-1])
+            
+            var lastStringNote = getNameNote2(internal.rightAnswerRectangle.model.usedFB[len-1])
+                        print("noteName: " + noteName)
+                        print("lastStringNote: " + lastStringNote)
+            var dif = ((noteName+12)-lastStringNote)%12
+                        print("dif: " + (dif-1))
+            aux[internal.rightAnswerRectangle.model.usedFB[len-1]] = true
+            guitar.frets[dif-1].press = aux
+            
+        }
     }
     function noteUnmark(chan, pitch, vel, color) {
      //   fretBoard4.press = [false, false, false, false, false, false];

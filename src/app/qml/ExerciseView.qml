@@ -236,6 +236,8 @@ Item {
                                             var array = [core.exerciseController.chosenRootNote()]
                                             model.sequence.split(' ').forEach(function(note) {
                                                 array.push(core.exerciseController.chosenRootNote() + parseInt(note))
+                                                //                       |
+                                                // good only for PIANO  \|/
                                                 instrumentView.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, internal.colors[answerRectangle.index])
                                             })
                                             sheetMusicView.model = array
