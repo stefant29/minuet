@@ -4,22 +4,14 @@
       "tags": ["chord", "root-position", "minor", "triad"],
       "name": "Minor",
       "sequence": "3 7",
-      "usedCE": [0, 1, 2, 3, 4],
-      "barCE": true,
       "seqCE": [0, 1, 2, 2, 0],
-      "usedFB": [0, 1, 2, 3, 4, 5],
-      "barFB": true,
       "seqFB": [0, 0, 0, 2, 2, 0]
     },
     {
       "tags": ["chord", "root-position", "major", "triad"],
       "name": "Major",
       "sequence": "4 7",
-      "usedCE": [0, 1, 2, 3, 4],
-      "barCE": true,
       "seqCE": [0, 2, 2, 2, 0],
-      "usedFB": [0, 1, 2, 3, 4, 5],
-      "barFB": true,
       "seqFB": [0, 0, 1, 2, 2, 0]
     },
     {

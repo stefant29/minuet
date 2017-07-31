@@ -31,6 +31,8 @@ Flickable {
     contentWidth: guitar.width
     boundsBehavior: Flickable.OvershootBounds
     clip: true
+    
+    property int crtString: 5
 
 
     function clearUserAnswers() {
@@ -122,37 +124,40 @@ Flickable {
     function noteMark(chan, pitch, vel, color) {
         var aux = [false, false, false, false, false, false]
         var noteName = getNameNote(pitch)
-        
-        
-        if (noteName <= 4) {
-            var len = internal.rightAnswerRectangle.model.usedCE.length
-                        print("MARK NOTE: " + pitch + "   ultima nota din cele alese este: " + internal.rightAnswerRectangle.model.usedCE[len-1])
-            
-            var lastStringNote = getNameNote2(internal.rightAnswerRectangle.model.usedCE[len-1])
-                        print("noteName: " + noteName)
-                        print("lastStringNote: " + lastStringNote)
-            var dif = ((noteName+12)-lastStringNote)%12
-                        print("dif: " + (dif-1))
-            aux[internal.rightAnswerRectangle.model.usedCE[len-1]] = true
-            guitar.frets[dif-1].press = aux
-        } else {
-            var len = internal.rightAnswerRectangle.model.usedFB.length
-                        print("MARK NOTE: " + pitch + "   ultima nota din cele alese este: " + internal.rightAnswerRectangle.model.usedFB[len-1])
-            
-            var lastStringNote = getNameNote2(internal.rightAnswerRectangle.model.usedFB[len-1])
-                        print("noteName: " + noteName)
-                        print("lastStringNote: " + lastStringNote)
-            var dif = ((noteName+12)-lastStringNote)%12
-                        print("dif: " + (dif-1))
-            aux[internal.rightAnswerRectangle.model.usedFB[len-1]] = true
-            guitar.frets[dif-1].press = aux
-            
+        var chordsUsed;
+
+        if (noteName <= 4)
+            chordsUsed = internal.rightAnswerRectangle.model.seqCE
+        else
+            chordsUsed = internal.rightAnswerRectangle.model.seqFB
+
+        crtString = chordsUsed.length-1
+                    print("MARK NOTE: " + pitch + "   ultima nota din cele alese este: " + crtString)
+        var lastStringNote = getNameNote2(crtString)
+                    print("noteName: " + noteName)
+                    print("lastStringNote: " + lastStringNote)
+        var fretNo = ((noteName+12)-lastStringNote)%12
+                    print("fretNo: " + (fretNo-1))
+        aux[crtString] = true
+        guitar.frets[fretNo-1].press = aux
+
+        var i
+        for (i = 0; i < crtString; i++) {
+             var aux = guitar.frets[fretNo-1 + chordsUsed[i]].press
+             aux[i] = true
+             print(aux)
+             guitar.frets[fretNo-1 + chordsUsed[i]].press = aux
         }
     }
     function noteUnmark(chan, pitch, vel, color) {
      //   fretBoard4.press = [false, false, false, false, false, false];
     }
     function clearAllMarks() {
+        print("clear all marks..............................................")
+        var clear = [false, false, false, false, false, false]
+        var i
+        for (i = 0; i < guitar.frets.length; i++)
+            guitar.frets.press = clear
     }
     function scrollToNote(pitch) {
     }
