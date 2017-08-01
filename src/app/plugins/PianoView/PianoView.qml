@@ -34,8 +34,22 @@ Flickable {
 
     property int keyWidth: Math.max(16, (parent.width - 80) / 52)
     property int keyHeight: 3.4 * keyWidth
-    
-    
+
+    function markNotes(sequence, color) {
+        print("in mark NOtes: " + sequence)
+        sequence.split(' ').forEach(function(note) {
+            var sum = core.exerciseController.chosenRootNote() + parseInt(note)
+            print("val: " + sum)
+            flickable.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, color)
+        })
+    }
+
+    function unmarkNotes(sequence) {
+        sequence.split(' ').forEach(function(note) {
+            noteUnmark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0)
+        })
+    }
+
     function clearUserAnswers() {
         clearAllMarks()
         sheetMusicView.clearAllMarks()

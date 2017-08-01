@@ -32,9 +32,40 @@ Flickable {
     boundsBehavior: Flickable.OvershootBounds
     clip: true
     
-    property int crtString: 5
+    property int crtString: 0
+    property int rootFret: 0
+    property int rootName: 0
 
+    function markNotes(sequence) {
+        // call noteMark() for the current sequence
+        //     ACTUALLY, NO
+        // no matter the sequence, select the sequence 
+        //    from Guitar definitions based on the root position: CE or FB
+    }
 
+    function unmarkNotes(sequence) {
+        // follow the same technique as for the markNotes
+    }
+
+    function setRootFret(chan, pitch, vel, color) {
+        var aux = [false, false, false, false, false, false]
+        flickable.rootName = getNameNote(pitch)
+        var chordsUsed;
+
+        if (flickable.rootName <= 4)
+            chordsUsed = internal.rightAnswerRectangle.model.seqCE
+        else
+            chordsUsed = internal.rightAnswerRectangle.model.seqFB
+
+        crtString = chordsUsed.length-1
+                    print("MARK NOTE: " + pitch + "   ultima nota din cele alese este: " + crtString)
+        var lastStringNote = getNameNote2(crtString)
+                    print("flickable.rootName: " + flickable.rootName)
+                    print("lastStringNote: " + lastStringNote)
+        flickable.rootFret = ((flickable.rootName+12)-lastStringNote)%12
+                    print("flickable.rootFret: " + (flickable.rootFret-1))
+    }
+    
     function clearUserAnswers() {
         clearAllMarks()
     }
@@ -96,7 +127,7 @@ Flickable {
             // A == 9
         */
     }
-    
+
     function getNameNote2(index) {
         if (index == 3)                     // D  ->  2
             return 2
@@ -109,27 +140,51 @@ Flickable {
         else if (index == 1)                // B  ->  11
             return 11
     }
-    
+
     function getNameNote(pitch) {
         return pitch%12   //(pitch-21)%12
     }
 
     function applyCurrentQuestion() {
+        core.soundController.prepareFromExerciseOptions(chosenExercises)
+        if (currentExercise["playMode"] != "rhythm") {
+            instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
+            instrumentView.scrollToNote(core.exerciseController.chosenRootNote())
+            sheetMusicView.model = [core.exerciseController.chosenRootNote()]
+            sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
+        }
     }
 
     function noteOn(chan, pitch, vel) {
     }
     function noteOff(chan, pitch, vel) {
     }
-    function noteMark(chan, pitch, vel, color) {
-        var aux = [false, false, false, false, false, false]
-        var noteName = getNameNote(pitch)
-        var chordsUsed;
 
-        if (noteName <= 4)
+    function noteMark(chan, pitch, vel, color) {
+        print("noteMark    pitch: " + pitch)
+        if (pitch == core.exerciseController.chosenRootNote())
+            setRootFret(chan, pitch, vel, color)
+
+        var chordsUsed;
+        if (flickable.rootName <= 4)
             chordsUsed = internal.rightAnswerRectangle.model.seqCE
         else
             chordsUsed = internal.rightAnswerRectangle.model.seqFB
+
+        var aux = guitar.frets[flickable.rootFret + flickable.crtString].press
+        aux[flickable.crtString] = true
+        print(aux)
+        guitar.frets[flickable.rootFret + flickable.crtString].press = aux
+        guitar.frets[flickable.rootFret + flickable.crtString].mark_color = color
+
+        flickable.crtString++
+        if (flickable.crtString >= 5)
+            flickable.crtString = 0
+        print(flickable.crtString)
+/*
+        var aux = [false, false, false, false, false, false]
+        var noteName = getNameNote(pitch)
+
 
         crtString = chordsUsed.length-1
                     print("MARK NOTE: " + pitch + "   ultima nota din cele alese este: " + crtString)
@@ -140,6 +195,7 @@ Flickable {
                     print("fretNo: " + (fretNo-1))
         aux[crtString] = true
         guitar.frets[fretNo-1].press = aux
+        guitar.frets[fretNo-1].mark_color = color
 
         var i
         for (i = 0; i < crtString; i++) {
@@ -148,16 +204,38 @@ Flickable {
              print(aux)
              guitar.frets[fretNo-1 + chordsUsed[i]].press = aux
         }
+        */
     }
     function noteUnmark(chan, pitch, vel, color) {
-     //   fretBoard4.press = [false, false, false, false, false, false];
+        print("noteMark    pitch: " + pitch)
+        if (pitch == core.exerciseController.chosenRootNote())
+            setRootFret(chan, pitch, vel, color)
+
+        var chordsUsed;
+        if (flickable.rootName <= 4)
+            chordsUsed = internal.rightAnswerRectangle.model.seqCE
+        else
+            chordsUsed = internal.rightAnswerRectangle.model.seqFB
+
+        var aux = guitar.frets[flickable.rootFret + flickable.crtString].press
+        aux[flickable.crtString] = false
+        print(aux)
+        guitar.frets[flickable.rootFret + flickable.crtString].press = aux
+        guitar.frets[flickable.rootFret + flickable.crtString].mark_color = "red"
+
+        flickable.crtString++
+        print(flickable.crtString)
     }
     function clearAllMarks() {
+        
+        flickable.crtString = 0
         print("clear all marks..............................................")
-        var clear = [false, false, false, false, false, false]
+        print(flickable.crtString)
+        /*  var clear = [false, false, false, false, false, false]
         var i
         for (i = 0; i < guitar.frets.length; i++)
             guitar.frets.press = clear
+            */
     }
     function scrollToNote(pitch) {
     }

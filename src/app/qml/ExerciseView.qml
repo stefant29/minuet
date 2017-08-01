@@ -234,11 +234,12 @@ Item {
                                     if (currentExercise["playMode"] != "rhythm" && exerciseView.state == "waitingForAnswer") {
                                         if (parent.parent == answerGrid) {
                                             var array = [core.exerciseController.chosenRootNote()]
+                                            instrumentView.markNotes(model.sequence, internal.colors[answerRectangle.index])
                                             model.sequence.split(' ').forEach(function(note) {
                                                 array.push(core.exerciseController.chosenRootNote() + parseInt(note))
                                                 //                       |
                                                 // good only for PIANO  \|/
-                                                instrumentView.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, internal.colors[answerRectangle.index])
+                                                //instrumentView.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, internal.colors[answerRectangle.index])
                                             })
                                             sheetMusicView.model = array
                                         }
@@ -262,9 +263,12 @@ Item {
                                     if (currentExercise["playMode"] != "rhythm") {
                                         if (parent.parent == answerGrid) {
                                             if (!animation.running)
-                                                model.sequence.split(' ').forEach(function(note) {
-                                                    instrumentView.noteUnmark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0)
-                                                })
+                                                instrumentView.unmarkNotes(model.sequence)
+                                                //                       |
+                                                // good only for PIANO  \|/
+//                                                 model.sequence.split(' ').forEach(function(note) {
+//                                                     instrumentView.noteUnmark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0)
+//                                                 })
                                             sheetMusicView.model = [core.exerciseController.chosenRootNote()]
                                         }
                                     }

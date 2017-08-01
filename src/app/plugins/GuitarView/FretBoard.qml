@@ -4,6 +4,7 @@ Rectangle {
     id: fretBoard
     height: (string_E1.height + string_E1.anchors.topMargin) * 6 + string_E1.anchors.topMargin
     color: "#4b3020"
+    property var mark_color: "black"
     property double string_size: 3
     property string string_color: "#FFF2E6"
     property bool show_fret_marker: false
@@ -101,7 +102,7 @@ Rectangle {
             height: 3 * string_size; width: height
             radius: width * 0.5
             visible: is_end || is_nut ? false : modelData
-            color: "yellow"
+            color: fretBoard.mark_color
             border.width: 1
             border.color: "black"
             anchors.centerIn: fretBoard.ids[index]

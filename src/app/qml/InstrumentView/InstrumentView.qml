@@ -27,6 +27,16 @@ Item {
 
     property alias source: pluginMainPageLoader2.source
 
+    function markNotes(sequence, color) {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.markNotes(sequence, color)
+    }
+
+    function unmarkNotes(sequence) {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.unmarkNotes(sequence)
+    }
+
     function clearUserAnswers() {
         if (pluginMainPageLoader2.item)
             pluginMainPageLoader2.item.clearUserAnswers()
