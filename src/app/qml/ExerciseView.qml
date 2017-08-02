@@ -235,7 +235,7 @@ Item {
                                         if (parent.parent == answerGrid) {
                                             var array = [core.exerciseController.chosenRootNote()]
                                             instrumentView.markNotes(model.sequence, internal.colors[answerRectangle.index])
-                                            model.sequence.split(' ').forEach(function(note) {
+                                            model.sequence[0].split(' ').forEach(function(note) {
                                                 array.push(core.exerciseController.chosenRootNote() + parseInt(note))
                                                 //                       |
                                                 // good only for PIANO  \|/

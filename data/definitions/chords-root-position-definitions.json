@@ -3,14 +3,14 @@
     {
       "tags": ["chord", "root-position", "minor", "triad"],
       "name": "Minor",
-      "sequence": "3 7",
+      "sequence": ["3 7", "0 1 2 2 0", "0 0 0 2 2 0"],
       "seqCE": [0, 1, 2, 2, 0],
       "seqFB": [0, 0, 0, 2, 2, 0]
     },
     {
       "tags": ["chord", "root-position", "major", "triad"],
       "name": "Major",
-      "sequence": "4 7",
+      "sequence": ["4 7", "0 2 2 2 0", "0 0 1 2 2 0"],
       "seqCE": [0, 2, 2, 2, 0],
       "seqFB": [0, 0, 1, 2, 2, 0]
     },

@@ -99,7 +99,7 @@ Rectangle {
 
         Rectangle {
             id: press1
-            height: 3 * string_size; width: height
+            height: 5 * string_size; width: height
             radius: width * 0.5
             visible: is_end || is_nut ? false : modelData
             color: fretBoard.mark_color

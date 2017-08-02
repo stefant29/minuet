@@ -37,7 +37,8 @@ Flickable {
 
     function markNotes(sequence, color) {
         print("in mark NOtes: " + sequence)
-        sequence.split(' ').forEach(function(note) {
+        print("sequence.len: " + sequence.length)
+        sequence[0].split(' ').forEach(function(note) {
             var sum = core.exerciseController.chosenRootNote() + parseInt(note)
             print("val: " + sum)
             flickable.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, color)
@@ -45,7 +46,7 @@ Flickable {
     }
 
     function unmarkNotes(sequence) {
-        sequence.split(' ').forEach(function(note) {
+        sequence[0].split(' ').forEach(function(note) {
             noteUnmark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0)
         })
     }
@@ -99,7 +100,7 @@ Flickable {
             }
         }
         var array = [core.exerciseController.chosenRootNote()]
-        internal.rightAnswerRectangle.model.sequence.split(' ').forEach(function(note) {
+        internal.rightAnswerRectangle.model.sequence[0].split(' ').forEach(function(note) {
             instrumentView.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, internal.rightAnswerRectangle.color)
             array.push(core.exerciseController.chosenRootNote() + parseInt(note))
         })
@@ -131,7 +132,7 @@ Flickable {
             messageText.text = ""
         core.exerciseController.randomlySelectExerciseOptions()
         chosenExercises = core.exerciseController.selectedExerciseOptions
-        core.soundController.prepareFromExerciseOptions(chosenExercises)        
+        core.soundController.prepareFromExerciseOptions(chosenExercises)
         if (currentExercise["playMode"] != "rhythm") {
             instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
             instrumentView.scrollToNote(core.exerciseController.chosenRootNote())
