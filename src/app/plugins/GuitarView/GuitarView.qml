@@ -200,6 +200,8 @@ Flickable {
             }
         }
         var array = [core.exerciseController.chosenRootNote()]
+        markNotes(internal.rightAnswerRectangle.model.sequence, internal.rightAnswerRectangle.color)
+        //print("internal.rightAnswerRectangle.model.sequence " + internal.rightAnswerRectangle.model.sequence)
         internal.rightAnswerRectangle.model.sequence[0].split(' ').forEach(function(note) {
             //instrumentView.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, internal.rightAnswerRectangle.color)
             array.push(core.exerciseController.chosenRootNote() + parseInt(note))
