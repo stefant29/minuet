@@ -13,7 +13,9 @@ Rectangle {
     property bool is_end: false
     property var press: [false, false, false, false, false, false]
     property var ids: [string_E1, string_B, string_G, string_D, string_A, string_E2]
-
+    property int startBar: -1
+    property int endBar: -1
+    
     Rectangle {
         id: fret_marker1
         height: 6.5 * string_size; width: height
@@ -107,6 +109,21 @@ Rectangle {
             border.color: "black"
             anchors.centerIn: fretBoard.ids[index]
         }
+    }
+    
+    Rectangle {
+        id: bar
+        width: 5 * string_size
+        radius: width * 0.5
+        visible: (endBar - startBar) > 0
+        color: fretBoard.mark_color
+        border.width: 1
+        border.color: "black"
+        anchors.top: fretBoard.ids[startBar] ? fretBoard.ids[startBar].top : parent.top
+        anchors.bottom: fretBoard.ids[endBar] ? fretBoard.ids[endBar].bottom : parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: - width / 2
+        anchors.bottomMargin: - width / 2
     }
 
 }

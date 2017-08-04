@@ -52,6 +52,7 @@ Flickable {
             })
         }
     }
+    
     function markNotes(sequence, color) {
         // call noteMark() for the current sequence
         //     ACTUALLY, NO
@@ -60,6 +61,18 @@ Flickable {
         setSequence(sequence, flickable.rootName)
 
         var i = 0
+        var startBar = -1;
+        var endBar = -1;
+        for (i = 0; i < flickable.sequence.length; i++) 
+            if (flickable.sequence[i] == 0) {
+                    if (startBar == -1)
+                        startBar = i;
+                    endBar = i;
+            }
+        
+        guitar.frets[flickable.rootFret].startBar = startBar
+        guitar.frets[flickable.rootFret].endBar = endBar
+            
         for (i = 0; i < flickable.sequence.length; i++) {
             //flickable.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(flickable.sequence[i]), 0, color)
             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
@@ -91,6 +104,9 @@ Flickable {
         flickable.rightSequence = []
 
         var i = 0
+        
+        print ("BENI " + exerciseView.availableAnswers.answerRectangle.model)
+        
         if (flickable.rootName <= 4) {
             internal.rightAnswerRectangle.model.sequence[1].split(' ').forEach(function(note) {
                 flickable.rightSequence[i++] = note
@@ -203,6 +219,7 @@ Flickable {
             messageText.text = ""
         core.exerciseController.randomlySelectExerciseOptions()
         chosenExercises = core.exerciseController.selectedExerciseOptions
+        //print("FANE " + chosenExercises)
         core.soundController.prepareFromExerciseOptions(chosenExercises)        
         if (currentExercise["playMode"] != "rhythm") {
             //noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
@@ -312,6 +329,9 @@ Flickable {
         var i
         for (i = 0; i < guitar.frets.length; i++)
             guitar.frets[i].press = [false, false, false, false, false, false]
+            
+        guitar.frets[flickable.rootFret].startBar = -1
+        guitar.frets[flickable.rootFret].endBar = -1
     }
     function scrollToNote(pitch) {
         flickable.contentX = guitar.frets[flickable.rootFret].x - flickable.width/2

@@ -47,7 +47,7 @@ Item {
         property int correctAnswers: 0
         property int currentExercise: 0
         property int maximumExercises: 10
-
+        
         onCurrentAnswerChanged: {
             for (var i = 0; i < yourAnswersParent.children.length; ++i)
                 yourAnswersParent.children[i].destroy()
