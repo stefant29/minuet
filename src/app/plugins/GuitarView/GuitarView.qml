@@ -54,10 +54,6 @@ Flickable {
     }
     
     function markNotes(sequence, color) {
-        // call noteMark() for the current sequence
-        //     ACTUALLY, NO
-        // no matter the sequence, select the sequence 
-        //    from Guitar definitions based on the root position: CE or FB
         setSequence(sequence, flickable.rootName)
 
         var i = 0
@@ -85,19 +81,26 @@ Flickable {
 //                     print(aux)
             guitar.frets[index].press = aux
             guitar.frets[index].mark_color = color
-                    print("")
-                    print("")
         }
     }
 
     function unmarkNotes(sequence) {
         // follow the same technique as for the markNotes
         print("unmarkNotes")
-        clearAllMarks()
-        setRootFret(0, core.exerciseController.chosenRootNote(), 0, "white")
+        var i
+        for (i = 0; i < flickable.sequence.length-1; i++) {
+            var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
+            var aux = guitar.frets[index].press
+            aux[i] = false
+            guitar.frets[index].press = aux
+            guitar.frets[index].mark_color = color
+        }
+        clearBar()
+        //clearAllMarks()
+        //setRootFret(0, core.exerciseController.chosenRootNote(), 0, "white")
     }
 
-    function setRootFret(chan, pitch, vel, color) {
+    function setRootFret(chan, pitch, vel, color, sequence) {
         var aux = [false, false, false, false, false, false]
         flickable.rootName = getNameNote(pitch)
 
@@ -105,20 +108,20 @@ Flickable {
 
         var i = 0
         
-        print ("BENI " + exerciseView.availableAnswers.answerRectangle.model)
+       // print ("BENI " + exerciseView.availableAnswers.answerRectangle.model)
         
         if (flickable.rootName <= 4) {
-            internal.rightAnswerRectangle.model.sequence[1].split(' ').forEach(function(note) {
+            sequence[1].split(' ').forEach(function(note) {
                 flickable.rightSequence[i++] = note
             })
         }
         else {
-            internal.rightAnswerRectangle.model.sequence[2].split(' ').forEach(function(note) {
+            sequence[2].split(' ').forEach(function(note) {
                 flickable.rightSequence[i++] = note
             })
         }
 
-                    print("chord is: " + internal.rightAnswerRectangle.model.name + "   with seq: " + flickable.rightSequence)
+                    //print("chord is: " + internal.rightAnswerRectangle.model.name + "   with seq: " + flickable.rightSequence)
 
                     //print("len: " + flickable.sequence.length)
         var string = flickable.rightSequence.length-1
@@ -219,12 +222,16 @@ Flickable {
             messageText.text = ""
         core.exerciseController.randomlySelectExerciseOptions()
         chosenExercises = core.exerciseController.selectedExerciseOptions
-        //print("FANE " + chosenExercises)
+        
+        
         core.soundController.prepareFromExerciseOptions(chosenExercises)        
+        //print("FANE " + JSON.stringify(chosenExercises[0].sequence))
+        print("FANE " + chosenExercises[0].sequence)
+
         if (currentExercise["playMode"] != "rhythm") {
             //noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
             //TODO: change this in pianoview as well
-            setRootFret(0, core.exerciseController.chosenRootNote(), 0, "white")
+            setRootFret(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0].sequence)
             scrollToNote(core.exerciseController.chosenRootNote())
             sheetMusicView.model = [core.exerciseController.chosenRootNote()]
             sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
@@ -329,7 +336,9 @@ Flickable {
         var i
         for (i = 0; i < guitar.frets.length; i++)
             guitar.frets[i].press = [false, false, false, false, false, false]
-            
+        clearBar()
+    }
+    function clearBar() {
         guitar.frets[flickable.rootFret].startBar = -1
         guitar.frets[flickable.rootFret].endBar = -1
     }
