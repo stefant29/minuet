@@ -1,4 +1,4 @@
-/****************************************************************************
+f/****************************************************************************
 **
 ** Copyright (C) 2016 by Sandro S. Andrade <sandroandrade@kde.org>
 **
@@ -56,8 +56,7 @@ bool ExerciseController::initialize(Core *core)
     bool exercisesMerge = mergeJsonFiles("exercises", m_exercises, true, "name", "children");
 
     QFile file("STEFAN_MERGED.json");
-    
-    qDebug() << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    qDebug() << "STEFAN_MERGED.json";
     file.open(QIODevice::WriteOnly);
     file.write(QJsonDocument(m_exercises).toJson());
     file.close();
@@ -86,7 +85,7 @@ void ExerciseController::randomlySelectExerciseOptions()
 
         QString sequence = exerciseOptions[chosenExerciseOption].toObject()[QStringLiteral("sequence")].toArray()[0].toString();
         //QString sequence = exerciseOptions[chosenExerciseOption].toObject()[QStringLiteral("sequence")].toString();
-        qDebug() << "in randomlySelectExerciseOptions: " << sequence;
+        qDebug() << "src/app/exerciseController.cpp -> randomlySelectExerciseOptions: " << sequence;
 
         foreach(const QString &additionalNote, sequence.split(' ')) {
             int note = additionalNote.toInt();

@@ -35,10 +35,10 @@ Flickable {
     property int keyWidth: Math.max(16, (parent.width - 80) / 52)
     property int keyHeight: 3.4 * keyWidth
 
-    function markNotes(sequence, color) {
-        print("in mark NOtes: " + sequence)
-        print("sequence.len: " + sequence.length)
-        sequence[0].split(' ').forEach(function(note) {
+    function markNotes(model, color) {
+        print("in mark NOtes: " + model.sequence)
+        print("sequence.len: " + model.sequence.length)
+        model.sequence[0].split(' ').forEach(function(note) {
             var sum = core.exerciseController.chosenRootNote() + parseInt(note)
             print("val: " + sum)
             flickable.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, color)

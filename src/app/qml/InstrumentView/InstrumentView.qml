@@ -27,9 +27,9 @@ Item {
 
     property alias source: pluginMainPageLoader2.source
 
-    function markNotes(sequence, color) {
+    function markNotes(model, color) {
         if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.markNotes(sequence, color)
+            pluginMainPageLoader2.item.markNotes(model, color)
     }
 
     function unmarkNotes(sequence) {

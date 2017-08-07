@@ -234,7 +234,7 @@ Item {
                                     if (currentExercise["playMode"] != "rhythm" && exerciseView.state == "waitingForAnswer") {
                                         if (parent.parent == answerGrid) {
                                             var array = [core.exerciseController.chosenRootNote()]
-                                            instrumentView.markNotes(model.sequence, internal.colors[answerRectangle.index])
+                                            instrumentView.markNotes(model, internal.colors[answerRectangle.index])
                                             model.sequence[0].split(' ').forEach(function(note) {
                                                 array.push(core.exerciseController.chosenRootNote() + parseInt(note))
                                                 //                       |
