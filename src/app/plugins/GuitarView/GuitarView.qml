@@ -115,7 +115,7 @@ Flickable {
             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
             /* get the press array from the current fret */
             var aux = guitar.frets[index].press
-            aux[i] = true
+            aux[i + flickable.stringsUsed[0]] = true
             /* update the press array of the current fret with the modified aux array 
              *    and set the fret's color */
             guitar.frets[index].press = aux
@@ -128,7 +128,7 @@ Flickable {
         for (i = 0; i < flickable.sequence.length-1; i++) {
             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
             var aux = guitar.frets[index].press
-            aux[i] = false
+            aux[i + flickable.stringsUsed[0]] = false
             guitar.frets[index].press = aux
             guitar.frets[index].mark_color = color
         }
