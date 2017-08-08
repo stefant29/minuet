@@ -22,9 +22,9 @@
 
 #include "fluidsynthsoundcontroller.h"
 
+#include <QDebug>
 #include <QUrl>
 #include <QtMath>
-#include <QDebug>
 #include <QJsonObject>
 #include <QStandardPaths>
 
@@ -93,17 +93,12 @@ void FluidSynthSoundController::prepareFromExerciseOptions(QJsonArray selectedEx
     if (m_playMode == "rhythm")
         for (int i = 0; i < 4; ++i)
             appendEvent(9, 80, 127, 1000*(60.0/m_tempo));
-    qDebug() << "cccccccccccccccccc  "; 
 
     for (int i = 0; i < selectedExerciseOptions.size(); ++i) {
         QString sequence = selectedExerciseOptions[i].toObject()[QStringLiteral("sequence")].toArray()[0].toString();
-//        QString sequence = selectedExerciseOptions[i].toObject()[QStringLiteral("sequence")].toString();
-
-        qDebug() << "selectedExerciseOptions  " << sequence; 
         unsigned int chosenRootNote = selectedExerciseOptions[i].toObject()[QStringLiteral("rootNote")].toString().toInt();
         if (m_playMode != "rhythm") {
             appendEvent(1, chosenRootNote, 127, 1000*(60.0/m_tempo));
-            qDebug() << "DE CE NU MERGE?";
             foreach(const QString &additionalNote, sequence.split(' '))
                 appendEvent(1, chosenRootNote + additionalNote.toInt(), 127, ((m_playMode == "scale") ? 1000:4000)*(60.0/m_tempo));
         }

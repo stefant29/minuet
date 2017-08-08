@@ -27,6 +27,10 @@ Item {
 
     property alias source: pluginMainPageLoader2.source
 
+    function setRoot(chan, pitch, vel, color, sequence) {
+        if (pluginMainPageLoader2.item)
+            pluginMainPageLoader2.item.setRoot(chan, pitch, vel, color, sequence)
+    }
     function markNotes(model, color) {
         if (pluginMainPageLoader2.item)
             pluginMainPageLoader2.item.markNotes(model, color)
@@ -36,40 +40,9 @@ Item {
         if (pluginMainPageLoader2.item)
             pluginMainPageLoader2.item.unmarkNotes(sequence)
     }
-
-    function clearUserAnswers() {
+    function clean() {
         if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.clearUserAnswers()
-    }
-
-    function checkAnswers() {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.checkAnswers()
-    }
-    
-    function highlightRightAnswer() {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.highlightRightAnswer()
-    }
-
-    function resetTest() {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.resetTest()
-    }
-
-    function nextTestExercise() {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.nextTestExercise()
-    }
-
-    function generateNewQuestion() {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.generateNewQuestion()
-    }
-
-    function applyCurrentQuestion() {
-        if (pluginMainPageLoader2.item)
-            pluginMainPageLoader2.item.applyCurrentQuestion()
+            pluginMainPageLoader2.item.clean()
     }
 
 
@@ -82,7 +55,6 @@ Item {
             pluginMainPageLoader2.item.noteOff(chan, pitch, vel)
     }
     function noteMark(chan, pitch, vel, color) {
-        print(chan + "  " + pitch + "  " + vel + "  " + color)
         if (pluginMainPageLoader2.item)
             pluginMainPageLoader2.item.noteMark(chan, pitch, vel, color)
     }

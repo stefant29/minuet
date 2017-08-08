@@ -58,7 +58,7 @@ Item {
     }
 
     onCurrentExerciseChanged: {
-        instrumentView.clearUserAnswers()
+        clearUserAnswers()
         for (var i = 0; i < answerGrid.children.length; ++i)
             answerGrid.children[i].destroy()
         answerGrid.children = ""
@@ -72,6 +72,113 @@ Item {
             sheetMusicView.spaced = (currentExercise["playMode"] == "chord") ? false:true
             messageText.text = i18n("Click 'New Question' to start!")
             exerciseView.state = "waitingForNewQuestion"
+        }
+    }
+
+    function clearUserAnswers() {
+        instrumentView.clearAllMarks()
+        sheetMusicView.clearAllMarks()
+        for (var i = 0; i < yourAnswersParent.children.length; ++i)
+            yourAnswersParent.children[i].destroy()
+        yourAnswersParent.children = ""
+        internal.currentAnswer = 0
+        internal.userAnswers = []
+        instrumentView.clean()
+    }
+
+    function checkAnswers() {
+        var rightAnswers = core.exerciseController.selectedExerciseOptions
+        internal.answersAreRight = true
+        for (var i = 0; i < currentExercise.numberOfSelectedOptions; ++i) {
+            if (internal.userAnswers[i].name != rightAnswers[i].name) {
+                yourAnswersParent.children[i].border.color = "red"
+                internal.answersAreRight = false
+            }
+            else {
+                yourAnswersParent.children[i].border.color = "green"
+                if (internal.isTest)
+                    internal.correctAnswers++
+            }
+        }
+        messageText.text = (internal.giveUp) ? i18n("Here is the answer") : (internal.answersAreRight) ? i18n("Congratulations, you answered correctly!"):i18n("Oops, not this time! Try again!")
+        if (internal.currentExercise == internal.maximumExercises) {
+            messageText.text = i18n("You answered correctly %1%", internal.correctAnswers * 100 / internal.maximumExercises)
+            resetTest()
+        }
+
+        if (currentExercise.numberOfSelectedOptions == 1)
+            highlightRightAnswer()
+        else
+            exerciseView.state = "waitingForNewQuestion"
+        internal.giveUp = false
+    }
+
+    function highlightRightAnswer() {
+        var chosenExercises = core.exerciseController.selectedExerciseOptions
+        for (var i = 0; i < answerGrid.children.length; ++i) {
+            if (answerGrid.children[i].model.name != chosenExercises[0].name) {
+                answerGrid.children[i].opacity = 0.25
+            }
+            else {
+                internal.rightAnswerRectangle = answerGrid.children[i]
+                answerGrid.children[i].opacity = 1
+            }
+        }
+        var array = [core.exerciseController.chosenRootNote()]
+        instrumentView.markNotes(internal.rightAnswerRectangle.model, internal.rightAnswerRectangle.color)
+        internal.rightAnswerRectangle.model.sequence[0].split(' ').forEach(function(note) {
+            //instrumentView.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, internal.rightAnswerRectangle.color)
+            array.push(core.exerciseController.chosenRootNote() + parseInt(note))
+        })
+        sheetMusicView.model = array
+        animation.start()
+    }
+
+    function resetTest() {
+        internal.isTest = false
+        internal.correctAnswers = 0
+        internal.currentExercise = 0
+    }
+
+    function nextTestExercise() {
+        for (var i = 0; i < answerGrid.children.length; ++i)
+            answerGrid.children[i].opacity = 1
+        instrumentView.clearAllMarks()
+        sheetMusicView.clearAllMarks()
+        clearUserAnswers()
+        generateNewQuestion(true)
+        core.soundController.play()
+    }
+
+    function generateNewQuestion () {
+        clearUserAnswers()
+        if (internal.isTest)
+            messageText.text = i18n("Question %1 out of %2", internal.currentExercise + 1, internal.maximumExercises)
+        else
+            messageText.text = ""
+        core.exerciseController.randomlySelectExerciseOptions()
+        chosenExercises = core.exerciseController.selectedExerciseOptions
+        core.soundController.prepareFromExerciseOptions(chosenExercises)
+        if (currentExercise["playMode"] != "rhythm") {
+            //instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
+            instrumentView.setRoot(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0].sequence)
+            instrumentView.scrollToNote(core.exerciseController.chosenRootNote())
+            sheetMusicView.model = [core.exerciseController.chosenRootNote()]
+            sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
+        }
+        exerciseView.state = "waitingForAnswer"
+        if (internal.isTest)
+            internal.currentExercise++
+    }
+
+    function applyCurrentQuestion() {
+        core.soundController.prepareFromExerciseOptions(chosenExercises)
+        if (currentExercise["playMode"] != "rhythm") {
+            //instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
+            instrumentView.setRoot(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0].sequence)
+            instrumentView.scrollToNote(core.exerciseController.chosenRootNote())
+            sheetMusicView.model = [core.exerciseController.chosenRootNote()]
+            sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
         }
     }
 
@@ -110,7 +217,7 @@ Item {
 
                 onClicked: {
                     if (exerciseView.state == "waitingForNewQuestion") {
-                        instrumentView.generateNewQuestion()
+                        generateNewQuestion()
                     }
                     core.soundController.play()
                 }
@@ -137,7 +244,7 @@ Item {
                         }
                     }
                     internal.currentAnswer = currentExercise.numberOfSelectedOptions
-                    instrumentView.checkAnswers()
+                    checkAnswers()
                 }
             }
             Button {
@@ -149,13 +256,13 @@ Item {
 
                 onClicked: {
                     if (!internal.isTest) {
-                        instrumentView.resetTest()
+                        resetTest()
                         internal.isTest = true
-                        instrumentView.generateNewQuestion()
+                        generateNewQuestion()
                         if (internal.isTest)
                             core.soundController.play()
                     } else {
-                        instrumentView.resetTest()
+                        resetTest()
                         exerciseView.state = "waitingForNewQuestion"
                         messageText.text = i18n("Click 'New Question' to start")
                     }
@@ -225,7 +332,7 @@ Item {
                                         internal.userAnswers.push({"name": option.originalText, "model": answerRectangle.model, "index": answerRectangle.index, "color": answerRectangle.color})
                                         internal.currentAnswer++
                                         if (internal.currentAnswer == currentExercise.numberOfSelectedOptions)
-                                            instrumentView.checkAnswers()
+                                            checkAnswers()
                                     }
                                 }
                                 hoverEnabled: Qt.platform.os != "android" && !animation.running
@@ -337,7 +444,7 @@ Item {
 
                 onSourceChanged: {
                     if (chosenExercises)
-                        instrumentView.applyCurrentQuestion()
+                        applyCurrentQuestion()
                 }
             }
 
@@ -383,7 +490,7 @@ Item {
         onStopped: {
             exerciseView.state = internal.isTest ? "waitingForAnswer" : "waitingForNewQuestion"
             if (internal.isTest) {
-                instrumentView.nextTestExercise()
+                nextTestExercise()
                 if (internal.currentExercise == internal.maximumExercises+1)
                    internal.isTest = false
             }

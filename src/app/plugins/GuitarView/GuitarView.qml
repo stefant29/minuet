@@ -31,21 +31,21 @@ Flickable {
     contentWidth: guitar.width
     boundsBehavior: Flickable.OvershootBounds
     clip: true
-    
-    property int rootFret: 0
+
     property int rootName: 0
-    property var sequence
-    property var rightSequence
+    property int rootFret: 0
     property int barFret: rootFret
+    property var sequence
     property var stringsUsed
 
-    function setSequence(sequence, stringsUsed, root) {
+    function setSequence(sequence, stringsUsed) {
         flickable.sequence = []
         flickable.stringsUsed = []
-        
-        //print("SETSEQUENCE: " + stringsUsed)
+
+        /* depending on the root position, select a certain sequence: C->E or F->B, 
+         *    equivalent to sequence[1] and sequence[2] */
         var i = 0
-        if (root <= 4) {
+        if (flickable.rootName <= 4) {
             sequence[1].split(' ').forEach(function(note) {
                 flickable.sequence[i++] = note
             })
@@ -63,67 +63,67 @@ Flickable {
             })
         }
     }
-    // change the opacity of unused strings to 0.3
-    function drawUnusedStrings() {
+    /* change the opacity of unused strings to a given value */
+    function setUnusedStrings(value) {
         var i, j
+        /* for each fret */
         for (i = 0; i < guitar.frets.length; i++) {
+            /* for each string */
             for (j = 0; j < 6; j++)
+                /* if the string is not used */
                 if (j < flickable.stringsUsed[0] || j > flickable.stringsUsed[1])
-                    guitar.frets[i].ids[j].opacity = 0.3
+                    guitar.frets[i].ids[j].opacity = value
         }
     }
-    // change the opacity back to 1 for unused strings
-    function clearUnusedStrings() {
-        var i, j
-        for (i = 0; i < guitar.frets.length; i++) {
-            for (j = 0; j < 6; j++)
-                if (j < flickable.stringsUsed[0] || j > flickable.stringsUsed[1])
-                    guitar.frets[i].ids[j].opacity = 1
-        }
-    }
+    /* draw the bar on the guitar */
     function setBar() {
-        var i = 0
-        var startBar = -1;
-        var endBar = -1;
+        var i = 0, startBar = -1, endBar = -1;
+        /* save the furthest to the left fret: this is the bar's fret */
         flickable.barFret = flickable.rootFret
-        // save the furthest to the left fret
         for (i = 0; i < flickable.sequence.length; i++) {
             var crtFret = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
             if (crtFret < flickable.barFret)
                 flickable.barFret = crtFret
         }
-        // save the start string and the end string of the bar
-        for (i = 0; i < flickable.sequence.length; i++) {
+        /* save the start string and the end string of the bar */
+        for (i = 0; i < flickable.sequence.length; i++)
             if (parseInt(flickable.rootFret) + parseInt(flickable.sequence[i]) == flickable.barFret) {
                     if (startBar == -1)
                         startBar = i;
                     endBar = i;
             }
-        }
         // set the start and end of the bar into the saved fret
         guitar.frets[flickable.barFret].startBar = startBar
         guitar.frets[flickable.barFret].endBar = endBar
     }
+    /* remove the bar */
+    function clearBar() {
+        guitar.frets[flickable.barFret].startBar = -1
+        guitar.frets[flickable.barFret].endBar = -1
+    }
     function markNotes(model, color) {
-        setSequence(model.sequence, model.stringsUsed, flickable.rootName)
-        drawUnusedStrings()
+        /* select the right sequence from the model into flickable.sequence */
+        setSequence(model.sequence, model.stringsUsed)
+        /* change the opacity of unused strings to 0.3 */
+        setUnusedStrings(0.3)
+        /* draw the bar (if exists) on the guitar */
         setBar()
+        /* for each note in the sequence, draw the note on its current fret */
         var i
         for (i = 0; i < flickable.sequence.length; i++) {
+            /* get the fret's index coresponding to each index in the sequence */
             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
+            /* get the press array from the current fret */
             var aux = guitar.frets[index].press
             aux[i] = true
-                    /*print("index: " + index)
-                    print("rootFret: " + flickable.rootFret)
-                    print("seq: " + flickable.sequence)
-                    print(aux) */
+            /* update the press array of the current fret with the modified aux array 
+             *    and set the fret's color */
             guitar.frets[index].press = aux
             guitar.frets[index].mark_color = color
         }
     }
-
     function unmarkNotes(sequence) {
-        // follow the same technique as for the markNotes
+        /* reset the press array for each fret modified by markNotes */
         var i
         for (i = 0; i < flickable.sequence.length-1; i++) {
             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
@@ -132,153 +132,45 @@ Flickable {
             guitar.frets[index].press = aux
             guitar.frets[index].mark_color = color
         }
-        clearUnusedStrings()
+        /* change the opacity back to 1 for unused strings */
+        setUnusedStrings(1)
+        /* delete the bar from guitar */
         clearBar()
     }
-
-    function setRootFret(chan, pitch, vel, color, sequence) {
-        flickable.rootName = getNameNote(pitch)
-        flickable.rightSequence = []
+    /* aditional method to bring the instrument to its initial state */
+    function clean() {
+        if (flickable.stringsUsed)
+             setUnusedStrings(1)
+    }
+    /* set the root name and fret, then draw the root note on the guitar */
+    function setRoot(chan, pitch, vel, color, sequence) {
+        flickable.rootName = pitch%12
 
         var i = 0
+        /* get the last index of the right sequence: [1] for C->E and [2] for F->B */
+        var lastString = -1
         if (flickable.rootName <= 4) {
             sequence[1].split(' ').forEach(function(note) {
-                flickable.rightSequence[i++] = note
+                lastString++
             })
         } else {
             sequence[2].split(' ').forEach(function(note) {
-                flickable.rightSequence[i++] = note
+                lastString++
             })
         }
-//                     print("   with rightSequence: " + flickable.rightSequence)
-//                     print("len: " + flickable.sequence.length)
-        var string = flickable.rightSequence.length-1
-        var lastStringNote = getNameNote2(string)
-        flickable.rootFret = ((flickable.rootName+12)-lastStringNote)%12
-//                 print("    MARK NOTE: " + pitch + "   ultima nota din cele alese este: " + string)
-//                 print("    flickable.rootName: " + flickable.rootName)
-//                 print("    lastStringNote: " + lastStringNote)
-        var index
-        index = parseInt(flickable.rootFret) + parseInt(flickable.rightSequence[string])
-//                 print("index: " + index)
-//                 print("rootFret: " + flickable.rootFret)
-//                 print("seq: " + flickable.sequence)
-//                 print("string: " + string)
-        var aux = guitar.frets[index].press
-        aux[string] = true
-//                 print(aux)
-        guitar.frets[index].press = aux
-        guitar.frets[index].mark_color = color
-//                 print("")
-//                 print("")
-
+        /* compute root's fret by substracting the converted guitar index 
+         *    into a piano index from the root's piano index */
+        flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString))%12
+        /* get the root's fret */
+        var aux = guitar.frets[flickable.rootFret].press
+        /* set the root's note in the aux array*/
+        aux[lastString] = true
+        /* assign the new press array to root's fret and set the color */
+        guitar.frets[flickable.rootFret].press = aux
+        guitar.frets[flickable.rootFret].mark_color = color
     }
-
-    function clearUserAnswers() {
-        clearAllMarks()
-        sheetMusicView.clearAllMarks()
-        for (var i = 0; i < yourAnswersParent.children.length; ++i)
-            yourAnswersParent.children[i].destroy()
-        yourAnswersParent.children = ""
-        internal.currentAnswer = 0
-        internal.userAnswers = []
-        if (flickable.stringsUsed)
-            clearUnusedStrings()
-    }
-
-    function checkAnswers() {
-        var rightAnswers = core.exerciseController.selectedExerciseOptions
-        internal.answersAreRight = true
-        for (var i = 0; i < currentExercise.numberOfSelectedOptions; ++i) {
-            //print("internal.userAnswers[i].name :" + internal.userAnswers[i].name)
-            //print("rightAnswers[i].name: " + rightAnswers[i].name)
-            if (internal.userAnswers[i].name != rightAnswers[i].name) {
-                yourAnswersParent.children[i].border.color = "red"
-                internal.answersAreRight = false
-            }
-            else {
-                yourAnswersParent.children[i].border.color = "green"
-                if (internal.isTest)
-                    internal.correctAnswers++
-            }
-        }
-        messageText.text = (internal.giveUp) ? i18n("Here is the answer") : (internal.answersAreRight) ? i18n("Congratulations, you answered correctly!"):i18n("Oops, not this time! Try again!")
-        if (internal.currentExercise == internal.maximumExercises) {
-            messageText.text = i18n("You answered correctly %1%", internal.correctAnswers * 100 / internal.maximumExercises)
-            resetTest()
-        }
-
-        if (currentExercise.numberOfSelectedOptions == 1)
-            highlightRightAnswer()
-        else
-            exerciseView.state = "waitingForNewQuestion"
-        internal.giveUp = false
-    }
-
-    function highlightRightAnswer() {
-        //print("==highlightRightAnswer == in guitar view ==")
-        var chosenExercises = core.exerciseController.selectedExerciseOptions
-        for (var i = 0; i < answerGrid.children.length; ++i) {
-            if (answerGrid.children[i].model.name != chosenExercises[0].name) {
-                answerGrid.children[i].opacity = 0.25
-            }
-            else {
-                internal.rightAnswerRectangle = answerGrid.children[i]
-                answerGrid.children[i].opacity = 1
-            }
-        }
-        var array = [core.exerciseController.chosenRootNote()]
-        markNotes(internal.rightAnswerRectangle.model, internal.rightAnswerRectangle.color)
-        internal.rightAnswerRectangle.model.sequence[0].split(' ').forEach(function(note) {
-            //instrumentView.noteMark(0, core.exerciseController.chosenRootNote() + parseInt(note), 0, internal.rightAnswerRectangle.color)
-            array.push(core.exerciseController.chosenRootNote() + parseInt(note))
-        })
-        sheetMusicView.model = array
-        animation.start()
-    }
-
-    function resetTest() {
-    }
-
-    function nextTestExercise() {
-    }
-
-    function generateNewQuestion () {
-        clearUserAnswers()
-        if (internal.isTest)
-            messageText.text = i18n("Question %1 out of %2", internal.currentExercise + 1, internal.maximumExercises)
-        else
-            messageText.text = ""
-        core.exerciseController.randomlySelectExerciseOptions()
-        chosenExercises = core.exerciseController.selectedExerciseOptions
-        
-        
-        core.soundController.prepareFromExerciseOptions(chosenExercises)        
-        //print("FANE " + JSON.stringify(chosenExercises[0].sequence))
-        //print("FANE " + chosenExercises[0].sequence)
-        //print("not used: " + chosenExercises[0].stringsUsed)
-
-        if (currentExercise["playMode"] != "rhythm") {
-            //noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
-            //TODO: change this in pianoview as well
-            setRootFret(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0].sequence)
-            scrollToNote(core.exerciseController.chosenRootNote())
-            sheetMusicView.model = [core.exerciseController.chosenRootNote()]
-            sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
-        }
-        exerciseView.state = "waitingForAnswer"
-        if (internal.isTest)
-            internal.currentExercise++
-
-   /*
-                 3     0/5       2    4    1   
-
-            C C# D D#   E   F F# G G# A A# B
-            0 1  2 3    4   5 6  7 8  9 10 11
-        */
-    }
-
-    function getNameNote2(index) {
+    /* convert string index to piano indexes of an octave */
+    function guitarToPiano(index) {
         if (index == 3)                     // D  ->  2
             return 2
         else if (index == 0 || index == 5)  // E  ->  4
@@ -290,49 +182,23 @@ Flickable {
         else if (index == 1)                // B  ->  11
             return 11
     }
-
-    function getNameNote(pitch) {
-        return pitch%12   //(pitch-21)%12
-    }
-
-    function applyCurrentQuestion() {
-        core.soundController.prepareFromExerciseOptions(chosenExercises)
-        if (currentExercise["playMode"] != "rhythm") {
-            //instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
-            setRootFret(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0].sequence)
-            instrumentView.scrollToNote(core.exerciseController.chosenRootNote())
-            sheetMusicView.model = [core.exerciseController.chosenRootNote()]
-            sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
-        }
-    }
-
-    function noteOn(chan, pitch, vel) {
-    }
-    function noteOff(chan, pitch, vel) {
-    }
-
-    function noteMark(chan, pitch, vel, color) {
-    }
-    function noteUnmark(chan, pitch, vel, color) {
-        //print("noteUnmark")
-    }
+    /* return the guitar to the original state: delete all notes and the bar */
     function clearAllMarks() {
         var i
         for (i = 0; i < guitar.frets.length; i++)
             guitar.frets[i].press = [false, false, false, false, false, false]
         clearBar()
     }
-    function clearBar() {
-        guitar.frets[flickable.barFret].startBar = -1
-        guitar.frets[flickable.barFret].endBar = -1
-    }
     function scrollToNote(pitch) {
         flickable.contentX = guitar.frets[flickable.rootFret].x - flickable.width/2
     }
-    function highlightKey(pitch, color) {
-    }
-    function itemForPitch(pitch) {
-    }
+
+    function noteOn(chan, pitch, vel) {}
+    function noteOff(chan, pitch, vel) {}
+    function noteMark(chan, pitch, vel, color) {}
+    function noteUnmark(chan, pitch, vel, color) {}
+    function highlightKey(pitch, color) {}
+    function itemForPitch(pitch) {}
 
     Rectangle {
         id: guitar

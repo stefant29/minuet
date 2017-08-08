@@ -1,4 +1,4 @@
-f/****************************************************************************
+/****************************************************************************
 **
 ** Copyright (C) 2016 by Sandro S. Andrade <sandroandrade@kde.org>
 **
@@ -55,11 +55,10 @@ bool ExerciseController::initialize(Core *core)
     bool definitionsMerge = mergeJsonFiles("definitions", m_definitions);
     bool exercisesMerge = mergeJsonFiles("exercises", m_exercises, true, "name", "children");
 
-    QFile file("STEFAN_MERGED.json");
-    qDebug() << "STEFAN_MERGED.json";
-    file.open(QIODevice::WriteOnly);
-    file.write(QJsonDocument(m_exercises).toJson());
-    file.close();
+//    QFile file("merged-exercises.json");
+//    file.open(QIODevice::WriteOnly);
+//    file.write(QJsonDocument(m_exercises).toJson());
+//    file.close();
 
     return definitionsMerge & exercisesMerge;
 }
@@ -84,9 +83,6 @@ void ExerciseController::randomlySelectExerciseOptions()
         quint8 chosenExerciseOption = qrand() % exerciseOptions.size();
 
         QString sequence = exerciseOptions[chosenExerciseOption].toObject()[QStringLiteral("sequence")].toArray()[0].toString();
-        //QString sequence = exerciseOptions[chosenExerciseOption].toObject()[QStringLiteral("sequence")].toString();
-        qDebug() << "src/app/exerciseController.cpp -> randomlySelectExerciseOptions: " << sequence;
-
         foreach(const QString &additionalNote, sequence.split(' ')) {
             int note = additionalNote.toInt();
             if (note > maxNote) maxNote = note;

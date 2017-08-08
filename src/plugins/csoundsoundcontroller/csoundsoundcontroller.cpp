@@ -126,11 +126,8 @@ void CsoundSoundController::prepareFromExerciseOptions(QJsonArray selectedExerci
 
     int exerciseOptionsSize = selectedExerciseOptions.size();
 
-    qDebug() << "ppppppppppppppppppppppppppppppppppppppppp";
     for (int i = 0; i < exerciseOptionsSize; ++i) {
         QString sequence = selectedExerciseOptions[i].toObject()[QStringLiteral("sequence")].toArray()[0].toString();
-//        QString sequence = selectedExerciseOptions[i].toObject()[QStringLiteral("sequence")].toString();
-        qDebug() << "sequence: "<< sequence;
         unsigned int chosenRootNote = selectedExerciseOptions[i].toObject()[QStringLiteral("rootNote")].toString().toInt();
         if (m_playMode != "rhythm") {
             midiNotes.append(chosenRootNote);
