@@ -62,6 +62,7 @@ Flickable {
                 flickable.stringsUsed[i++] = string
             })
         }
+        print("seq: " + flickable.sequence)
     }
     /* change the opacity of unused strings to a given value */
     function setUnusedStrings(value) {
@@ -92,9 +93,10 @@ Flickable {
                         startBar = i;
                     endBar = i;
             }
+        print("start: " + startBar + "    endBar: " + endBar + "   stringsUsed: " + flickable.stringsUsed) 
         // set the start and end of the bar into the saved fret
-        guitar.frets[flickable.barFret].startBar = startBar
-        guitar.frets[flickable.barFret].endBar = endBar
+        guitar.frets[flickable.barFret].startBar = startBar + parseInt(flickable.stringsUsed[0])
+        guitar.frets[flickable.barFret].endBar = endBar + parseInt(flickable.stringsUsed[0])
     }
     /* remove the bar */
     function clearBar() {
@@ -115,7 +117,7 @@ Flickable {
             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
             /* get the press array from the current fret */
             var aux = guitar.frets[index].press
-            print(index + " " + aux + " " + flickable.stringsUsed[0])
+//             print(index + " " + aux + " " + flickable.stringsUsed[0])
             aux[i + parseInt(flickable.stringsUsed[0])] = true
             /* update the press array of the current fret with the modified aux array 
              *    and set the fret's color */
@@ -125,19 +127,18 @@ Flickable {
     }
     function unmarkNotes(sequence) {
         /* reset the press array for each fret modified by markNotes */
-        
-//         var i
-//         for (i = 0; i < flickable.sequence.length-1; i++) {
-//             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
-//             var aux = guitar.frets[index].press
-//             aux[i + flickable.stringsUsed[0]] = false
-//             guitar.frets[index].press = aux
-//             guitar.frets[index].mark_color = color
-//         }
+         var i
+         for (i = 0; i < flickable.sequence.length; i++) {
+             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
+             var aux = guitar.frets[index].press
+             aux[i + parseInt(flickable.stringsUsed[0])] = false
+             guitar.frets[index].press = aux
+             guitar.frets[index].mark_color = color
+         }
         /* change the opacity back to 1 for unused strings */
-//         setUnusedStrings(1)
+         setUnusedStrings(1)
         /* delete the bar from guitar */
-//         clearBar()
+         clearBar()
     }
     /* aditional method to bring the instrument to its initial state */
     function clean() {
@@ -147,7 +148,7 @@ Flickable {
     /* set the root name and fret, then draw the root note on the guitar */
     function setRoot(chan, pitch, vel, color, sequence) {
         flickable.rootName = pitch%12
-
+        print("setR: " + sequence)
         var i = 0
         /* get the last index of the right sequence: [1] for C->E and [2] for F->B */
         var lastString = -1
