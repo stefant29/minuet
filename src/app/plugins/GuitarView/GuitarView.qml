@@ -104,6 +104,7 @@ Flickable {
         guitar.frets[flickable.barFret].endBar = -1
     }
     function markNotes(model, color) {
+        setRoot(0, core.exerciseController.chosenRootNote(), 0, color, model)
         /* select the right sequence from the model into flickable.sequence */
         setSequence(model.sequence, model.stringsUsed)
         /* change the opacity of unused strings to 0.3 */
@@ -146,28 +147,35 @@ Flickable {
              setUnusedStrings(1)
     }
     /* set the root name and fret, then draw the root note on the guitar */
-    function setRoot(chan, pitch, vel, color, sequence) {
+    function setRoot(chan, pitch, vel, color, model) {
         flickable.rootName = pitch%12
-        print("setR: " + sequence)
+        var sequence = model.sequence
+        print("setR: " + sequence + "    model.stringsUsed: " + model.stringsUsed)
         var i = 0
+        var start = -1
         /* get the last index of the right sequence: [1] for C->E and [2] for F->B */
         var lastString = -1
         if (flickable.rootName <= 4) {
             sequence[1].split(' ').forEach(function(note) {
                 lastString++
             })
+            print("seq in setRoot: " + sequence[1])
+            start = parseInt(model.stringsUsed[0][0])
         } else {
             sequence[2].split(' ').forEach(function(note) {
                 lastString++
             })
+            print("seq in setRoot: " + sequence[2])
+            start = parseInt(model.stringsUsed[1][0])
         }
         /* compute root's fret by substracting the converted guitar index 
          *    into a piano index from the root's piano index */
-        flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString))%12
+        flickable.rootFret = ((flickable.rootName+11)-guitarToPiano(lastString+start))%12
         /* get the root's fret */
         var aux = guitar.frets[flickable.rootFret].press
+        print("lastString: " + lastString + "     start: " + start)
         /* set the root's note in the aux array*/
-        aux[lastString] = true
+        aux[lastString+start] = true
         /* assign the new press array to root's fret and set the color */
         guitar.frets[flickable.rootFret].press = aux
         guitar.frets[flickable.rootFret].mark_color = color

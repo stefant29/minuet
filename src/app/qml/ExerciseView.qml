@@ -161,7 +161,7 @@ Item {
         core.soundController.prepareFromExerciseOptions(chosenExercises)
         if (currentExercise["playMode"] != "rhythm") {
             //instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
-            instrumentView.setRoot(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0].sequence)
+            instrumentView.setRoot(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0])
             instrumentView.scrollToNote(core.exerciseController.chosenRootNote())
             sheetMusicView.model = [core.exerciseController.chosenRootNote()]
             sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
@@ -175,7 +175,7 @@ Item {
         core.soundController.prepareFromExerciseOptions(chosenExercises)
         if (currentExercise["playMode"] != "rhythm") {
             //instrumentView.noteMark(0, core.exerciseController.chosenRootNote(), 0, "white")
-            instrumentView.setRoot(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0].sequence)
+            instrumentView.setRoot(0, core.exerciseController.chosenRootNote(), 0, "white", chosenExercises[0])
             instrumentView.scrollToNote(core.exerciseController.chosenRootNote())
             sheetMusicView.model = [core.exerciseController.chosenRootNote()]
             sheetMusicView.clef.type = (core.exerciseController.chosenRootNote() >= 60) ? 0:1
