@@ -34,6 +34,7 @@ Flickable {
 
     property int rootName: 0
     property int rootFret: 0
+    property int rootString: 0
     property int barFret: rootFret
     property var sequence
     property var stringsUsed
@@ -102,6 +103,12 @@ Flickable {
         guitar.frets[flickable.barFret].endBar = -1
     }
     function markNotes(model, color) {
+        //TODO: comments
+        if (currentExercise["playMode"] == "scale") {
+            noteMark(0, parseInt(model.sequence[0]), 0, color)
+            return
+        }
+
         clearAllMarks()
 
         setOneRoot(0, core.exerciseController.chosenRootNote(), 0, color, model)
@@ -126,6 +133,12 @@ Flickable {
         }
     }
     function unmarkNotes(sequence) {
+        //TODO: comments
+        if (currentExercise["playMode"] == "scale") {
+            noteUnmark(0, parseInt(sequence[0]), 0, color)
+            return
+        }
+        
         /* reset the press array for each fret modified by markNotes */
          var i
          for (i = 0; i < flickable.sequence.length; i++) {
@@ -177,13 +190,16 @@ Flickable {
         /* compute root's fret by substracting the converted guitar index 
          *    into a piano index from the root's piano index */
         flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
-        /* get the root's fret */
-        var aux = guitar.frets[flickable.rootFret].press
-        /* set the root's note in the aux array*/
-        aux[lastString+start] = true
-        /* assign the new press array to root's fret and set the color */
-        guitar.frets[flickable.rootFret].press = aux
-        guitar.frets[flickable.rootFret].mark_color = color
+        
+        flickable.rootString = lastString + start
+        noteMark(0, 0, 0, color)
+//         /* get the root's fret */
+//         var aux = guitar.frets[flickable.rootFret].press
+//         /* set the root's note in the aux array*/
+//         aux[flickable.rootString] = true
+//         /* assign the new press array to root's fret and set the color */
+//         guitar.frets[flickable.rootFret].press = aux
+//         guitar.frets[flickable.rootFret].mark_color = color
     }
     /* convert string index to piano indexes of an octave */
     function guitarToPiano(index) {
@@ -212,8 +228,26 @@ Flickable {
 
     function noteOn(chan, pitch, vel) {}
     function noteOff(chan, pitch, vel) {}
-    function noteMark(chan, pitch, vel, color) {}
-    function noteUnmark(chan, pitch, vel, color) {}
+    function noteMark(chan, pitch, vel, color) {
+        //TODO: comments
+        /* get the root's fret */
+        var aux = guitar.frets[flickable.rootFret+pitch].press
+        /* set the root's note in the aux array*/
+        aux[flickable.rootString] = true
+        /* assign the new press array to root's fret and set the color */
+        guitar.frets[flickable.rootFret+pitch].press = aux
+        guitar.frets[flickable.rootFret+pitch].mark_color = color
+    }
+    function noteUnmark(chan, pitch, vel, color) {
+        //TODO: comments
+        /* get the root's fret */
+        var aux = guitar.frets[flickable.rootFret+pitch].press
+        /* set the root's note in the aux array*/
+        aux[flickable.rootString] = false
+        /* assign the new press array to root's fret and set the color */
+        guitar.frets[flickable.rootFret+pitch].press = aux
+        guitar.frets[flickable.rootFret+pitch].mark_color = color
+    }
     function highlightKey(pitch, color) {}
     function itemForPitch(pitch) {}
 
