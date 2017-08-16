@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2016 by Sandro S. Andrade <sandroandrade@kde.org>
+** Copyright (C) 2017 by Stefan Toncu <stefan.toncu29@gmail.com>
 **
 ** This program is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU General Public License as
@@ -190,16 +190,8 @@ Flickable {
         /* compute root's fret by substracting the converted guitar index 
          *    into a piano index from the root's piano index */
         flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
-        
         flickable.rootString = lastString + start
         noteMark(0, 0, 0, color)
-//         /* get the root's fret */
-//         var aux = guitar.frets[flickable.rootFret].press
-//         /* set the root's note in the aux array*/
-//         aux[flickable.rootString] = true
-//         /* assign the new press array to root's fret and set the color */
-//         guitar.frets[flickable.rootFret].press = aux
-//         guitar.frets[flickable.rootFret].mark_color = color
     }
     /* convert string index to piano indexes of an octave */
     function guitarToPiano(index) {

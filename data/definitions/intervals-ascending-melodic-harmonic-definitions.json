@@ -3,14 +3,12 @@
     {
       "tags": ["interval", "ascending", "harmonic", "2", "minor"],
       "name": "Minor Second",
-      "sequence": ["1", "0 1 1 1 0", "0 1 1 1 1 0"],
-      "stringsUsed": ["0 1", "0 1"]
+      "sequence": "1"
     },
     {
       "tags": ["interval", "ascending", "harmonic", "2", "major"],
       "name": "Major Second",
-      "sequence": ["2", "0 2 2 2 0", "0 2 2 2 2 0"],
-      "stringsUsed": ["0 2", "0 2"]
+      "sequence": "2"
     },
     {
       "tags": ["interval", "ascending", "harmonic", "3", "minor"],
