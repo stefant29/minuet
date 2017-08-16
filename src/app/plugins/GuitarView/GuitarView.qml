@@ -106,6 +106,7 @@ Flickable {
         //TODO: comments
         if (currentExercise["playMode"] == "scale") {
             noteMark(0, parseInt(model.sequence[0]), 0, color)
+            print("markNotes calls noteMark with: " + parseInt(model.sequence[0]))
             return
         }
 
@@ -171,26 +172,50 @@ Flickable {
      */
     function setOneRoot(chan, pitch, vel, color, model) {
         flickable.rootName = pitch%12
-        var sequence = model.sequence
-        var i = 0
         var start = -1
-        /* get the last index of the right sequence: [1] for C->E and [2] for F->B */
         var lastString = -1
-        if (flickable.rootName <= 4) {
-            sequence[1].split(' ').forEach(function(note) {
-                lastString++
-            })
-            start = parseInt(model.stringsUsed[0][0])
+
+        /* for intervals/scales */
+        if (currentExercise["playMode"] == "scale") {
+            lastString = 5
+            start = 0
+
+            /* compute root's fret by substracting the converted guitar index 
+             *    into a piano index from the root's piano index */
+            flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
+            /* TODO: daca depaseste fret 9, mergi pe stringul de mai sus TODO  */
+            while (flickable.rootFret > 8) {
+                print("bigger than 8, lastString: " + lastString + "   rootFret: " + flickable.rootFret)
+                lastString--
+                flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
+                print("new RootFret: " + flickable.rootFret)
+            }
+
+            flickable.rootString = lastString + start
+
+        /* for chords */
         } else {
-            sequence[2].split(' ').forEach(function(note) {
-                lastString++
-            })
-            start = parseInt(model.stringsUsed[1][0])
+            var sequence = model.sequence
+            /* get the last index of the right sequence: [1] for C->E and [2] for F->B */
+            if (flickable.rootName <= 4) {
+                sequence[1].split(' ').forEach(function(note) {
+                    lastString++
+                })
+                start = parseInt(model.stringsUsed[0][0])
+            } else {
+                sequence[2].split(' ').forEach(function(note) {
+                    lastString++
+                })
+                start = parseInt(model.stringsUsed[1][0])
+            }
+
+            /* compute root's fret by substracting the converted guitar index 
+             *    into a piano index from the root's piano index */
+            flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
+            flickable.rootString = lastString + start
         }
-        /* compute root's fret by substracting the converted guitar index 
-         *    into a piano index from the root's piano index */
-        flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
-        flickable.rootString = lastString + start
+
+
         noteMark(0, 0, 0, color)
     }
     /* convert string index to piano indexes of an octave */
