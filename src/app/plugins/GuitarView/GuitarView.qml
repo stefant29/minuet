@@ -181,19 +181,11 @@ Flickable {
             if (newFret == 0)
                 newFret = 12
 
-                
+            /* draw or delete the marks, depending on the value */
             if (value)
                 noteMark(crtString, newFret, 0, color)
             else
                 noteUnmark(crtString, newFret, 0, color)
-                
-//             /* draw the note: get the current fret array */
-//             var aux = guitar.frets[newFret].press
-//             /* set the current note in the aux array to value */
-//             aux[crtString] = value
-//             /* assign the new press array to the current fret and set the color */
-//             guitar.frets[newFret].press = aux
-//             guitar.frets[newFret].noteMarks[crtString].color = color
     }
     /* aditional method to bring the instrument to its initial state */
     function clean() {
@@ -217,7 +209,17 @@ Flickable {
 
         /* for intervals/scales */
         if (currentExercise["playMode"] == "scale") {
-            lastString = 5
+            var mode = 1
+            if (currentExercise["options"][0]["tags"].indexOf("ascending") != -1) {
+                print("ascending")
+                lastString = 5
+                mode = -1
+            } else {
+                print("descending")
+                lastString = 0
+                mode = 1
+            }
+
             start = 0
 
             /* compute root's fret by substracting the converted guitar index 
@@ -227,8 +229,8 @@ Flickable {
              * keep the root's fret in the limit set by "flickable.fretRootIntervalLimit";
              * if it exceeds the limit, go up one string and recompute the root fret
              */
-            while (flickable.rootFret > fretRootIntervalLimit || flickable.rootFret == 0) {
-                lastString--
+            while (flickable.rootFret > fretRootIntervalLimit || flickable.rootFret <= 0) {
+                lastString += mode
                 flickable.rootFret = ((rootName + 12) - guitarToPiano(lastString + start)) % 12
             }
 
