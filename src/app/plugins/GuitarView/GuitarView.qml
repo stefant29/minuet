@@ -36,6 +36,8 @@ Flickable {
     property int rootFret: 0
     property int rootString: 0
     property int barFret: rootFret
+    property int fretIntervalLimit: 6
+    property int fretRootIntervalLimit: 8
     property var sequence
     property var stringsUsed
 
@@ -46,7 +48,7 @@ Flickable {
         /* depending on the root position, select a certain sequence: C->E or F->B, 
          *    equivalent to sequence[1] and sequence[2] */
         var i = 0
-        if (flickable.rootName <= 4) {
+        if (rootName <= 4) {
             sequence[1].split(' ').forEach(function(note) {
                 flickable.sequence[i++] = note
             })
@@ -103,14 +105,13 @@ Flickable {
         guitar.frets[flickable.barFret].endBar = -1
     }
     function markNotes(model, color) {
-        //TODO: comments
-        if (currentExercise["playMode"] == "scale") {
-            scaleExercise(model.sequence, true, color)
-            return
-        }
+        /* for interval and scales, only draw the notes given by sequence */
+        if (currentExercise["playMode"] == "scale")
+            return scaleExercise(model.sequence, true, color)
 
+        /* for chords, clear the guitar from marks */
         clearAllMarks()
-
+        /* then set the current root (given by model) */
         setOneRoot(0, core.exerciseController.chosenRootNote(), 0, color, model)
         /* select the right sequence from the model into flickable.sequence */
         setSequence(model.sequence, model.stringsUsed)
@@ -119,8 +120,7 @@ Flickable {
         /* draw the bar (if exists) on the guitar */
         setBar()
         /* for each note in the sequence, draw the note on its current fret */
-        var i
-        for (i = 0; i < flickable.sequence.length; i++) {
+        for (var i = 0; i < flickable.sequence.length; i++) {
             /* get the fret's index coresponding to each index in the sequence */
             var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
             /* get the press array from the current fret */
@@ -133,13 +133,11 @@ Flickable {
         }
     }
     function unmarkNotes(sequence) {
-        //TODO: comments
-        if (currentExercise["playMode"] == "scale") {
-            scaleExercise(sequence, false, "white")
-            return
-        }
-        
-        /* reset the press array for each fret modified by markNotes */
+        /* for interval and scales, only delete the notes given by sequence */
+        if (currentExercise["playMode"] == "scale")
+            return scaleExercise(sequence, false, "white")
+
+        /* chords, reset the press array for each fret modified by markNotes */
          var i
          for (i = 0; i < flickable.sequence.length; i++) {
              var index = parseInt(flickable.rootFret) + parseInt(flickable.sequence[i])
@@ -156,93 +154,46 @@ Flickable {
         setRoot(0, core.exerciseController.chosenRootNote(), 0, "white");
     }
     function scaleExercise(sequence, value, color) {
-            //noteMark(0, parseInt(model.sequence[0]), 0, color)
-            //setOneRoot(0, core.exerciseController.chosenRootNote() + parseInt(model.sequence[0]), 0, color, model)
-            
-            var lastString = flickable.rootString
-            //print("lastString: " + lastString)
+            /* current string used is the rootString */
+            var crtString = rootString
+            /* the new fret's location on guitar (index) */
             var newFret = rootFret + parseInt(sequence[0])
-            var distance = parseInt(sequence[0])
+            /* the note at index "newFret" for string: "crtString" */
+            var crtNote = (guitarToPiano(crtString) + newFret) % 12
 
-            //print("new Fret bef: " + newFret)
-            
-            var crtNote = (guitarToPiano(lastString) + newFret) % 12
-//             //print("new fret is bigger:  \n before: crtNote: " + crtNote + "   lastString: " + lastString )
-//             if (crtNote > 12) {
-//                 //lastString = lastString - Math.round(crtNote/12)
-//                 //crtNote = crtNote % 12
-//                 if (lastString == 5) {
-//                     print("din crtNote: " + crtNote + "  se scade " + (12-flickable.rootFret))
-//                     crtNote -= (12-flickable.rootFret)
-//                 }
-//                 else if (lastString <= 4 && lastString >= 2)
-//                     crtNote -= 5
-//                 else if (lastString == 1)
-//                     crtNote -= 4
-//                 else
-//                     print("lastString is 0")
-//                 lastString--
-//                 newFret = ((crtNote+12)-guitarToPiano(lastString))%12
-//             }
-//             //print("after  : crtNote: " + crtNote + "   lastString: " + lastString  + "  newFret:" + newFret)
-//             
-            print("seq: " + sequence[0] + "  lastString: "  +   lastString + "  newFret: " + newFret + "   crtNote: " + crtNote)
-//             if (crtNote >= 22) {
-//                 lastString -= 2
-//             }
-
-            var aux = flickable.rootFret - 6
-            print("aux: " + aux + " calcul: " + (parseInt(sequence[0]) + aux))
-            var skipLastXStrings = Math.ceil((parseInt(sequence[0]) + aux)/5)
-            print("skipLastXStrings: " + skipLastXStrings)
+            /*
+             * compute how many strings to go up if the newFret exceeds 
+             *    the limit set by "flickable.fretIntervalLimit"
+             */
+            var skipLastXStrings = Math.ceil((parseInt(sequence[0]) + rootFret - fretIntervalLimit) /
+                                                (11-fretIntervalLimit))
+            /* keep skipLastXStrings in bounds: 0..rootString */
             if (skipLastXStrings < 0)
                 skipLastXStrings = 0
-            if (skipLastXStrings > flickable.rootString)
-                skipLastXStrings = flickable.rootString
-                
-            lastString -= skipLastXStrings
-            print("lastString: " + lastString)
-            print("(crtNote+12): " + (crtNote+12))
-            print("guitarToPiano(lastString): " + guitarToPiano(lastString))
-            print("(crtNote+12)-guitarToPiano(lastString): " + ((crtNote+12)-guitarToPiano(lastString)))
-            newFret = ((crtNote+12)-guitarToPiano(lastString))%12
-            if (newFret == 0) {
-                print("===newFret is 0===")
+            if (skipLastXStrings > rootString)
+                skipLastXStrings = rootString
+            /* update the string used for current note */
+            crtString -= skipLastXStrings
+
+            /* recompute the fret index */
+            newFret = ((crtNote+12)-guitarToPiano(crtString))%12
+            /* the fret index result cannot be zero: change it to 12 */
+            if (newFret == 0)
                 newFret = 12
-            }
-//             while (newFret > 6 || newFret == 0) {
-//                 if (lastString == 5) {
-//                     if (newFret < 12) {
-//                         print("din distance: " + distance + "  se scade " + (newFret - flickable.rootFret))
-//                         distance -= (newFret - flickable.rootFret)
-//                     } else {
-//                         print("din distance: " + distance + "  se scade " + (12 - flickable.rootFret))
-//                         distance -= (12 - flickable.rootFret)
-//                     }
-//                 }
-//                 else if (lastString <= 4 && lastString >= 2)
-//                     distance -= 5
-//                 else if (lastString == 1)
-//                     distance -= 4
-//                 else
-//                     print("lastString is 0")
-//                 lastString--
-//                 //print("lastString--: " + lastString)
-//                 newFret = ((crtNote+12)-guitarToPiano(lastString))%12
-//                 //print("new fret is: " + newFret)
-//             }
 
-            print("                 === newFret: " + newFret)
-
-            // ==== draw the notes ====
-            /* get the root's fret */
-            var aux = guitar.frets[newFret].press
-            /* set the root's note in the aux array*/
-            aux[lastString] = value
-            /* assign the new press array to root's fret and set the color */
-            guitar.frets[newFret].press = aux
-            guitar.frets[newFret].noteMarks[lastString].color = color
-            //print("\n\n")
+                
+            if (value)
+                noteMark(crtString, newFret, 0, color)
+            else
+                noteUnmark(crtString, newFret, 0, color)
+                
+//             /* draw the note: get the current fret array */
+//             var aux = guitar.frets[newFret].press
+//             /* set the current note in the aux array to value */
+//             aux[crtString] = value
+//             /* assign the new press array to the current fret and set the color */
+//             guitar.frets[newFret].press = aux
+//             guitar.frets[newFret].noteMarks[crtString].color = color
     }
     /* aditional method to bring the instrument to its initial state */
     function clean() {
@@ -259,7 +210,8 @@ Flickable {
      * then draw the root note on the guitar
      */
     function setOneRoot(chan, pitch, vel, color, model) {
-        flickable.rootName = pitch%12
+        /* get the root name */
+        rootName = pitch%12
         var start = -1
         var lastString = -1
 
@@ -270,21 +222,21 @@ Flickable {
 
             /* compute root's fret by substracting the converted guitar index 
              *    into a piano index from the root's piano index */
-            flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
-            print("==flickable.rootFret in setOneRoot: " + flickable.rootFret + "==")
-            /* TODO: daca depaseste fret 9, mergi pe stringul de mai sus TODO  */
-            while (flickable.rootFret > 8 || flickable.rootFret == 0) {
-                print("bigger than 8, lastString: " + lastString + "   rootFret: " + flickable.rootFret)
+            flickable.rootFret = ((rootName + 12) - guitarToPiano(lastString + start)) % 12
+            /*
+             * keep the root's fret in the limit set by "flickable.fretRootIntervalLimit";
+             * if it exceeds the limit, go up one string and recompute the root fret
+             */
+            while (flickable.rootFret > fretRootIntervalLimit || flickable.rootFret == 0) {
                 lastString--
-                flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
-                print("new RootFret: " + flickable.rootFret)
+                flickable.rootFret = ((rootName + 12) - guitarToPiano(lastString + start)) % 12
             }
 
         /* for chords */
         } else {
             var sequence = model.sequence
             /* get the last index of the right sequence: [1] for C->E and [2] for F->B */
-            if (flickable.rootName <= 4) {
+            if (rootName <= 4) {
                 sequence[1].split(' ').forEach(function(note) {
                     lastString++
                 })
@@ -298,11 +250,11 @@ Flickable {
 
             /* compute root's fret by substracting the converted guitar index 
              *    into a piano index from the root's piano index */
-            flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
+            flickable.rootFret = ((rootName+12)-guitarToPiano(lastString+start))%12
         }
 
-        flickable.rootString = lastString + start
-        noteMark(0, 0, 0, color)
+        rootString = lastString + start
+        noteMark(rootString, rootFret, 0, color)
     }
     /* convert string index to piano indexes of an octave */
     function guitarToPiano(index) {
@@ -328,28 +280,25 @@ Flickable {
     function scrollToNote(pitch) {
         flickable.contentX = guitar.frets[flickable.rootFret].x - flickable.width/2
     }
-
     function noteOn(chan, pitch, vel) {}
     function noteOff(chan, pitch, vel) {}
     function noteMark(chan, pitch, vel, color) {
-        //TODO: comments
-        /* get the root's fret */
-        var aux = guitar.frets[flickable.rootFret+pitch].press
-        /* set the root's note in the aux array*/
-        aux[flickable.rootString] = true
-        /* assign the new press array to root's fret and set the color */
-        guitar.frets[flickable.rootFret+pitch].press = aux
-        guitar.frets[flickable.rootFret+pitch].mark_color = color
+        /* get the array "press" for a given index fret "pitch" */
+        var aux = guitar.frets[pitch].press
+        /* set the note in the aux array to TRUE at index "chan" */
+        aux[chan] = true
+        /* assign the modified press array to given fret ("pitch") and set the color */
+        guitar.frets[pitch].press = aux
+        guitar.frets[pitch].noteMarks[chan].color = color
     }
     function noteUnmark(chan, pitch, vel, color) {
-        //TODO: comments
-        /* get the root's fret */
-        var aux = guitar.frets[flickable.rootFret+pitch].press
-        /* set the root's note in the aux array*/
-        aux[flickable.rootString] = false
-        /* assign the new press array to root's fret and set the color */
-        guitar.frets[flickable.rootFret+pitch].press = aux
-        guitar.frets[flickable.rootFret+pitch].mark_color = color
+        /* get the array "press" for a given index fret "pitch" */
+        var aux = guitar.frets[pitch].press
+        /* set the note in the aux array to FALSE at index "chan" */
+        aux[chan] = false
+        /* assign the modified press array to given fret ("pitch") and set the color */
+        guitar.frets[pitch].press = aux
+        guitar.frets[pitch].noteMarks[chan].color = color
     }
     function highlightKey(pitch, color) {}
     function itemForPitch(pitch) {}
