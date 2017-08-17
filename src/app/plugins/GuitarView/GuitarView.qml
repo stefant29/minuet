@@ -159,21 +159,44 @@ Flickable {
             /* the new fret's location on guitar (index) */
             var newFret = rootFret + parseInt(sequence[0])
             /* the note at index "newFret" for string: "crtString" */
-            var crtNote = (guitarToPiano(crtString) + newFret) % 12
+            var crtNote = (guitarToPiano(crtString) + newFret + 24) % 12
 
             /*
              * compute how many strings to go up if the newFret exceeds 
-             *    the limit set by "flickable.fretIntervalLimit"
+             *    the limit set by "flickable.fretIntervalLimit" 
+             *    and update the "crtString" variable accordingly 
              */
-            var skipLastXStrings = Math.ceil((parseInt(sequence[0]) + rootFret - fretIntervalLimit) /
-                                                (11-fretIntervalLimit))
-            /* keep skipLastXStrings in bounds: 0..rootString */
-            if (skipLastXStrings < 0)
-                skipLastXStrings = 0
-            if (skipLastXStrings > rootString)
-                skipLastXStrings = rootString
-            /* update the string used for current note */
-            crtString -= skipLastXStrings
+            var skipLastXStrings
+            if (currentExercise["options"][0]["tags"].indexOf("ascending") != -1) {
+                skipLastXStrings = Math.ceil((parseInt(sequence[0]) + rootFret - fretIntervalLimit) /
+                                                    (11-fretIntervalLimit))
+                /* keep skipLastXStrings in bounds: 0..rootString */
+                if (skipLastXStrings < 0)
+                    skipLastXStrings = 0
+                if (skipLastXStrings > rootString)
+                    skipLastXStrings = rootString
+                /* update the string used for current note */
+                crtString -= skipLastXStrings
+            } else {
+                skipLastXStrings = Math.ceil((Math.abs(parseInt(sequence[0])) + fretIntervalLimit - rootFret) / 
+                                                (11-fretIntervalLimit)) - 1
+                /* update the string used for current note */
+                crtString += skipLastXStrings
+
+                /* recompute the fret index */
+                newFret = ((crtNote+12)-guitarToPiano(crtString))%12
+
+                /* if the note is on fret 0 == nut, draw the note on the string below */
+                if (newFret == 0)
+                    crtString++
+
+                /* 
+                 * if the note should be on a string below the 6th, 
+                 *    draw it from top == string 0
+                 */
+                if (crtString > 5)
+                    crtString = 0
+            }
 
             /* recompute the fret index */
             newFret = ((crtNote+12)-guitarToPiano(crtString))%12
@@ -203,7 +226,7 @@ Flickable {
      */
     function setOneRoot(chan, pitch, vel, color, model) {
         /* get the root name */
-        rootName = pitch%12
+        rootName = pitch % 12
         var start = -1
         var lastString = -1
 
@@ -211,11 +234,9 @@ Flickable {
         if (currentExercise["playMode"] == "scale") {
             var mode = 1
             if (currentExercise["options"][0]["tags"].indexOf("ascending") != -1) {
-                print("ascending")
                 lastString = 5
                 mode = -1
             } else {
-                print("descending")
                 lastString = 0
                 mode = 1
             }
