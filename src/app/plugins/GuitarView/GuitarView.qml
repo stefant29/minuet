@@ -162,24 +162,77 @@ Flickable {
             var lastString = flickable.rootString
             //print("lastString: " + lastString)
             var newFret = rootFret + parseInt(sequence[0])
+            var distance = parseInt(sequence[0])
+
             //print("new Fret bef: " + newFret)
             
-            var crtNote = guitarToPiano(lastString) + newFret
-            //print("new fret is bigger:  \n before: crtNote: " + crtNote + "   lastString: " + lastString )
-            if (crtNote >= 12) {
-                lastString = lastString - Math.floor(crtNote/12)
-                crtNote = crtNote % 12
-                newFret = ((crtNote+12)-guitarToPiano(lastString))%12
+            var crtNote = (guitarToPiano(lastString) + newFret) % 12
+//             //print("new fret is bigger:  \n before: crtNote: " + crtNote + "   lastString: " + lastString )
+//             if (crtNote > 12) {
+//                 //lastString = lastString - Math.round(crtNote/12)
+//                 //crtNote = crtNote % 12
+//                 if (lastString == 5) {
+//                     print("din crtNote: " + crtNote + "  se scade " + (12-flickable.rootFret))
+//                     crtNote -= (12-flickable.rootFret)
+//                 }
+//                 else if (lastString <= 4 && lastString >= 2)
+//                     crtNote -= 5
+//                 else if (lastString == 1)
+//                     crtNote -= 4
+//                 else
+//                     print("lastString is 0")
+//                 lastString--
+//                 newFret = ((crtNote+12)-guitarToPiano(lastString))%12
+//             }
+//             //print("after  : crtNote: " + crtNote + "   lastString: " + lastString  + "  newFret:" + newFret)
+//             
+            print("seq: " + sequence[0] + "  lastString: "  +   lastString + "  newFret: " + newFret + "   crtNote: " + crtNote)
+//             if (crtNote >= 22) {
+//                 lastString -= 2
+//             }
+
+            var aux = flickable.rootFret - 6
+            print("aux: " + aux + " calcul: " + (parseInt(sequence[0]) + aux))
+            var skipLastXStrings = Math.ceil((parseInt(sequence[0]) + aux)/5)
+            print("skipLastXStrings: " + skipLastXStrings)
+            if (skipLastXStrings < 0)
+                skipLastXStrings = 0
+            if (skipLastXStrings > flickable.rootString)
+                skipLastXStrings = flickable.rootString
+                
+            lastString -= skipLastXStrings
+            print("lastString: " + lastString)
+            print("(crtNote+12): " + (crtNote+12))
+            print("guitarToPiano(lastString): " + guitarToPiano(lastString))
+            print("(crtNote+12)-guitarToPiano(lastString): " + ((crtNote+12)-guitarToPiano(lastString)))
+            newFret = ((crtNote+12)-guitarToPiano(lastString))%12
+            if (newFret == 0) {
+                print("===newFret is 0===")
+                newFret = 12
             }
-            //print("after  : crtNote: " + crtNote + "   lastString: " + lastString  + "  newFret:" + newFret)
-            
-            
-            while (newFret > 6 || newFret == 0) {
-                lastString--
-                //print("lastString--: " + lastString)
-                newFret = ((crtNote+12)-guitarToPiano(lastString))%12
-                //print("new fret is: " + newFret)
-            }
+//             while (newFret > 6 || newFret == 0) {
+//                 if (lastString == 5) {
+//                     if (newFret < 12) {
+//                         print("din distance: " + distance + "  se scade " + (newFret - flickable.rootFret))
+//                         distance -= (newFret - flickable.rootFret)
+//                     } else {
+//                         print("din distance: " + distance + "  se scade " + (12 - flickable.rootFret))
+//                         distance -= (12 - flickable.rootFret)
+//                     }
+//                 }
+//                 else if (lastString <= 4 && lastString >= 2)
+//                     distance -= 5
+//                 else if (lastString == 1)
+//                     distance -= 4
+//                 else
+//                     print("lastString is 0")
+//                 lastString--
+//                 //print("lastString--: " + lastString)
+//                 newFret = ((crtNote+12)-guitarToPiano(lastString))%12
+//                 //print("new fret is: " + newFret)
+//             }
+
+            print("                 === newFret: " + newFret)
 
             // ==== draw the notes ====
             /* get the root's fret */
