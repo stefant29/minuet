@@ -105,32 +105,7 @@ Flickable {
     function markNotes(model, color) {
         //TODO: comments
         if (currentExercise["playMode"] == "scale") {
-            //noteMark(0, parseInt(model.sequence[0]), 0, color)
-            //setOneRoot(0, core.exerciseController.chosenRootNote() + parseInt(model.sequence[0]), 0, color, model)
-            
-            var lastString = flickable.rootString
-            print("lastString: " + lastString)
-            var newFret = rootFret + parseInt(model.sequence[0])
-            print("new Fret bef: " + newFret)
-            while (newFret > 6) {
-                print("new fret is bigger ")
-                var crtNote = (guitarToPiano(lastString) + newFret) % 12
-                print("crt note: " + crtNote)
-                lastString--
-                print("lastString--: " + lastString)
-                newFret = ((crtNote+12)-guitarToPiano(lastString))%12
-                print("new fret is: " + newFret)
-            }
-
-            // ==== draw the notes ====
-            /* get the root's fret */
-            var aux = guitar.frets[newFret].press
-            /* set the root's note in the aux array*/
-            aux[lastString] = true
-            /* assign the new press array to root's fret and set the color */
-            guitar.frets[newFret].press = aux
-            guitar.frets[newFret].mark_color = color
-
+            scaleExercise(model.sequence, true, color)
             return
         }
 
@@ -160,7 +135,7 @@ Flickable {
     function unmarkNotes(sequence) {
         //TODO: comments
         if (currentExercise["playMode"] == "scale") {
-            noteUnmark(0, parseInt(sequence[0]), 0, color)
+            scaleExercise(sequence, false, "white")
             return
         }
         
@@ -179,6 +154,42 @@ Flickable {
          clearBar()
         /* reset root notes */
         setRoot(0, core.exerciseController.chosenRootNote(), 0, "white");
+    }
+    function scaleExercise(sequence, value, color) {
+            //noteMark(0, parseInt(model.sequence[0]), 0, color)
+            //setOneRoot(0, core.exerciseController.chosenRootNote() + parseInt(model.sequence[0]), 0, color, model)
+            
+            var lastString = flickable.rootString
+            //print("lastString: " + lastString)
+            var newFret = rootFret + parseInt(sequence[0])
+            //print("new Fret bef: " + newFret)
+            
+            var crtNote = guitarToPiano(lastString) + newFret
+            //print("new fret is bigger:  \n before: crtNote: " + crtNote + "   lastString: " + lastString )
+            if (crtNote >= 12) {
+                lastString = lastString - Math.floor(crtNote/12)
+                crtNote = crtNote % 12
+                newFret = ((crtNote+12)-guitarToPiano(lastString))%12
+            }
+            //print("after  : crtNote: " + crtNote + "   lastString: " + lastString  + "  newFret:" + newFret)
+            
+            
+            while (newFret > 6 || newFret == 0) {
+                lastString--
+                //print("lastString--: " + lastString)
+                newFret = ((crtNote+12)-guitarToPiano(lastString))%12
+                //print("new fret is: " + newFret)
+            }
+
+            // ==== draw the notes ====
+            /* get the root's fret */
+            var aux = guitar.frets[newFret].press
+            /* set the root's note in the aux array*/
+            aux[lastString] = value
+            /* assign the new press array to root's fret and set the color */
+            guitar.frets[newFret].press = aux
+            guitar.frets[newFret].noteMarks[lastString].color = color
+            //print("\n\n")
     }
     /* aditional method to bring the instrument to its initial state */
     function clean() {

@@ -35,6 +35,7 @@ Rectangle {
     property bool is_end: false
     property var press: [false, false, false, false, false, false]
     property var ids: [string_E1, string_B, string_G, string_D, string_A, string_E2]
+    property var noteMarks: [noteMark0, noteMark1, noteMark2, noteMark3, noteMark4, noteMark5]
     property int startBar: -1
     property int endBar: -1
 
@@ -78,12 +79,12 @@ Rectangle {
     String { id: string_A;  anchors.top: string_D.bottom }
     String { id: string_E2; anchors.top: string_A.bottom }
 
-    NoteMark { index: 0}
-    NoteMark { index: 1}
-    NoteMark { index: 2}
-    NoteMark { index: 3}
-    NoteMark { index: 4}
-    NoteMark { index: 5}
+    NoteMark { id: noteMark0; index: 0}
+    NoteMark { id: noteMark1; index: 1}
+    NoteMark { id: noteMark2; index: 2}
+    NoteMark { id: noteMark3; index: 3}
+    NoteMark { id: noteMark4; index: 4}
+    NoteMark { id: noteMark5; index: 5}
 
     Rectangle {
         id: bar
