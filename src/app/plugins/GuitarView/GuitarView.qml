@@ -105,8 +105,32 @@ Flickable {
     function markNotes(model, color) {
         //TODO: comments
         if (currentExercise["playMode"] == "scale") {
-            noteMark(0, parseInt(model.sequence[0]), 0, color)
-            print("markNotes calls noteMark with: " + parseInt(model.sequence[0]))
+            //noteMark(0, parseInt(model.sequence[0]), 0, color)
+            //setOneRoot(0, core.exerciseController.chosenRootNote() + parseInt(model.sequence[0]), 0, color, model)
+            
+            var lastString = flickable.rootString
+            print("lastString: " + lastString)
+            var newFret = rootFret + parseInt(model.sequence[0])
+            print("new Fret bef: " + newFret)
+            while (newFret > 6) {
+                print("new fret is bigger ")
+                var crtNote = (guitarToPiano(lastString) + newFret) % 12
+                print("crt note: " + crtNote)
+                lastString--
+                print("lastString--: " + lastString)
+                newFret = ((crtNote+12)-guitarToPiano(lastString))%12
+                print("new fret is: " + newFret)
+            }
+
+            // ==== draw the notes ====
+            /* get the root's fret */
+            var aux = guitar.frets[newFret].press
+            /* set the root's note in the aux array*/
+            aux[lastString] = true
+            /* assign the new press array to root's fret and set the color */
+            guitar.frets[newFret].press = aux
+            guitar.frets[newFret].mark_color = color
+
             return
         }
 
@@ -183,15 +207,14 @@ Flickable {
             /* compute root's fret by substracting the converted guitar index 
              *    into a piano index from the root's piano index */
             flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
+            print("==flickable.rootFret in setOneRoot: " + flickable.rootFret + "==")
             /* TODO: daca depaseste fret 9, mergi pe stringul de mai sus TODO  */
-            while (flickable.rootFret > 8) {
+            while (flickable.rootFret > 8 || flickable.rootFret == 0) {
                 print("bigger than 8, lastString: " + lastString + "   rootFret: " + flickable.rootFret)
                 lastString--
                 flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
                 print("new RootFret: " + flickable.rootFret)
             }
-
-            flickable.rootString = lastString + start
 
         /* for chords */
         } else {
@@ -212,10 +235,9 @@ Flickable {
             /* compute root's fret by substracting the converted guitar index 
              *    into a piano index from the root's piano index */
             flickable.rootFret = ((flickable.rootName+12)-guitarToPiano(lastString+start))%12
-            flickable.rootString = lastString + start
         }
 
-
+        flickable.rootString = lastString + start
         noteMark(0, 0, 0, color)
     }
     /* convert string index to piano indexes of an octave */
